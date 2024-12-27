@@ -24,4 +24,9 @@
         <PackageReference Include="X.PagedList.Mvc.Core" Version="10.5.7" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="modules\categoria\controller\" />
+      <Folder Include="modules\categoria\service\" />
+    </ItemGroup>
+
 </Project>

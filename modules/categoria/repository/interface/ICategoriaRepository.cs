@@ -1,0 +1,14 @@
+﻿using controle_vendas.modules.categoria.model.entity;
+using controle_vendas.modules.categoria.model.request;
+using controle_vendas.modules.common.pagination.models.request;
+using controle_vendas.modules.common.repository.interfaces;
+using X.PagedList;
+
+namespace controle_vendas.modules.categoria.repository.@interface;
+
+public interface ICategoriaRepository : IRepository<Categoria>
+{
+    Task<IPagedList<Categoria>> GetAllIncludePageableAsync(QueryParameters queryParameters);
+    
+    Task<IPagedList<Categoria>> GetAllFilterPageableAsync(CategoriaFiltroRequest filtroRequest);
+}
