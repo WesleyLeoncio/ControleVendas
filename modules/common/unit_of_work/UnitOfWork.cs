@@ -1,6 +1,6 @@
 ﻿using controle_vendas.infra.data;
 using controle_vendas.modules.categoria.repository;
-using controle_vendas.modules.categoria.repository.@interface;
+using controle_vendas.modules.categoria.repository.interfaces;
 using controle_vendas.modules.common.unit_of_work.interfaces;
 
 namespace controle_vendas.modules.common.unit_of_work;

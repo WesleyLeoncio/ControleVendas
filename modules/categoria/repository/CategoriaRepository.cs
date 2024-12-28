@@ -1,7 +1,7 @@
 ﻿using controle_vendas.infra.data;
 using controle_vendas.modules.categoria.model.entity;
 using controle_vendas.modules.categoria.model.request;
-using controle_vendas.modules.categoria.repository.@interface;
+using controle_vendas.modules.categoria.repository.interfaces;
 using controle_vendas.modules.common.pagination.models.request;
 using controle_vendas.modules.common.repository;
 using X.PagedList;

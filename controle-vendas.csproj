@@ -25,8 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="modules\categoria\controller\" />
-      <Folder Include="modules\categoria\service\" />
+      <Folder Include="modules\produto\models\entity\" />
     </ItemGroup>
 
 </Project>

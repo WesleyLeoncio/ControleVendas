@@ -4,7 +4,7 @@ using controle_vendas.modules.common.pagination.models.request;
 using controle_vendas.modules.common.repository.interfaces;
 using X.PagedList;
 
-namespace controle_vendas.modules.categoria.repository.@interface;
+namespace controle_vendas.modules.categoria.repository.interfaces;
 
 public interface ICategoriaRepository : IRepository<Categoria>
 {
