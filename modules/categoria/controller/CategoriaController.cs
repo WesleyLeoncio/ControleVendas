@@ -23,6 +23,18 @@ public class CategoriaController : ControllerBase
         return CreatedAtAction(nameof(BuscarCategoriaPorId),new 
             { id = response.Id }, response);
     }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult<CategoriaResponse>> AlterarCategoria(int id, CategoriaRequest request)
+    {
+        return Ok(await _categoriaService.UpdateCategoria(id, request));
+    }
+    
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<CategoriaResponse>> DeletarCategoria(int id)
+    { 
+      return Ok(await _categoriaService.DeleteCategoria(id));
+    }
     
     [HttpGet("{id}")]
     public async Task<ActionResult<CategoriaResponse>> BuscarCategoriaPorId(int id)

@@ -12,24 +12,24 @@ public class CategoriaService : ICategoriaService
 {
     private readonly IUnitOfWork _uof;
     private readonly IMapper _mapper;
-    
+
     public CategoriaService(IUnitOfWork uof, IMapper mapper)
     {
         _uof = uof;
         _mapper = mapper;
     }
-    
-    public async Task<CategoriaResponse> CreateCategoria(CategoriaRequest categoria)
+
+    public async Task<CategoriaResponse> CreateCategoria(CategoriaRequest request)
     {
-       Categoria entity = 
-           _uof.CategoriaRepository.Create(_mapper.Map<Categoria>(categoria));
-       await _uof.Commit();
-       return _mapper.Map<CategoriaResponse>(entity);
+        Categoria entity =
+            _uof.CategoriaRepository.Create(_mapper.Map<Categoria>(request));
+        await _uof.Commit();
+        return _mapper.Map<CategoriaResponse>(entity);
     }
 
     public async Task<CategoriaResponse> GetCategoriaById(int id)
     {
-        return _mapper.Map<CategoriaResponse>( await CheckCategoria(id));
+        return _mapper.Map<CategoriaResponse>(await CheckCategoria(id));
     }
 
     public Task<CategoriaResponse> GetAllFilterCategorias(CategoriaFiltroRequest filtroRequest)
@@ -37,19 +37,26 @@ public class CategoriaService : ICategoriaService
         throw new NotImplementedException();
     }
 
-    public Task<CategoriaResponse> UpdateCategoria(int id, CategoriaRequest categoria)
+    public async Task<CategoriaResponse> UpdateCategoria(int id, CategoriaRequest request)
     {
-        throw new NotImplementedException();
+        Categoria categoria = await CheckCategoria(id);
+        _mapper.Map(request, categoria);
+        Categoria update = _uof.CategoriaRepository.Update(categoria);
+        await _uof.Commit();
+        return _mapper.Map<CategoriaResponse>(update);
     }
 
-    public Task<CategoriaResponse> DeleteCategoria(int id)
+    public async Task<CategoriaResponse> DeleteCategoria(int id)
     {
-        throw new NotImplementedException();
+        Categoria categoria = await CheckCategoria(id);
+        _uof.CategoriaRepository.Delete(categoria);
+        await _uof.Commit();
+        return _mapper.Map<CategoriaResponse>(categoria);
     }
 
     private async Task<Categoria> CheckCategoria(int id)
     {
-        return await _uof.CategoriaRepository.GetAsync(c => c.Id == id)??
+        return await _uof.CategoriaRepository.GetAsync(c => c.Id == id) ??
                throw new NotFoundException("Categoria não encontrada!");
     }
 }
