@@ -26,5 +26,6 @@ public static class DependencyInjectionConfig
         services.AddScoped<IFornecedorService, FornecedorService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddTransient<IErrorResultTask, HandleNotFound>();
+        services.AddTransient<IErrorResultTask, HandleKeyDuplication>();
     }
 }

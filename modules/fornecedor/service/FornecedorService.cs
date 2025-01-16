@@ -23,6 +23,7 @@ public class FornecedorService : IFornecedorService
 
     public async Task<FornecedorResponse> CreateFornecedor(FornecedorRequest request)
     {
+        await CheckNameExists(request.Nome);
         Fornecedor entity =
             _uof.FornecedorRepository.Create(_mapper.Map<Fornecedor>(request));
         await _uof.Commit();
@@ -45,7 +46,8 @@ public class FornecedorService : IFornecedorService
     }
 
     public async Task<FornecedorResponse> UpdateFornecedor(int id, FornecedorRequest request)
-    {
+    {   
+        await CheckNameExists(request.Nome);
         Fornecedor fornecedor = await CheckFornecedor(id);
         _mapper.Map(request, fornecedor);
         Fornecedor update = _uof.FornecedorRepository.Update(fornecedor);
@@ -65,5 +67,14 @@ public class FornecedorService : IFornecedorService
     {
         return await _uof.FornecedorRepository.GetAsync(c => c.Id == id) ??
                throw new NotFoundException("Fornecedor não encontrado!");
+    }
+    
+    private async Task CheckNameExists(string nome)
+    {
+        Fornecedor? fornecedor = await _uof.FornecedorRepository.GetAsync(f => f.Nome == nome);
+        if (fornecedor != null)
+        {
+            throw new KeyDuplicationException("Já existe um fornecedor com este nome!");
+        }
     }
 }

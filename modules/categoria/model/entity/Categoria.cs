@@ -1,10 +1,12 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace controle_vendas.modules.categoria.model.entity;
 
 [Table("categorias")]
+[Index(nameof(Nome), IsUnique = true)]
 public class Categoria
 {
     [Key]

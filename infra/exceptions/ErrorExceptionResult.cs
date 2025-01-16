@@ -6,14 +6,14 @@ public class ErrorExceptionResult
 {
     public HttpContext Context { get; set; }
     public string Mensage { get; set; }
-    public Type ExceptionType { get; set; }
+    public Exception Exception { get; set; }
     
 
     public ErrorExceptionResult(HttpContext context, Exception exception)
     {
         Context = context;
         Mensage = exception.Message;
-        ExceptionType = exception.GetType();
+        Exception = exception;
     }
     
     public Task? GetResultPadrao(Exception exception)

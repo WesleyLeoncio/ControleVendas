@@ -23,6 +23,7 @@ public class CategoriaService : ICategoriaService
 
     public async Task<CategoriaResponse> CreateCategoria(CategoriaRequest request)
     {
+        await CheckNameExists(request.Nome);
         Categoria entity =
             _uof.CategoriaRepository.Create(_mapper.Map<Categoria>(request));
         await _uof.Commit();
@@ -36,7 +37,7 @@ public class CategoriaService : ICategoriaService
 
     public async Task<CategoriaPaginationResponse> GetAllFilterCategorias(CategoriaFiltroRequest filtroRequest)
     {
-        IPagedList<Categoria> categorias = 
+        IPagedList<Categoria> categorias =
             await _uof.CategoriaRepository.GetAllFilterPageableAsync(filtroRequest);
         CategoriaPaginationResponse categoriaPg = new CategoriaPaginationResponse(
             _mapper.Map<IEnumerable<CategoriaResponse>>(categorias),
@@ -45,7 +46,8 @@ public class CategoriaService : ICategoriaService
     }
 
     public async Task<CategoriaResponse> UpdateCategoria(int id, CategoriaRequest request)
-    {
+    {   
+        await CheckNameExists(request.Nome);
         Categoria categoria = await CheckCategoria(id);
         _mapper.Map(request, categoria);
         Categoria update = _uof.CategoriaRepository.Update(categoria);
@@ -60,10 +62,19 @@ public class CategoriaService : ICategoriaService
         await _uof.Commit();
         return _mapper.Map<CategoriaResponse>(categoria);
     }
-    
+
     private async Task<Categoria> CheckCategoria(int id)
     {
         return await _uof.CategoriaRepository.GetAsync(c => c.Id == id) ??
                throw new NotFoundException("Categoria não encontrada!");
+    }
+
+    private async Task CheckNameExists(string nome)
+    {
+        Categoria? categoria = await _uof.CategoriaRepository.GetAsync(c => c.Nome == nome);
+        if (categoria != null)
+        {
+            throw new KeyDuplicationException("Já existe uma categoria com este nome!");
+        }
     }
 }

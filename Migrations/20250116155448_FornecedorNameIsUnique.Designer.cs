@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using controle_vendas.infra.data;
@@ -11,9 +12,11 @@ using controle_vendas.infra.data;
 namespace controle_vendas.Migrations
 {
     [DbContext(typeof(AppDbConnectionContext))]
-    partial class AppDbConnectionContextModelSnapshot : ModelSnapshot
+    [Migration("20250116155448_FornecedorNameIsUnique")]
+    partial class FornecedorNameIsUnique
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,9 +173,6 @@ namespace controle_vendas.Migrations
                         .HasColumnName("nome");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Nome")
-                        .IsUnique();
 
                     b.ToTable("categorias");
                 });
