@@ -25,7 +25,12 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="modules\fornecedor\controller\" />
+      <Folder Include="modules\fornecedor\service\" />
       <Folder Include="modules\produto\models\entity\" />
+      <Folder Include="modules\produto\models\mapper\" />
+      <Folder Include="modules\produto\models\request\" />
+      <Folder Include="modules\produto\models\response\" />
     </ItemGroup>
 
 </Project>

@@ -5,6 +5,7 @@ using controle_vendas.modules.categoria.model.request;
 using controle_vendas.modules.categoria.model.response;
 using controle_vendas.modules.categoria.service.interfaces;
 using controle_vendas.modules.common.unit_of_work.interfaces;
+using X.PagedList;
 
 namespace controle_vendas.modules.categoria.service;
 
@@ -32,9 +33,9 @@ public class CategoriaService : ICategoriaService
         return _mapper.Map<CategoriaResponse>(await CheckCategoria(id));
     }
 
-    public Task<CategoriaResponse> GetAllFilterCategorias(CategoriaFiltroRequest filtroRequest)
+    public async Task<IPagedList<Categoria>> GetAllFilterCategorias(CategoriaFiltroRequest filtroRequest)
     {
-        throw new NotImplementedException();
+        return await _uof.CategoriaRepository.GetAllFilterPageableAsync(filtroRequest);
     }
 
     public async Task<CategoriaResponse> UpdateCategoria(int id, CategoriaRequest request)

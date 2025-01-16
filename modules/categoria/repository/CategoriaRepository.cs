@@ -5,6 +5,7 @@ using controle_vendas.modules.categoria.repository.interfaces;
 using controle_vendas.modules.common.pagination.models.request;
 using controle_vendas.modules.common.repository;
 using X.PagedList;
+using X.PagedList.Extensions;
 
 namespace controle_vendas.modules.categoria.repository;
 
@@ -25,20 +26,19 @@ public class CategoriaRepository : Repository<Categoria>, ICategoriaRepository
         throw new NotImplementedException();
     }
 
-    public Task<IPagedList<Categoria>> GetAllFilterPageableAsync(CategoriaFiltroRequest filtroRequest)
+    public async Task<IPagedList<Categoria>> GetAllFilterPageableAsync(CategoriaFiltroRequest filtroRequest)
     {
-        // IEnumerable<Categoria> categorias = await GetAllAsync();
-        // IQueryable<Categoria> queryableCategoria = 
-        //     categorias.OrderBy(c => c.Nome).AsQueryable();
-        //
-        // if (!string.IsNullOrEmpty(filtroRequest.Nome))
-        // {
-        //     queryableCategoria = queryableCategoria.Where(c =>
-        //         c.Nome != null && c.Nome.Contains(filtroRequest.Nome));
-        // }
-        //
-        // return await queryableCategoria.ToPagedListAsync(filtroRequest.PageNumber,
-        //     filtroRequest.PageSize);
-        throw new NotImplementedException();
+        IEnumerable<Categoria> categorias = await GetAllAsync();
+        IQueryable<Categoria> queryableCategoria = 
+            categorias.OrderBy(c => c.Nome).AsQueryable();
+        
+        if (!string.IsNullOrEmpty(filtroRequest.Nome))
+        {
+            queryableCategoria = queryableCategoria.Where(c =>
+                c.Nome != null && c.Nome.Contains(filtroRequest.Nome));
+        }
+        return queryableCategoria.ToPagedList(filtroRequest.PageNumber,
+            filtroRequest.PageSize);
+        
     }
 }
