@@ -11,9 +11,10 @@ public interface ICategoriaService
     
     Task<CategoriaResponse> GetCategoriaById(int id); 
     
-    Task<IPagedList<Categoria>> GetAllFilterCategorias(CategoriaFiltroRequest filtroRequest);
+    Task<CategoriaPaginationResponse> GetAllFilterCategorias(CategoriaFiltroRequest filtroRequest);
     
     Task<CategoriaResponse> UpdateCategoria(int id, CategoriaRequest request);
     
     Task<CategoriaResponse> DeleteCategoria(int id);
+    
 }

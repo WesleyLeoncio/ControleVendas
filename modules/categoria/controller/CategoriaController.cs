@@ -1,12 +1,8 @@
-﻿using AutoMapper;
-using controle_vendas.modules.categoria.model.entity;
-using controle_vendas.modules.categoria.model.request;
+﻿using controle_vendas.modules.categoria.model.request;
 using controle_vendas.modules.categoria.model.response;
 using controle_vendas.modules.categoria.service.interfaces;
-using controle_vendas.modules.common.pagination;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using X.PagedList;
 
 namespace controle_vendas.modules.categoria.controller;
 
@@ -15,20 +11,18 @@ namespace controle_vendas.modules.categoria.controller;
 public class CategoriaController : ControllerBase
 {
     private readonly ICategoriaService _categoriaService;
-    private readonly IMapper _mapper;
-
-    public CategoriaController(ICategoriaService categoriaService, IMapper mapper)
+    
+    public CategoriaController(ICategoriaService categoriaService)
     {
         _categoriaService = categoriaService;
-        _mapper = mapper;
     }
 
     [HttpPost]
     public async Task<ActionResult<CategoriaResponse>> CadastroDeCategoria(CategoriaRequest request)
     {
         CategoriaResponse response = await _categoriaService.CreateCategoria(request);
-        return CreatedAtAction(nameof(BuscarCategoriaPorId),new 
-            { id = response.Id }, response);
+        return CreatedAtAction(nameof(BuscarCategoriaPorId),
+            new { id = response.Id }, response);
     }
 
     [HttpPut("{id}")]
@@ -52,10 +46,10 @@ public class CategoriaController : ControllerBase
     [HttpGet("Filter/Pagination")]
     public async Task<ActionResult<IEnumerable<CategoriaResponse>>> ListarCategoriaComFiltro([FromQuery] CategoriaFiltroRequest filtroRequest)
     {
-        IPagedList<Categoria> categorias = await _categoriaService.GetAllFilterCategorias(filtroRequest);
-        Response.Headers.Append("X-Pagination", 
-            JsonConvert.SerializeObject(MetaData<Categoria>.ToValue(categorias)));
-        return Ok(_mapper.Map<IEnumerable<CategoriaResponse>>(categorias));
+        CategoriaPaginationResponse response = await _categoriaService.GetAllFilterCategorias(filtroRequest);
+        Response.Headers.Append("X-Pagination",JsonConvert.SerializeObject(response.MetaData));
+        return Ok(response.Categorias);
     }
+   
     
 }
