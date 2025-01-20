@@ -8,7 +8,7 @@ namespace controle_vendas.modules.categoria.repository.interfaces;
 
 public interface ICategoriaRepository : IRepository<Categoria>
 {
-    Task<IPagedList<Categoria>> GetAllIncludePageableAsync(QueryParameters queryParameters);
+    Task<IPagedList<Categoria>> GetAllIncludePageableAsync(CategoriaFiltroRequest filtroRequest);
     
     Task<IPagedList<Categoria>> GetAllFilterPageableAsync(CategoriaFiltroRequest filtroRequest);
 }

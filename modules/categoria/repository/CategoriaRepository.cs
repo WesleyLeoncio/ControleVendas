@@ -15,7 +15,7 @@ public class CategoriaRepository : Repository<Categoria>, ICategoriaRepository
     {
     }
 
-    public Task<IPagedList<Categoria>> GetAllIncludePageableAsync(QueryParameters queryParameters)
+    public Task<IPagedList<Categoria>> GetAllIncludePageableAsync(CategoriaFiltroRequest filtroRequest)
     {
         // IEnumerable<Categoria> categorias = await GetIQueryable()
         //     .OrderBy(c => c.Nome)
