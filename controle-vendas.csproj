@@ -24,11 +24,4 @@
         <PackageReference Include="X.PagedList.Mvc.Core" Version="10.5.7" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="modules\produto\models\entity\" />
-      <Folder Include="modules\produto\models\mapper\" />
-      <Folder Include="modules\produto\models\request\" />
-      <Folder Include="modules\produto\models\response\" />
-    </ItemGroup>
-
 </Project>

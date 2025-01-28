@@ -11,5 +11,6 @@ public class CategoriaMapper : Profile
     {
         CreateMap<CategoriaRequest, Categoria>();
         CreateMap<Categoria, CategoriaResponse>();
+        CreateMap<Categoria, CategoriaProdutoResponse>();
     }
 }

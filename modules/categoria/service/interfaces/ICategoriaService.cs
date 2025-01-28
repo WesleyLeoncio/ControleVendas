@@ -13,6 +13,8 @@ public interface ICategoriaService
     
     Task<CategoriaPaginationResponse> GetAllFilterCategorias(CategoriaFiltroRequest filtroRequest);
     
+    Task<CategoriaPaginationProdutoResponse> GetAllIncludeProduto(CategoriaFiltroRequest filtroRequest);
+    
     Task<CategoriaResponse> UpdateCategoria(int id, CategoriaRequest request);
     
     Task<CategoriaResponse> DeleteCategoria(int id);

@@ -12,6 +12,10 @@ using controle_vendas.modules.fornecedor.repository;
 using controle_vendas.modules.fornecedor.repository.interfaces;
 using controle_vendas.modules.fornecedor.service;
 using controle_vendas.modules.fornecedor.service.interfaces;
+using controle_vendas.modules.produto.repository;
+using controle_vendas.modules.produto.repository.interfaces;
+using controle_vendas.modules.produto.service;
+using controle_vendas.modules.produto.service.interfaces;
 
 namespace controle_vendas.infra.config;
 
@@ -21,10 +25,15 @@ public static class DependencyInjectionConfig
     {
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<ICategoriaRepository, CategoriaRepository>();
-        services.AddScoped<ICategoriaService, CategoriaService>();
         services.AddScoped<IFornecedorRepository, FornecedorRepository>();
+        services.AddScoped<IProdutoRepository, ProdutoRepository>();
+        
+        services.AddScoped<ICategoriaService, CategoriaService>();
         services.AddScoped<IFornecedorService, FornecedorService>();
+        services.AddScoped<IProdutoService, ProdutoService>();
+        
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        
         services.AddTransient<IErrorResultTask, HandleNotFound>();
         services.AddTransient<IErrorResultTask, HandleKeyDuplication>();
     }

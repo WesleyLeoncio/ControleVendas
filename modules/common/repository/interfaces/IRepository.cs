@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 
+
 namespace controle_vendas.modules.common.repository.interfaces;
 
 public interface IRepository<T>

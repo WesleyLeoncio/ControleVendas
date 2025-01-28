@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using controle_vendas.infra.data;
@@ -11,9 +12,11 @@ using controle_vendas.infra.data;
 namespace controle_vendas.Migrations
 {
     [DbContext(typeof(AppDbConnectionContext))]
-    partial class AppDbConnectionContextModelSnapshot : ModelSnapshot
+    [Migration("20250128152815_ProdutoDB")]
+    partial class ProdutoDB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -373,7 +376,7 @@ namespace controle_vendas.Migrations
             modelBuilder.Entity("controle_vendas.modules.produto.models.entity.Produto", b =>
                 {
                     b.HasOne("controle_vendas.modules.categoria.model.entity.Categoria", "Categoria")
-                        .WithMany("Produtos")
+                        .WithMany()
                         .HasForeignKey("CategoriaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -387,11 +390,6 @@ namespace controle_vendas.Migrations
                     b.Navigation("Categoria");
 
                     b.Navigation("Fornecedor");
-                });
-
-            modelBuilder.Entity("controle_vendas.modules.categoria.model.entity.Categoria", b =>
-                {
-                    b.Navigation("Produtos");
                 });
 #pragma warning restore 612, 618
         }

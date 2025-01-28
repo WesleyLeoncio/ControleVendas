@@ -4,6 +4,7 @@ using controle_vendas.modules.categoria.model.request;
 using controle_vendas.modules.categoria.repository.interfaces;
 using controle_vendas.modules.common.pagination.models.request;
 using controle_vendas.modules.common.repository;
+using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 using X.PagedList.Extensions;
 
@@ -15,15 +16,24 @@ public class CategoriaRepository : Repository<Categoria>, ICategoriaRepository
     {
     }
 
-    public Task<IPagedList<Categoria>> GetAllIncludePageableAsync(CategoriaFiltroRequest filtroRequest)
+    public async Task<IPagedList<Categoria>> GetAllIncludePageableAsync(CategoriaFiltroRequest filtroRequest)
     {
-        // IEnumerable<Categoria> categorias = await GetIQueryable()
-        //     .OrderBy(c => c.Nome)
-        //     .Include(categoria => categoria.Produtos)
-        //     .ToListAsync();
-        // return await categorias.ToPagedListAsync(queryParameters.PageNumber,
-        //     queryParameters.PageSize);
-        throw new NotImplementedException();
+        IEnumerable<Categoria> categorias = await GetIQueryable()
+            .OrderBy(c => c.Nome)
+            .Include(categoria => categoria.Produtos)
+            .ToListAsync();
+        
+        IQueryable<Categoria> queryableCategoria = 
+            categorias.AsQueryable();
+        
+        if (!string.IsNullOrEmpty(filtroRequest.Nome))
+        {
+            queryableCategoria = queryableCategoria.Where(c =>
+                c.Nome != null && c.Nome.Contains(filtroRequest.Nome));
+        }
+
+        return queryableCategoria.ToPagedList(filtroRequest.PageNumber,
+            filtroRequest.PageSize);
     }
 
     public async Task<IPagedList<Categoria>> GetAllFilterPageableAsync(CategoriaFiltroRequest filtroRequest)

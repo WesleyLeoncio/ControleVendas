@@ -50,6 +50,14 @@ public class CategoriaController : ControllerBase
         Response.Headers.Append("X-Pagination",JsonConvert.SerializeObject(response.MetaData));
         return Ok(response.Categorias);
     }
+    
+    [HttpGet("Filter/Pagination/Produtos")]
+    public async Task<ActionResult<IEnumerable<CategoriaPaginationProdutoResponse>>> ListarCategoriaComProdutosFiltro([FromQuery] CategoriaFiltroRequest filtroRequest)
+    {
+        CategoriaPaginationProdutoResponse response = await _categoriaService.GetAllIncludeProduto(filtroRequest);
+        Response.Headers.Append("X-Pagination",JsonConvert.SerializeObject(response.MetaData));
+        return Ok(response.Categorias);
+    }
    
     
 }

@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using controle_vendas.infra.data;
+using controle_vendas.modules.categoria.model.entity;
 using controle_vendas.modules.common.repository.interfaces;
 using Microsoft.EntityFrameworkCore;
 

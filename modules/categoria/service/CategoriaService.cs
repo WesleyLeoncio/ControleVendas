@@ -45,6 +45,17 @@ public class CategoriaService : ICategoriaService
         return categoriaPg;
     }
 
+    public async Task<CategoriaPaginationProdutoResponse> GetAllIncludeProduto(CategoriaFiltroRequest filtroRequest)
+    {
+        IPagedList<Categoria> categorias =
+            await _uof.CategoriaRepository.GetAllIncludePageableAsync(filtroRequest);
+        CategoriaPaginationProdutoResponse categoriaPg = new CategoriaPaginationProdutoResponse(
+            _mapper.Map<IEnumerable<CategoriaProdutoResponse>>(categorias),
+            MetaData<Categoria>.ToValue(categorias));
+        return categoriaPg;
+    }
+
+
     public async Task<CategoriaResponse> UpdateCategoria(int id, CategoriaRequest request)
     {   
         await CheckNameExists(request.Nome);

@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using controle_vendas.modules.produto.models.entity;
 using Microsoft.EntityFrameworkCore;
 
 namespace controle_vendas.modules.categoria.model.entity;
@@ -18,5 +19,5 @@ public class Categoria
     [StringLength(80)]
     public string? Nome { get; set; }
     
-    //public ICollection<Produto> Produtos { get; set; } = new Collection<Produto>();
+    public ICollection<Produto> Produtos { get; set; } = new Collection<Produto>();
 }
