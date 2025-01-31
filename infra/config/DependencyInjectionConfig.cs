@@ -13,6 +13,8 @@ using controle_vendas.modules.fornecedor.repository.interfaces;
 using controle_vendas.modules.fornecedor.service;
 using controle_vendas.modules.fornecedor.service.interfaces;
 using controle_vendas.modules.produto.repository;
+using controle_vendas.modules.produto.repository.filter.custom;
+using controle_vendas.modules.produto.repository.filter.interfaces;
 using controle_vendas.modules.produto.repository.interfaces;
 using controle_vendas.modules.produto.service;
 using controle_vendas.modules.produto.service.interfaces;
@@ -36,5 +38,11 @@ public static class DependencyInjectionConfig
         
         services.AddTransient<IErrorResultTask, HandleNotFound>();
         services.AddTransient<IErrorResultTask, HandleKeyDuplication>();
+        
+        // services.AddTransient<IFilterProdutoResult, FilterNameProduto>();
+        // services.AddTransient<IFilterProdutoResult, FilterCategoriaProduto>();
+        // services.AddTransient<IFilterProdutoResult, FilterFonecedorProduto>();
+        // services.AddTransient<IFilterProdutoResult, FilterPrecoCriteiroProduto>();
+     
     }
 }
