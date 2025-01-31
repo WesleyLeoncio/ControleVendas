@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using controle_vendas.infra.exceptions.custom;
 using controle_vendas.modules.categoria.model.entity;
+using controle_vendas.modules.common.pagination;
 using controle_vendas.modules.common.unit_of_work.interfaces;
 using controle_vendas.modules.fornecedor.model.entity;
 using controle_vendas.modules.produto.models.entity;
 using controle_vendas.modules.produto.models.request;
 using controle_vendas.modules.produto.models.response;
 using controle_vendas.modules.produto.service.interfaces;
+using X.PagedList;
 
 namespace controle_vendas.modules.produto.service;
 
@@ -32,6 +34,16 @@ public class ProdutoService : IProdutoService
     public async Task<ProdutoResponse> GetCategoriaById(int id)
     {
         return _mapper.Map<ProdutoResponse>(await CheckProduto(id));
+    }
+
+    public async Task<ProdutoPaginationResponse> GetAllFilterProdutos(ProdutoFiltroRequest filtroRequest)
+    {
+        IPagedList<Produto> produtos = await 
+            _uof.ProdutoRepository.GetAllFilterPageableAsync(filtroRequest);
+        ProdutoPaginationResponse produtoPg = new ProdutoPaginationResponse(
+            _mapper.Map<IEnumerable<ProdutoResponse>>(produtos),
+            MetaData<Produto>.ToValue(produtos));
+        return produtoPg;
     }
 
     private async Task<Produto> CheckProduto(int id)

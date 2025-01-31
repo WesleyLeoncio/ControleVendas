@@ -2,6 +2,7 @@
 using controle_vendas.modules.produto.models.response;
 using controle_vendas.modules.produto.service.interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace controle_vendas.modules.produto.controller;
 
@@ -22,6 +23,14 @@ public class ProdutoController : ControllerBase
         ProdutoResponse response = await _produtoService.CreateCategoria(request);
         return CreatedAtAction(nameof(BuscarProdutoPorId),
             new { id = response.Id }, response);
+    }
+
+    [HttpGet("Filter/Pagination")]
+    public async Task<ActionResult<IEnumerable<ProdutoResponse>>> ListarProdutosComFiltro([FromQuery] ProdutoFiltroRequest filtroRequest)
+    {
+        ProdutoPaginationResponse response = await _produtoService.GetAllFilterProdutos(filtroRequest);
+        Response.Headers.Append("X-Pagination",JsonConvert.SerializeObject(response.MetaData));
+        return Ok(response.Produtos);
     }
     
     [HttpGet("{id}")]

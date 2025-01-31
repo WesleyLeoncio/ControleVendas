@@ -6,10 +6,8 @@ namespace controle_vendas.modules.produto.service.interfaces;
 public interface IProdutoService
 {
     Task<ProdutoResponse> CreateCategoria(ProdutoRequest request);
-    
     Task<ProdutoResponse> GetCategoriaById(int id); 
-    //
-    // Task<CategoriaPaginationResponse> GetAllFilterCategorias(CategoriaFiltroRequest filtroRequest);
+    Task<ProdutoPaginationResponse> GetAllFilterProdutos(ProdutoFiltroRequest filtroRequest);
     //
     // Task<CategoriaResponse> UpdateCategoria(int id, CategoriaRequest request);
     //

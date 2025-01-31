@@ -1,4 +1,5 @@
 ﻿using controle_vendas.infra.data;
+using controle_vendas.modules.categoria.model;
 using controle_vendas.modules.common.repository;
 using controle_vendas.modules.produto.models.entity;
 using controle_vendas.modules.produto.models.enums;
@@ -18,27 +19,51 @@ public class ProdutoRepository : Repository<Produto>, IProdutoRepository
     public async Task<IPagedList<Produto>> GetAllFilterPageableAsync(ProdutoFiltroRequest filtroRequest)
     {
         IEnumerable<Produto> produtos = await GetAllAsync();
+
+        IQueryable<Produto> produtosQuery =
+            produtos.OrderBy(p => p.Nome).AsQueryable();
+
+        if (!string.IsNullOrEmpty(filtroRequest.Nome))
+        {
+            produtosQuery = produtosQuery.Where(p =>
+                p.Nome != null && p.Nome.Contains(filtroRequest.Nome));
+        }
+
+        if (filtroRequest.Categoria.HasValue)
+        {
+            produtosQuery = produtosQuery
+                .Where(p => p.CategoriaId == filtroRequest.Categoria);
+            
+        }
+        
+        if (filtroRequest.Fornecedor.HasValue)
+        {
+            produtosQuery = produtosQuery
+                .Where(p => p.FornecedorId == filtroRequest.Fornecedor);
+            
+        }
      
         if (filtroRequest.VerificarValores())
         {
             switch (filtroRequest.PrecoCriterio)
             {
                 case Criterio.MAIOR:
-                    produtos = produtos.Where(p => p.ValorVenda > filtroRequest.Preco)
+                    produtosQuery = produtosQuery.Where(p => p.ValorVenda > filtroRequest.Preco)
                         .OrderBy(p => p.ValorVenda);
                     break;
                 case Criterio.MENOR:
-                    produtos = produtos.Where(p => p.ValorVenda < filtroRequest.Preco)
+                    produtosQuery = produtosQuery.Where(p => p.ValorVenda < filtroRequest.Preco)
                         .OrderBy(p => p.ValorVenda);
                     break;
                 case Criterio.IGUAL:
-                    produtos = produtos.Where(p => p.ValorVenda == filtroRequest.Preco)
+                    produtosQuery = produtosQuery.Where(p => p.ValorVenda == filtroRequest.Preco)
                         .OrderBy(p => p.ValorVenda);
                     break;
             }
             
         }
-        return produtos.ToPagedList(filtroRequest.PageNumber,
+        
+        return produtosQuery.ToPagedList(filtroRequest.PageNumber,
             filtroRequest.PageSize);
     }
 }
