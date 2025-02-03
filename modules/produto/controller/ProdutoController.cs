@@ -25,6 +25,18 @@ public class ProdutoController : ControllerBase
             new { id = response.Id }, response);
     }
 
+    [HttpPut("{id}")]
+    public async Task<ActionResult<ProdutoResponse>> AlterarProduto(int id, ProdutoRequest request)
+    {
+        return Ok(await _produtoService.UpdateProduto(id, request));
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<ProdutoResponse>> DeletarProduto(int id)
+    {
+        return Ok(await _produtoService.DeleteProduto(id));
+    }
+
     [HttpGet("Filter/Pagination")]
     public async Task<ActionResult<IEnumerable<ProdutoResponse>>> ListarProdutosComFiltro([FromQuery] ProdutoFiltroRequest filtroRequest)
     {

@@ -8,8 +8,8 @@ public interface IProdutoService
     Task<ProdutoResponse> CreateCategoria(ProdutoRequest request);
     Task<ProdutoResponse> GetCategoriaById(int id); 
     Task<ProdutoPaginationResponse> GetAllFilterProdutos(ProdutoFiltroRequest filtroRequest);
-    //
-    // Task<CategoriaResponse> UpdateCategoria(int id, CategoriaRequest request);
-    //
-    // Task<CategoriaResponse> DeleteCategoria(int id); 
+    
+    Task<ProdutoResponse> UpdateProduto(int id, ProdutoRequest request);
+    
+    Task<ProdutoResponse> DeleteProduto(int id); 
 }

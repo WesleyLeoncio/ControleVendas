@@ -2,10 +2,12 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using controle_vendas.modules.categoria.model.entity;
 using controle_vendas.modules.fornecedor.model.entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace controle_vendas.modules.produto.models.entity;
 
 [Table("produtos")]
+[Index(nameof(Nome), IsUnique = true)]
 public class Produto
 {
     [Key]
@@ -26,12 +28,19 @@ public class Produto
     public Fornecedor? Fornecedor { get; set; }
     
     [Column(name:"valor_compra")]
+    [Required]
     public decimal? ValorCompra { get; set; } 
     
     [Column(name:"valor_venda")] 
+    [Required]
     public decimal? ValorVenda { get; set; }
     
+    [Column(name:"descricao")] 
+    [StringLength(280)]
+    public string? Descricao { get; set; }
+    
     [Column(name:"estoque")] 
+    [Required]
     public int Estoque { get; set; }
     
     [Column(name:"data_cadastro")] 

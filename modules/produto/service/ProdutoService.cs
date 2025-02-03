@@ -25,6 +25,7 @@ public class ProdutoService : IProdutoService
 
     public async Task<ProdutoResponse> CreateCategoria(ProdutoRequest request)
     {
+        await CheckNameExists(request.Nome);
         await CheckCategoriaFornecedor(request);
         Produto entity = _uof.ProdutoRepository.Create(_mapper.Map<Produto>(request));
         await _uof.Commit();
@@ -38,12 +39,31 @@ public class ProdutoService : IProdutoService
 
     public async Task<ProdutoPaginationResponse> GetAllFilterProdutos(ProdutoFiltroRequest filtroRequest)
     {
-        IPagedList<Produto> produtos = await 
+        IPagedList<Produto> produtos = await
             _uof.ProdutoRepository.GetAllFilterPageableAsync(filtroRequest);
         ProdutoPaginationResponse produtoPg = new ProdutoPaginationResponse(
             _mapper.Map<IEnumerable<ProdutoResponse>>(produtos),
             MetaData<Produto>.ToValue(produtos));
         return produtoPg;
+    }
+
+    public async Task<ProdutoResponse> UpdateProduto(int id, ProdutoRequest request)
+    {
+        Produto produto = await CheckProduto(id);
+        if (produto.Nome != request.Nome) await CheckNameExists(request.Nome);
+        await CheckCategoriaFornecedor(request);
+        _mapper.Map(request, produto);
+        Produto update = _uof.ProdutoRepository.Update(produto);
+        await _uof.Commit();
+        return _mapper.Map<ProdutoResponse>(update);
+    }
+
+    public async Task<ProdutoResponse> DeleteProduto(int id)
+    {
+        Produto produto = await CheckProduto(id);
+        _uof.ProdutoRepository.Delete(produto);
+        await _uof.Commit();
+        return _mapper.Map<ProdutoResponse>(produto);
     }
 
     private async Task<Produto> CheckProduto(int id)
@@ -56,7 +76,7 @@ public class ProdutoService : IProdutoService
     {
         Categoria? categoria = await
             _uof.CategoriaRepository.GetAsync(c => c.Id == request.CategoriaId);
-        
+
         if (categoria == null)
         {
             throw new NotFoundException("Categoria não encontrada!");
@@ -64,10 +84,19 @@ public class ProdutoService : IProdutoService
 
         Fornecedor? fornecedor = await
             _uof.FornecedorRepository.GetAsync(f => f.Id == request.FornecedorId);
-        
+
         if (fornecedor == null)
         {
             throw new NotFoundException("Fornecedor não encontrado!");
+        }
+    }
+
+    private async Task CheckNameExists(string? nome)
+    {
+        Produto? produto = await _uof.ProdutoRepository.GetAsync(p => p.Nome == nome);
+        if (produto != null)
+        {
+            throw new KeyDuplicationException("Já existe um produto com este nome!");
         }
     }
 }

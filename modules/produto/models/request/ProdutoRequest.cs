@@ -13,6 +13,9 @@ public record ProdutoRequest(
     [Range(1,20000, ErrorMessage = "O Valor deve está dentro do Range (1 a 20000)")]
     decimal ValorVenda,
     
+    [StringLength(280,ErrorMessage = "O Campo descricção deve ter no maximo 280 a caracter")]
+    string Descricao,
+    
     [Range(1,20000, ErrorMessage = "O Estoque deve está dentro do Range (1 a 20000)")]
     int Estoque,
     

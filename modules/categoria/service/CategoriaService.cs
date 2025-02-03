@@ -58,8 +58,8 @@ public class CategoriaService : ICategoriaService
 
     public async Task<CategoriaResponse> UpdateCategoria(int id, CategoriaRequest request)
     {   
-        await CheckNameExists(request.Nome);
         Categoria categoria = await CheckCategoria(id);
+        if (categoria.Nome != request.Nome) await CheckNameExists(request.Nome);
         _mapper.Map(request, categoria);
         Categoria update = _uof.CategoriaRepository.Update(categoria);
         await _uof.Commit();
@@ -80,7 +80,7 @@ public class CategoriaService : ICategoriaService
                throw new NotFoundException("Categoria não encontrada!");
     }
 
-    private async Task CheckNameExists(string nome)
+    private async Task CheckNameExists(string? nome)
     {
         Categoria? categoria = await _uof.CategoriaRepository.GetAsync(c => c.Nome == nome);
         if (categoria != null)
