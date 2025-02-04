@@ -1,4 +1,5 @@
 ﻿using controle_vendas.modules.categoria.model.entity;
+using controle_vendas.modules.cliente.model.entity;
 using controle_vendas.modules.fornecedor.model.entity;
 using controle_vendas.modules.produto.models.entity;
 using controle_vendas.modules.user.models.entity;
@@ -13,5 +14,6 @@ public class AppDbConnectionContext(DbContextOptions options) :
     public DbSet<Categoria> CategoriaBd { get; set; }
     public DbSet<Fornecedor> FornecedorBd { get; set; }
     public DbSet<Produto> ProdutoBd { get; set; }
+    public DbSet<Cliente> ClienteBd { get; set; }
     
 }

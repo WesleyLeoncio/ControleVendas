@@ -4,6 +4,10 @@ using controle_vendas.modules.categoria.repository;
 using controle_vendas.modules.categoria.repository.interfaces;
 using controle_vendas.modules.categoria.service;
 using controle_vendas.modules.categoria.service.interfaces;
+using controle_vendas.modules.cliente.repository;
+using controle_vendas.modules.cliente.repository.interfaces;
+using controle_vendas.modules.cliente.service;
+using controle_vendas.modules.cliente.service.interfaces;
 using controle_vendas.modules.common.repository;
 using controle_vendas.modules.common.repository.interfaces;
 using controle_vendas.modules.common.unit_of_work;
@@ -29,10 +33,12 @@ public static class DependencyInjectionConfig
         services.AddScoped<ICategoriaRepository, CategoriaRepository>();
         services.AddScoped<IFornecedorRepository, FornecedorRepository>();
         services.AddScoped<IProdutoRepository, ProdutoRepository>();
+        services.AddScoped<IClienteRepository, ClienteRepository>();
         
         services.AddScoped<ICategoriaService, CategoriaService>();
         services.AddScoped<IFornecedorService, FornecedorService>();
         services.AddScoped<IProdutoService, ProdutoService>();
+        services.AddScoped<IClienteService, ClienteService>();
         
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         

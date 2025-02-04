@@ -2,7 +2,6 @@
 using controle_vendas.modules.categoria.model.entity;
 using controle_vendas.modules.categoria.model.request;
 using controle_vendas.modules.categoria.repository.interfaces;
-using controle_vendas.modules.common.pagination.models.request;
 using controle_vendas.modules.common.repository;
 using Microsoft.EntityFrameworkCore;
 using X.PagedList;

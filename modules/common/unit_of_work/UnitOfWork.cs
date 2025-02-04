@@ -1,6 +1,8 @@
 ﻿using controle_vendas.infra.data;
 using controle_vendas.modules.categoria.repository;
 using controle_vendas.modules.categoria.repository.interfaces;
+using controle_vendas.modules.cliente.repository;
+using controle_vendas.modules.cliente.repository.interfaces;
 using controle_vendas.modules.common.unit_of_work.interfaces;
 using controle_vendas.modules.fornecedor.repository;
 using controle_vendas.modules.fornecedor.repository.interfaces;
@@ -15,6 +17,7 @@ public class UnitOfWork : IUnitOfWork
     private ICategoriaRepository? _categoriaRepository;
     private IFornecedorRepository? _fornecedorRepository;
     private IProdutoRepository? _produtoRepository;
+    private IClienteRepository? _clienteRepository;
     private readonly AppDbConnectionContext _context;
     
     public UnitOfWork(AppDbConnectionContext context)
@@ -35,6 +38,11 @@ public class UnitOfWork : IUnitOfWork
     public IProdutoRepository ProdutoRepository
     {
         get { return _produtoRepository = _produtoRepository ?? new ProdutoRepository(_context); }
+    }
+    
+    public IClienteRepository ClienteRepository
+    {
+        get { return _clienteRepository = _clienteRepository ?? new ClienteRepository(_context); }
     }
 
     public async Task Commit()

@@ -6,7 +6,7 @@ namespace controle_vendas.modules.produto.repository.filter.custom;
 
 public class FilterNameProduto : IFilterProdutoResult
 {
-    public  IQueryable<Produto> RunFilter(IQueryable<Produto> queryable, ProdutoFiltroRequest filtro)
+    public IQueryable<Produto> RunFilter(IQueryable<Produto> queryable, ProdutoFiltroRequest filtro)
     {
         if (!string.IsNullOrEmpty(filtro.Nome))
         {
@@ -14,6 +14,7 @@ public class FilterNameProduto : IFilterProdutoResult
                 q.Nome != null && q.Nome.Contains(filtro.Nome));
             return queryable;
         }
+
         return queryable;
     }
 }
