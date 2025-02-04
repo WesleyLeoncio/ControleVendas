@@ -1,6 +1,7 @@
 ﻿using controle_vendas.infra.data;
 using controle_vendas.modules.categoria.model.entity;
 using controle_vendas.modules.categoria.model.request;
+using controle_vendas.modules.categoria.repository.filter;
 using controle_vendas.modules.categoria.repository.interfaces;
 using controle_vendas.modules.common.repository;
 using Microsoft.EntityFrameworkCore;
@@ -15,39 +16,25 @@ public class CategoriaRepository : Repository<Categoria>, ICategoriaRepository
     {
     }
 
-    public async Task<IPagedList<Categoria>> GetAllIncludePageableAsync(CategoriaFiltroRequest filtroRequest)
+    public Task<IPagedList<Categoria>> GetAllIncludePageableAsync(CategoriaFiltroRequest filtroRequest)
     {
-        IEnumerable<Categoria> categorias = await GetIQueryable()
+        IQueryable<Categoria> categoriaQuery = GetIQueryable()
             .OrderBy(c => c.Nome)
-            .Include(categoria => categoria.Produtos)
-            .ToListAsync();
-        
-        IQueryable<Categoria> queryableCategoria = 
-            categorias.AsQueryable();
-        
-        if (!string.IsNullOrEmpty(filtroRequest.Nome))
-        {
-            queryableCategoria = queryableCategoria.Where(c =>
-                c.Nome != null && c.Nome.Contains(filtroRequest.Nome));
-        }
+            .Include(categoria => categoria.Produtos);
 
-        return queryableCategoria.ToPagedList(filtroRequest.PageNumber,
-            filtroRequest.PageSize);
+        categoriaQuery = FilterCategoriaName.RunFilterName(categoriaQuery, filtroRequest.Nome);
+
+        return Task.FromResult(categoriaQuery.ToPagedList(filtroRequest.PageNumber,
+            filtroRequest.PageSize));
     }
 
-    public async Task<IPagedList<Categoria>> GetAllFilterPageableAsync(CategoriaFiltroRequest filtroRequest)
+    public Task<IPagedList<Categoria>> GetAllFilterPageableAsync(CategoriaFiltroRequest filtroRequest)
     {
-        IEnumerable<Categoria> categorias = await GetAllAsync();
-        IQueryable<Categoria> queryableCategoria = 
-            categorias.OrderBy(c => c.Nome).AsQueryable();
-        
-        if (!string.IsNullOrEmpty(filtroRequest.Nome))
-        {
-            queryableCategoria = queryableCategoria.Where(c =>
-                c.Nome != null && c.Nome.Contains(filtroRequest.Nome));
-        }
-        return queryableCategoria.ToPagedList(filtroRequest.PageNumber,
-            filtroRequest.PageSize);
-        
+        IQueryable<Categoria> categoriaQuery = GetIQueryable();
+
+        categoriaQuery = FilterCategoriaName.RunFilterName(categoriaQuery, filtroRequest.Nome);
+
+        return Task.FromResult(categoriaQuery.ToPagedList(filtroRequest.PageNumber,
+            filtroRequest.PageSize));
     }
 }
