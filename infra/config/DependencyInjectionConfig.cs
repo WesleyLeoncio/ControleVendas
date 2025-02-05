@@ -22,6 +22,8 @@ using controle_vendas.modules.produto.repository.filter.interfaces;
 using controle_vendas.modules.produto.repository.interfaces;
 using controle_vendas.modules.produto.service;
 using controle_vendas.modules.produto.service.interfaces;
+using controle_vendas.modules.user.service;
+using controle_vendas.modules.user.service.interfaces;
 
 namespace controle_vendas.infra.config;
 
@@ -39,6 +41,7 @@ public static class DependencyInjectionConfig
         services.AddScoped<IFornecedorService, FornecedorService>();
         services.AddScoped<IProdutoService, ProdutoService>();
         services.AddScoped<IClienteService, ClienteService>();
+        services.AddScoped<IUserService, UserService>();
         
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         
