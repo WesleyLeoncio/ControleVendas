@@ -17,11 +17,11 @@ using controle_vendas.modules.fornecedor.repository.interfaces;
 using controle_vendas.modules.fornecedor.service;
 using controle_vendas.modules.fornecedor.service.interfaces;
 using controle_vendas.modules.produto.repository;
-using controle_vendas.modules.produto.repository.filter.custom;
-using controle_vendas.modules.produto.repository.filter.interfaces;
 using controle_vendas.modules.produto.repository.interfaces;
 using controle_vendas.modules.produto.service;
 using controle_vendas.modules.produto.service.interfaces;
+using controle_vendas.modules.token.service;
+using controle_vendas.modules.token.service.interfaces;
 using controle_vendas.modules.user.service;
 using controle_vendas.modules.user.service.interfaces;
 
@@ -42,16 +42,13 @@ public static class DependencyInjectionConfig
         services.AddScoped<IProdutoService, ProdutoService>();
         services.AddScoped<IClienteService, ClienteService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<ITokenService, TokenService>();
         
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         
         services.AddTransient<IErrorResultTask, HandleNotFound>();
         services.AddTransient<IErrorResultTask, HandleKeyDuplication>();
+        services.AddTransient<IErrorResultTask, HandleUnauthorized>();
         
-        // services.AddTransient<IFilterProdutoResult, FilterNameProduto>();
-        // services.AddTransient<IFilterProdutoResult, FilterCategoriaProduto>();
-        // services.AddTransient<IFilterProdutoResult, FilterFonecedorProduto>();
-        // services.AddTransient<IFilterProdutoResult, FilterPrecoCriteiroProduto>();
-     
     }
 }

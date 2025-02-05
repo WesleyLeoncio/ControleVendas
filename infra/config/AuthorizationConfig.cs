@@ -7,7 +7,7 @@ public static class AuthorizationConfig
         services.AddAuthorization(options =>
         {
             options.AddPolicy("MASTER", policy => policy.RequireRole("MASTER"));
-            options.AddPolicy("SELLER", policy => policy.RequireRole("SELLER"));
+            options.AddPolicy("VENDEDOR", policy => policy.RequireRole("VENDEDOR"));
         });
     }
 }

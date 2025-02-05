@@ -1,4 +1,5 @@
-﻿using controle_vendas.modules.user.models.request;
+﻿using controle_vendas.modules.token.models.request;
+using controle_vendas.modules.user.models.request;
 using controle_vendas.modules.user.models.response;
 using controle_vendas.modules.user.service.interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -17,10 +18,18 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost]
+    [Route("login")]
+    public async Task<ActionResult<LoginResponse>> Login(LoginRequest request)
+    {
+        return Ok(await _userService.Login(request));
+    }
+
+    [HttpPost]
     [Route("register")]
     public async Task<ActionResult<RegisterResponse>> Register(UserRegisterRequest request)
     {
-        return StatusCode(StatusCodes.Status201Created, await _userService.Register(request));
+        return StatusCode(StatusCodes.Status201Created, 
+            await _userService.Register(request));
     }
 
     [HttpPost]
@@ -35,5 +44,21 @@ public class AuthController : ControllerBase
     public async Task<ActionResult<RegisterResponse>> AddUserToRole(string email, string roleName)
     {
         return Ok(await _userService.AddUserToRole(email, roleName));
+    }
+
+    [HttpPost]
+    [Route("refresh-token")]
+    public async Task<ActionResult<RefreshTokenResponse>> RefreshToken(TokenRequest tokenRequest)
+    {
+        return Ok(await _userService.RefreshToken(tokenRequest));
+    }
+
+
+    [HttpPost]
+    [Route("revoke/{email}")]
+    public async Task<IActionResult> Revoke(string email)
+    {
+        await _userService.Revoke(email);
+        return NoContent();
     }
 }

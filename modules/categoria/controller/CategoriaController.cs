@@ -1,6 +1,7 @@
 ﻿using controle_vendas.modules.categoria.model.request;
 using controle_vendas.modules.categoria.model.response;
 using controle_vendas.modules.categoria.service.interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -8,6 +9,7 @@ namespace controle_vendas.modules.categoria.controller;
 
 [ApiController]
 [Route("[controller]")]
+// [Authorize(policy: "VENDEDOR")]
 public class CategoriaController : ControllerBase
 {
     private readonly ICategoriaService _categoriaService;

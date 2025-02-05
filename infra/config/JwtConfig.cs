@@ -1,4 +1,6 @@
 ﻿using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace controle_vendas.infra.config;
 
@@ -9,26 +11,26 @@ public static class JwtConfig
         var secretKey = configuration["JWT:SecretKey"]
                         ?? throw new ArgumentException("Invalid secret key!!");
 
-        // services.AddAuthentication(options =>
-        //     {
-        //         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        //         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        //     })
-        //     .AddJwtBearer(options =>
-        //     {
-        //         options.SaveToken = true;
-        //         options.RequireHttpsMetadata = false;
-        //         options.TokenValidationParameters = new TokenValidationParameters()
-        //         {
-        //             ValidateIssuer = true,
-        //             ValidateAudience = true,
-        //             ValidateLifetime = true,
-        //             ValidateIssuerSigningKey = true,
-        //             ClockSkew = TimeSpan.Zero,
-        //             ValidAudience = configuration["JWT:ValidAudience"],
-        //             ValidIssuer = configuration["JWT:ValidIssuer"],
-        //             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
-        //         };
-        //     });
+        services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ClockSkew = TimeSpan.Zero,
+                    ValidAudience = configuration["JWT:ValidAudience"],
+                    ValidIssuer = configuration["JWT:ValidIssuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+                };
+            });
     }
 }
