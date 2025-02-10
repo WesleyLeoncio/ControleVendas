@@ -16,6 +16,10 @@ using controle_vendas.modules.fornecedor.repository;
 using controle_vendas.modules.fornecedor.repository.interfaces;
 using controle_vendas.modules.fornecedor.service;
 using controle_vendas.modules.fornecedor.service.interfaces;
+using controle_vendas.modules.pedido.repository;
+using controle_vendas.modules.pedido.repository.interfaces;
+using controle_vendas.modules.pedido.service;
+using controle_vendas.modules.pedido.service.interfaces;
 using controle_vendas.modules.produto.repository;
 using controle_vendas.modules.produto.repository.interfaces;
 using controle_vendas.modules.produto.service;
@@ -36,11 +40,13 @@ public static class DependencyInjectionConfig
         services.AddScoped<IFornecedorRepository, FornecedorRepository>();
         services.AddScoped<IProdutoRepository, ProdutoRepository>();
         services.AddScoped<IClienteRepository, ClienteRepository>();
+        services.AddScoped<IPedidoRepository, PedidoRepository>();
         
         services.AddScoped<ICategoriaService, CategoriaService>();
         services.AddScoped<IFornecedorService, FornecedorService>();
         services.AddScoped<IProdutoService, ProdutoService>();
         services.AddScoped<IClienteService, ClienteService>();
+        services.AddScoped<IPedidoService, PedidoService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ITokenService, TokenService>();
         

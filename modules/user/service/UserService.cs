@@ -175,7 +175,7 @@ public class UserService : IUserService
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
         foreach (var userRole in userRoles)
-        {
+        {   
             authClaims.Add(new Claim(ClaimTypes.Role, userRole));
         }
 

@@ -23,7 +23,7 @@ public class ProdutoService : IProdutoService
         _mapper = mapper;
     }
 
-    public async Task<ProdutoResponse> CreateCategoria(ProdutoRequest request)
+    public async Task<ProdutoResponse> CreateProduto(ProdutoRequest request)
     {
         await CheckNameExists(request.Nome);
         await CheckCategoriaFornecedor(request);
@@ -32,7 +32,7 @@ public class ProdutoService : IProdutoService
         return _mapper.Map<ProdutoResponse>(entity);
     }
 
-    public async Task<ProdutoResponse> GetCategoriaById(int id)
+    public async Task<ProdutoResponse> GetProdutoById(int id)
     {
         return _mapper.Map<ProdutoResponse>(await CheckProduto(id));
     }

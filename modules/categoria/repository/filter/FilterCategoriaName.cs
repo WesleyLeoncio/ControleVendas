@@ -2,7 +2,7 @@
 
 namespace controle_vendas.modules.categoria.repository.filter;
 
-public class FilterCategoriaName
+public abstract class FilterCategoriaName
 {
     public static IQueryable<Categoria> RunFilterName(IQueryable<Categoria> queryable, string? name)
     {

@@ -20,7 +20,7 @@ public class ProdutoController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<ProdutoResponse>> CadastroDeProduto(ProdutoRequest request)
     {
-        ProdutoResponse response = await _produtoService.CreateCategoria(request);
+        ProdutoResponse response = await _produtoService.CreateProduto(request);
         return CreatedAtAction(nameof(BuscarProdutoPorId),
             new { id = response.Id }, response);
     }
@@ -48,6 +48,6 @@ public class ProdutoController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<ProdutoResponse>> BuscarProdutoPorId(int id)
     {
-        return Ok(await _produtoService.GetCategoriaById(id));
+        return Ok(await _produtoService.GetProdutoById(id));
     }
 }

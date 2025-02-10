@@ -236,6 +236,86 @@ namespace controle_vendas.Migrations
                     b.ToTable("fornecedores");
                 });
 
+            modelBuilder.Entity("controle_vendas.modules.item_pedido.models.entity.ItemPedido", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("PedidoId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ProdutoId")
+                        .HasColumnType("integer")
+                        .HasColumnName("produto_id");
+
+                    b.Property<int>("Quantidade")
+                        .HasColumnType("integer")
+                        .HasColumnName("quantidade");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PedidoId");
+
+                    b.HasIndex("ProdutoId");
+
+                    b.ToTable("itens_pedido");
+                });
+
+            modelBuilder.Entity("controle_vendas.modules.pedido.models.entity.Pedido", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClienteId")
+                        .HasColumnType("integer")
+                        .HasColumnName("cliente_id");
+
+                    b.Property<DateTime>("DataVenda")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("data_venda");
+
+                    b.Property<decimal>("Desconto")
+                        .HasColumnType("numeric")
+                        .HasColumnName("desconto");
+
+                    b.Property<string>("FormaPagamento")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("forma_pagamento");
+
+                    b.Property<int>("NumeroParcela")
+                        .HasColumnType("integer")
+                        .HasColumnName("numero_parcelas");
+
+                    b.Property<string>("StatusPedido")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("status_pedido");
+
+                    b.Property<string>("VendedorId")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("vendedor_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClienteId");
+
+                    b.HasIndex("VendedorId");
+
+                    b.ToTable("pedidos");
+                });
+
             modelBuilder.Entity("controle_vendas.modules.produto.models.entity.Produto", b =>
                 {
                     b.Property<int>("Id")
@@ -414,6 +494,38 @@ namespace controle_vendas.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("controle_vendas.modules.item_pedido.models.entity.ItemPedido", b =>
+                {
+                    b.HasOne("controle_vendas.modules.pedido.models.entity.Pedido", null)
+                        .WithMany("Itens")
+                        .HasForeignKey("PedidoId");
+
+                    b.HasOne("controle_vendas.modules.produto.models.entity.Produto", "Produto")
+                        .WithMany()
+                        .HasForeignKey("ProdutoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Produto");
+                });
+
+            modelBuilder.Entity("controle_vendas.modules.pedido.models.entity.Pedido", b =>
+                {
+                    b.HasOne("controle_vendas.modules.cliente.model.entity.Cliente", "Cliente")
+                        .WithMany()
+                        .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("controle_vendas.modules.user.models.entity.ApplicationUser", "Vendedor")
+                        .WithMany()
+                        .HasForeignKey("VendedorId");
+
+                    b.Navigation("Cliente");
+
+                    b.Navigation("Vendedor");
+                });
+
             modelBuilder.Entity("controle_vendas.modules.produto.models.entity.Produto", b =>
                 {
                     b.HasOne("controle_vendas.modules.categoria.model.entity.Categoria", "Categoria")
@@ -436,6 +548,11 @@ namespace controle_vendas.Migrations
             modelBuilder.Entity("controle_vendas.modules.categoria.model.entity.Categoria", b =>
                 {
                     b.Navigation("Produtos");
+                });
+
+            modelBuilder.Entity("controle_vendas.modules.pedido.models.entity.Pedido", b =>
+                {
+                    b.Navigation("Itens");
                 });
 #pragma warning restore 612, 618
         }

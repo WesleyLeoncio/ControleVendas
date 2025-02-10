@@ -1,4 +1,4 @@
-﻿namespace controle_vendas.modules.categoria.model;
+﻿namespace controle_vendas.modules.categoria.model.enums;
 
 public enum CategoriaFiltro
 {

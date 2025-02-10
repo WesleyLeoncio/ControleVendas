@@ -24,4 +24,9 @@
         <PackageReference Include="X.PagedList.Mvc.Core" Version="10.5.7" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="modules\item_pedido\models\mapper\" />
+      <Folder Include="modules\item_pedido\models\response\" />
+    </ItemGroup>
+
 </Project>
