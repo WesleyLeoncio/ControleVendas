@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using controle_vendas.modules.cliente.model.entity;
 using controle_vendas.modules.item_pedido.models.entity;
 using controle_vendas.modules.pedido.models.enums;
@@ -16,13 +17,16 @@ public class Pedido
     
     [Column(name:"cliente_id")] 
     public int ClienteId { get; set; }
+    [JsonIgnore]
     public Cliente? Cliente { get; set; }
 
     [Column(name: "vendedor_id")]
     [StringLength(64)]
     public string? VendedorId { get; set; } = string.Empty;
+    [JsonIgnore]
     public ApplicationUser? Vendedor { get; set; }
     
+    [JsonIgnore]
     public List<ItemPedido> Itens { get; set; } = new List<ItemPedido>();
 
     [Column(name: "forma_pagamento")] 
@@ -39,7 +43,7 @@ public class Pedido
     
     [Column(name:"data_venda")] 
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-    public DateTime DataVenda { get; set; } = DateTime.Now;
+    public DateTime DataVenda { get; set; }
     
     
     

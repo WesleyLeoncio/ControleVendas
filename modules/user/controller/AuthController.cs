@@ -1,4 +1,5 @@
 ﻿using controle_vendas.modules.token.models.request;
+using controle_vendas.modules.user.models.enums;
 using controle_vendas.modules.user.models.request;
 using controle_vendas.modules.user.models.response;
 using controle_vendas.modules.user.service.interfaces;
@@ -34,16 +35,16 @@ public class AuthController : ControllerBase
 
     [HttpPost]
     [Route("CreateRole")]
-    public async Task<ActionResult<RegisterResponse>> CreateRole(string roleName)
+    public async Task<ActionResult<RegisterResponse>> CreateRole(Role role)
     {
-        return StatusCode(StatusCodes.Status201Created, await _userService.CreateRole(roleName));
+        return StatusCode(StatusCodes.Status201Created, await _userService.CreateRole(role));
     }
 
     [HttpPost]
     [Route("AddUserToRole")]
-    public async Task<ActionResult<RegisterResponse>> AddUserToRole(string email, string roleName)
+    public async Task<ActionResult<RegisterResponse>> AddUserToRole(string userName, Role role)
     {
-        return Ok(await _userService.AddUserToRole(email, roleName));
+        return Ok(await _userService.AddUserToRole(userName, role));
     }
 
     [HttpPost]
@@ -55,10 +56,10 @@ public class AuthController : ControllerBase
 
 
     [HttpPost]
-    [Route("revoke/{email}")]
-    public async Task<IActionResult> Revoke(string email)
+    [Route("revoke/{userName}")]
+    public async Task<IActionResult> Revoke(string userName)
     {
-        await _userService.Revoke(email);
+        await _userService.Revoke(userName);
         return NoContent();
     }
 }

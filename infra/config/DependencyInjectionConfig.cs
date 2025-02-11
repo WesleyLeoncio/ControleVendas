@@ -46,9 +46,9 @@ public static class DependencyInjectionConfig
         services.AddScoped<IFornecedorService, FornecedorService>();
         services.AddScoped<IProdutoService, ProdutoService>();
         services.AddScoped<IClienteService, ClienteService>();
-        services.AddScoped<IPedidoService, PedidoService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IPedidoService, PedidoService>();
         
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         

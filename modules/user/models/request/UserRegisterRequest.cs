@@ -5,6 +5,8 @@ namespace controle_vendas.modules.user.models.request;
 public record UserRegisterRequest(
     [Required(ErrorMessage = "O campo UserName é Obrigatorio!")]
     string Username,
+    [Required(ErrorMessage = "O campo Nome Completo é Obrigatorio!")]
+    string FullName,
     [EmailAddress]
     [Required(ErrorMessage = "O campo Email é Obrigatorio!")]
     string Email,

@@ -24,6 +24,7 @@ public class ProdutoRepository : Repository<Produto>, IProdutoRepository
         
         IEnumerable<IFilterProdutoResult> filterResults = new List<IFilterProdutoResult>
         {
+            new FilterProdutoEstoque(),
             new FilterNameProduto(),
             new FilterFonecedorProduto(),
             new FilterCategoriaProduto(),

@@ -4,11 +4,11 @@ using controle_vendas.infra.exceptions.custom;
 using controle_vendas.modules.token.models.request;
 using controle_vendas.modules.token.service.interfaces;
 using controle_vendas.modules.user.models.entity;
+using controle_vendas.modules.user.models.enums;
 using controle_vendas.modules.user.models.request;
 using controle_vendas.modules.user.models.response;
 using controle_vendas.modules.user.service.interfaces;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 
 namespace controle_vendas.modules.user.service;
 
@@ -60,17 +60,18 @@ public class UserService : IUserService
 
     public async Task<RegisterResponse> Register(UserRegisterRequest request)
     {
-        await CheckUserExists(request.Username);
+       await CheckUserExists(request.Username);
         ApplicationUser user = new()
         {
             Email = request.Email,
             SecurityStamp = Guid.NewGuid().ToString(),
             UserName = request.Username,
+            FullName = request.FullName,
             PhoneNumber = request.PhoneNumber
         };
         var result = await _userManager.CreateAsync(user, request.Password);
-        await AddUserToRole(request.Email, "VENDEDOR");
         if (!result.Succeeded) throw new ArgumentException("Ocorreram erros durante o registro!");
+        await AddUserToRole(request.Username, Role.VENDEDOR);
         return new RegisterResponse("Success", "Usuario criado com sucesso!");
     }
     
@@ -97,24 +98,26 @@ public class UserService : IUserService
             user.RefreshToken);
     }
     
-    public async Task Revoke(string email)
+    public async Task Revoke(string name)
     {
-        ApplicationUser user = await CheckUserEmailExists(email);
+        ApplicationUser user = await CheckUserNameExists(name);
         user.RefreshToken = null;
         await _userManager.UpdateAsync(user);
     }
 
-    public async Task<RegisterResponse> CreateRole(string roleName)
+    public async Task<RegisterResponse> CreateRole(Role role)
     {
+        string roleName = role.ToString();
         await CheckRoleExists(roleName);
         var roleResult = await _roleManager.CreateAsync(new IdentityRole(roleName));
         if (!roleResult.Succeeded) throw new NotFoundException("Erro ao criar o role!");
         return new RegisterResponse("Success", "Role criada com sucesso!");
     }
 
-    public async Task<RegisterResponse> AddUserToRole(string email, string roleName)
+    public async Task<RegisterResponse> AddUserToRole(string name, Role role)
     {
-        ApplicationUser user = await CheckUserEmailExists(email);
+        ApplicationUser user = await CheckUserNameExists(name);
+        string roleName = role.ToString();
         await CheckRoleNotExists(roleName);
         var roleResult = await _userManager.AddToRoleAsync(user, roleName);
         if (!roleResult.Succeeded) throw new NotFoundException("Erro ao tentar adicionar role!");
@@ -129,8 +132,7 @@ public class UserService : IUserService
     
     private async Task<ApplicationUser> CheckRefreshToken(string username, TokenRequest tokenRequest)
     {
-        ApplicationUser user = await _userManager.FindByNameAsync(username) ??
-               throw new NotFoundException("Usuário não encontrado!");
+        ApplicationUser user = await CheckUserNameExists(username);
 
         if (user.RefreshToken != tokenRequest.RefreshToken
             || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
@@ -152,15 +154,15 @@ public class UserService : IUserService
         if (!await _roleManager.RoleExistsAsync(roleName)) throw new NotFoundException("Role não encontrada!");
     }
 
-    private async Task<ApplicationUser> CheckUserEmailExists(string email)
+    private async Task<ApplicationUser> CheckUserNameExists(string name)
     {
-        return await _userManager.FindByEmailAsync(email) ??
+        return await _userManager.FindByNameAsync(name) ??
                throw new NotFoundException("Usuário não encontrado!");
     }
 
     private async Task<ApplicationUser> CheckCredential(LoginRequest request)
     {
-        ApplicationUser user = await CheckUserEmailExists(request.Email);
+        ApplicationUser user = await CheckUserNameExists(request.UserName);
         if (await _userManager.CheckPasswordAsync(user, request.Password)) return user;
         throw new UnauthorizedException("Password Incorreto!");
     }
@@ -169,16 +171,18 @@ public class UserService : IUserService
     {
         IList<string> userRoles = await _userManager.GetRolesAsync(user);
         var authClaims = new List<Claim>
-        {
+        {   
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id),
             new Claim(ClaimTypes.Name, user.UserName ?? string.Empty),
             new Claim(ClaimTypes.Email, user.Email ?? string.Empty),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
+        
         foreach (var userRole in userRoles)
-        {   
+        {
             authClaims.Add(new Claim(ClaimTypes.Role, userRole));
         }
-
+        
         return authClaims;
     }
 }

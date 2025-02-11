@@ -9,7 +9,8 @@ public class PedidoMapper : Profile
 {
     public PedidoMapper()
     {
-        CreateMap<PedidoRequest, Pedido>();
+        CreateMap<PedidoRequest, Pedido>()
+            .ForMember(dest => dest.Itens, opt => opt.Ignore());
         CreateMap<Pedido, PedidoResponse>();
     }
 }

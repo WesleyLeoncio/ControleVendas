@@ -47,11 +47,12 @@ public class UnitOfWork : IUnitOfWork
     {
         get { return _clienteRepository = _clienteRepository ?? new ClienteRepository(_context); }
     }
-    
+
     public IPedidoRepository PedidoRepository
     {
         get { return _pedidoRepository = _pedidoRepository ?? new PedidoRepository(_context); }
     }
+
 
     public async Task Commit()
     {

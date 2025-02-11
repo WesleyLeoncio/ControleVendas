@@ -36,7 +36,8 @@ builder.Services.AddAutoMapper(typeof(Program));
 //
 // Config conection SGBD
 builder.Services.AddDbContext<AppDbConnectionContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Connection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Connection")),
+    ServiceLifetime.Scoped);
 
 // Configuração de injeções de dependência usando a class DependencyInjectionConfig
 builder.Services.AddDependencyInjections();
