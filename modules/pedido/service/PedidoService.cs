@@ -2,7 +2,6 @@
 using controle_vendas.infra.exceptions.custom;
 using controle_vendas.modules.common.unit_of_work.interfaces;
 using controle_vendas.modules.item_pedido.models.entity;
-using controle_vendas.modules.item_pedido.models.request;
 using controle_vendas.modules.pedido.models.entity;
 using controle_vendas.modules.pedido.models.request;
 using controle_vendas.modules.pedido.service.interfaces;
@@ -29,19 +28,20 @@ public class PedidoService : IPedidoService
         pedido.VendedorId = "cadd2ea3-30bb-44a1-b409-ec65001fa6da";
         foreach (var item in pedidoRequest.Itens)
         {
-            await ValidarProduto(item);
+            Produto produto = await CheckProduto(item.ProdutoId);
+            await RetirarQuantidadeProduto(produto, item.Quantidade);
+           
+            ItemPedido itemPedido = new ItemPedido();
+            itemPedido.ProdutoId = produto.Id;
+            itemPedido.Quantidade = item.Quantidade;
+            itemPedido.PrecoUnitario = produto.ValorVenda;
+            itemPedido.CalcularLucroItemPedido(produto.ValorCompra);
             
-            ItemPedido itemPedido = new ItemPedido
-            {
-                ProdutoId = item.ProdutoId,
-                Quantidade = item.Quantidade,
-            };
            pedido.Itens.Add(itemPedido);
         }
         
         Pedido entity = _uof.PedidoRepository.Create(pedido);
         await _uof.Commit();
-        Console.WriteLine(entity);
     }
     
     private async Task<Produto> CheckProduto(int id)
@@ -49,14 +49,7 @@ public class PedidoService : IPedidoService
         return await _uof.ProdutoRepository.GetAsync(p => p.Id == id) ??
                throw new NotFoundException("Produto não encontrado!");
     }
-
-    private async Task ValidarProduto(ItemPedidoRequest item)
-    {
-        Produto produto = await CheckProduto(item.ProdutoId);
-        await RetirarQuantidadeProduto(produto, item.Quantidade);
-        
-    }
-
+    
     private async Task RetirarQuantidadeProduto(Produto produto, int quantidade)
     {
         if (produto.Estoque < quantidade)
@@ -68,4 +61,5 @@ public class PedidoService : IPedidoService
         _uof.ProdutoRepository.Update(produto);
         await _uof.Commit();
     }
+    
 }
