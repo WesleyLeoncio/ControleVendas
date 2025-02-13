@@ -4,17 +4,18 @@ using controle_vendas.modules.produto.models.entity;
 
 namespace controle_vendas.modules.item_pedido.models.entity;
 
-[Table("itens_pedido")]
+[Table("itens_pedidos")]
 public class ItemPedido
 {
     [Key]
-    [Column(name:"id")]
+    [Column(name: "id")]
     public int Id { get; set; }
-    
-    [Column(name:"produto_id")]
-    public int ProdutoId { get; set; }
-    public Produto? Produto { get; set; }
 
+    [Column(name: "produto_id")]
+    [Required]
+    public int ProdutoId { get; set; }
+    public Produto? Produto { get; set; } 
+    
     [Column(name: "quantidade")]
     [Required]
     public int Quantidade
@@ -28,8 +29,8 @@ public class ItemPedido
     }
 
     [Column(name: "preco_unitario")]
-    [Required]
-    public decimal? PrecoUnitario
+    
+    public decimal PrecoUnitario
     {
         get => _precoUnitario;
         set
@@ -37,28 +38,31 @@ public class ItemPedido
             _precoUnitario = value;
             CalcularPrecoTotal();
         }
-    } 
-    
-    [Column(name:"preco_total")]
-    [Required]
-    public decimal? PrecoTotal { get; set; } 
-    
-    [Column(name:"lucro_item")]
-    [Required]
-    public decimal? LucroItem { get; set; }
-    
-    private decimal? _precoUnitario;
-    private int _quantidade;
-    
-    private void CalcularPrecoTotal()
-    {
-        PrecoTotal = (PrecoUnitario ?? 0) * Quantidade;
-    }
-    
-    public void CalcularLucroItemPedido(decimal? produtoValorCompra)
-    {
-        if (produtoValorCompra < 0) throw new ArgumentException("O valor de compra do produto não pode ser negativo.");
-        LucroItem = PrecoTotal - (produtoValorCompra * Quantidade);
     }
 
+    [Column(name: "preco_total")]
+    [Required]
+    public decimal PrecoTotal { get; private set; }
+
+    [Column(name: "lucro_item")]
+    [Required]
+    public decimal LucroItem { get; private set; }
+    
+    
+    private int _quantidade;
+    private decimal _precoUnitario;
+
+    private void CalcularPrecoTotal()
+    {
+        PrecoTotal = PrecoUnitario * Quantidade;
+    }
+
+    public void CalcularLucroItemPedido(decimal produtoValorCompra)
+    {
+        if (produtoValorCompra < 0)
+        {
+            throw new ArgumentException("O valor de compra do produto não pode ser negativo.");
+        }
+        LucroItem = PrecoTotal - (produtoValorCompra * Quantidade);
+    }
 }

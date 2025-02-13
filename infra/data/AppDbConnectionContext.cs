@@ -24,7 +24,11 @@ public class AppDbConnectionContext(DbContextOptions options) :
     {
         base.OnModelCreating(builder);
         builder.Entity<Pedido>()
-            .Property(p => p.StatusPedido)
+            .Property(p => p.Status)
+            .HasConversion<string>(); // Salva como texto no banco
+        
+        builder.Entity<Pedido>()
+            .Property(p => p.FormaPagamento)
             .HasConversion<string>(); // Salva como texto no banco
     }
     

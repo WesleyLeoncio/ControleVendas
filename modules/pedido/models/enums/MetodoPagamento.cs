@@ -1,8 +1,7 @@
 ﻿namespace controle_vendas.modules.pedido.models.enums;
 
-public enum StatusPedido
+public enum MetodoPagamento
 {
-    Pendente,
-    Pago,
-    Atrasado
+    AVISTA,
+    PARCELADO
 }

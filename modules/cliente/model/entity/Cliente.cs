@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace controle_vendas.modules.cliente.model.entity;
 
-[Table("cliente")]
+[Table("clientes")]
 [Index(nameof(Telefone), IsUnique = true)]
 public class Cliente
 {

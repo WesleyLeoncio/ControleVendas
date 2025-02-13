@@ -29,11 +29,11 @@ public class Produto
     
     [Column(name:"valor_compra")]
     [Required]
-    public decimal? ValorCompra { get; set; } 
+    public decimal ValorCompra { get; set; } 
     
     [Column(name:"valor_venda")] 
     [Required]
-    public decimal? ValorVenda { get; set; }
+    public decimal ValorVenda { get; set; }
     
     [Column(name:"descricao")] 
     [StringLength(280)]

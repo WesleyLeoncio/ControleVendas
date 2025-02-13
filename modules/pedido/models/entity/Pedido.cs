@@ -31,20 +31,35 @@ public class Pedido
 
     [Column(name: "forma_pagamento")] 
     [Required]
-    [StringLength(50)]
-    public string? FormaPagamento { get; set; }
+    public MetodoPagamento FormaPagamento { get; set; }
     
     [Column(name:"numero_parcelas")] 
-    public int NumeroParcela { get; set; }
+    public int NumeroParcelas { get; set; }
 
     [Column(name: "desconto")] public decimal Desconto { get; set; }
 
-    [Column(name: "status_pedido")] public StatusPedido StatusPedido { get; set; } = StatusPedido.Pendente;
+    [Column(name: "status")] 
+    public StatusPedido Status { get; set; } = StatusPedido.Pendente;
     
     [Column(name:"data_venda")] 
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
     public DateTime DataVenda { get; set; }
     
+    [Column(name:"valor_pago")]
+    public decimal ValorPago { get; set; }
+
+    [Column(name: "valor_total")]
+    [Required]
+    public decimal ValorTotal
+    {
+        get => _valorTotal;
+        private set => _valorTotal = value;
+    }
     
+    private decimal _valorTotal;
     
+    public void CalcularValorTotal()
+    {
+        ValorTotal = Itens.Sum(i => i.PrecoTotal) - Desconto;
+    }
 }

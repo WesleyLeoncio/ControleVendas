@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using controle_vendas.infra.data;
@@ -11,9 +12,11 @@ using controle_vendas.infra.data;
 namespace controle_vendas.Migrations
 {
     [DbContext(typeof(AppDbConnectionContext))]
-    partial class AppDbConnectionContextModelSnapshot : ModelSnapshot
+    [Migration("20250213020930_AlteradoNomeDasTabelasClienteEItemPedidoParaPlural")]
+    partial class AlteradoNomeDasTabelasClienteEItemPedidoParaPlural
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -301,25 +304,18 @@ namespace controle_vendas.Migrations
 
                     b.Property<string>("FormaPagamento")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
                         .HasColumnName("forma_pagamento");
 
-                    b.Property<int>("NumeroParcelas")
+                    b.Property<int>("NumeroParcela")
                         .HasColumnType("integer")
                         .HasColumnName("numero_parcelas");
 
-                    b.Property<string>("Status")
+                    b.Property<string>("StatusPedido")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("status");
-
-                    b.Property<decimal>("ValorPago")
-                        .HasColumnType("numeric")
-                        .HasColumnName("valor_pago");
-
-                    b.Property<decimal>("ValorTotal")
-                        .HasColumnType("numeric")
-                        .HasColumnName("valor_total");
+                        .HasColumnName("status_pedido");
 
                     b.Property<string>("VendedorId")
                         .HasMaxLength(64)

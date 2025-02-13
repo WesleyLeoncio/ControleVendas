@@ -23,25 +23,25 @@ public class PedidoService : IPedidoService
 
     public async Task RegistrarPedido(PedidoRequest pedidoRequest)
     {
-        //if (user == null) throw new NotFoundException("Vendedor não encontrado!");
-        Pedido pedido =  _mapper.Map<Pedido>(pedidoRequest);
-        pedido.VendedorId = "cadd2ea3-30bb-44a1-b409-ec65001fa6da";
-        foreach (var item in pedidoRequest.Itens)
-        {
-            Produto produto = await CheckProduto(item.ProdutoId);
-            await RetirarQuantidadeProduto(produto, item.Quantidade);
-           
-            ItemPedido itemPedido = new ItemPedido();
-            itemPedido.ProdutoId = produto.Id;
-            itemPedido.Quantidade = item.Quantidade;
-            itemPedido.PrecoUnitario = produto.ValorVenda;
-            itemPedido.CalcularLucroItemPedido(produto.ValorCompra);
+        // if (user == null) throw new NotFoundException("Vendedor não encontrado!");
+         Pedido pedido =  _mapper.Map<Pedido>(pedidoRequest);
+         pedido.VendedorId = "cadd2ea3-30bb-44a1-b409-ec65001fa6da";
+         foreach (var item in pedidoRequest.Itens)
+         {
+             Produto produto = await CheckProduto(item.ProdutoId);
+             await RetirarQuantidadeProduto(produto, item.Quantidade);
             
-           pedido.Itens.Add(itemPedido);
-        }
-        
-        Pedido entity = _uof.PedidoRepository.Create(pedido);
-        await _uof.Commit();
+             ItemPedido itemPedido = new ItemPedido();
+             itemPedido.ProdutoId = produto.Id;
+             itemPedido.Quantidade = item.Quantidade;
+             itemPedido.PrecoUnitario = produto.ValorVenda;
+             itemPedido.CalcularLucroItemPedido(produto.ValorCompra);
+             
+            pedido.Itens.Add(itemPedido);
+         }
+         pedido.CalcularValorTotal();
+         Pedido entity = _uof.PedidoRepository.Create(pedido);
+         await _uof.Commit();
     }
     
     private async Task<Produto> CheckProduto(int id)
@@ -61,5 +61,7 @@ public class PedidoService : IPedidoService
         _uof.ProdutoRepository.Update(produto);
         await _uof.Commit();
     }
+
     
+  
 }
