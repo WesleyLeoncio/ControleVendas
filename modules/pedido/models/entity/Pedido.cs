@@ -17,7 +17,6 @@ public class Pedido
     
     [Column(name:"cliente_id")] 
     public int ClienteId { get; set; }
-    [JsonIgnore]
     public Cliente? Cliente { get; set; }
 
     [Column(name: "vendedor_id")]
@@ -26,7 +25,6 @@ public class Pedido
     [JsonIgnore]
     public ApplicationUser? Vendedor { get; set; }
     
-    [JsonIgnore]
     public List<ItemPedido> Itens { get; set; } = new List<ItemPedido>();
 
     [Column(name: "forma_pagamento")] 

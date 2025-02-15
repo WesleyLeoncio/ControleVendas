@@ -13,8 +13,8 @@ public class PedidoRequest
     [EnumDataType(typeof(MetodoPagamento))]
     public MetodoPagamento FormaPagamento { get; set; }
 
-    [Range(1, int.MaxValue, ErrorMessage = "O número de parcelas deve ser pelo menos 1.")]
-    public int NumeroParcelas { get; set; } = 1;
+    [Required(ErrorMessage = "O numero de parcelas é obrigatória.")]
+    public int NumeroParcelas { get; set; } = 0;
 
     [Range(0, double.MaxValue, ErrorMessage = "O desconto não pode ser negativo.")]
     public decimal Desconto { get; set; } = 0;
