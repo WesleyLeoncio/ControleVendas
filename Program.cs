@@ -1,8 +1,7 @@
-using controle_vendas.Infra.back_graund_tasks;
-using controle_vendas.infra.config;
-using controle_vendas.infra.data;
-using controle_vendas.infra.middlewares;
-using controle_vendas.modules.user.models.entity;
+using ControleVendas.Infra.Config;
+using ControleVendas.Infra.Data;
+using ControleVendas.Infra.Middlewares;
+using ControleVendas.Modules.User.Models.Entity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,8 +41,6 @@ builder.Services.AddDbContext<AppDbConnectionContext>(options =>
 // Configuração de injeções de dependência usando a class DependencyInjectionConfig
 builder.Services.AddDependencyInjections();
 
-// Adiciona o serviço de background para verificar pedidos atrasados
-builder.Services.AddHostedService<PedidoAtrasadoService>();
 
 // Configuração do logging
 builder.Logging.ClearProviders();
