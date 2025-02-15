@@ -1,3 +1,4 @@
+using controle_vendas.Infra.back_graund_tasks;
 using controle_vendas.infra.config;
 using controle_vendas.infra.data;
 using controle_vendas.infra.middlewares;
@@ -36,11 +37,17 @@ builder.Services.AddAutoMapper(typeof(Program));
 //
 // Config conection SGBD
 builder.Services.AddDbContext<AppDbConnectionContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Connection")),
-    ServiceLifetime.Scoped);
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Connection")));
 
 // Configuração de injeções de dependência usando a class DependencyInjectionConfig
 builder.Services.AddDependencyInjections();
+
+// Adiciona o serviço de background para verificar pedidos atrasados
+builder.Services.AddHostedService<PedidoAtrasadoService>();
+
+// Configuração do logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 var app = builder.Build();
 
