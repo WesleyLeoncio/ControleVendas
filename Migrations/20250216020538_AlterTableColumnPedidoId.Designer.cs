@@ -3,6 +3,7 @@ using System;
 using ControleVendas.Infra.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace controle_vendas.Migrations
 {
     [DbContext(typeof(AppDbConnectionContext))]
-    partial class AppDbConnectionContextModelSnapshot : ModelSnapshot
+    [Migration("20250216020538_AlterTableColumnPedidoId")]
+    partial class AlterTableColumnPedidoId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -117,6 +120,9 @@ namespace controle_vendas.Migrations
                         .HasColumnType("numeric")
                         .HasColumnName("lucro_item");
 
+                    b.Property<int?>("PedidoEntityId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("PedidoId")
                         .HasColumnType("integer")
                         .HasColumnName("pedido_id");
@@ -139,7 +145,7 @@ namespace controle_vendas.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PedidoId");
+                    b.HasIndex("PedidoEntityId");
 
                     b.HasIndex("ProdutoId");
 
@@ -471,19 +477,15 @@ namespace controle_vendas.Migrations
 
             modelBuilder.Entity("ControleVendas.Modules.ItemPedido.models.Entity.ItemPedidoEntity", b =>
                 {
-                    b.HasOne("ControleVendas.Modules.Pedido.Models.Entity.PedidoEntity", "Pedido")
+                    b.HasOne("ControleVendas.Modules.Pedido.Models.Entity.PedidoEntity", null)
                         .WithMany("Itens")
-                        .HasForeignKey("PedidoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PedidoEntityId");
 
                     b.HasOne("ControleVendas.Modules.Produto.Models.Entity.ProdutoEntity", "Produto")
                         .WithMany()
                         .HasForeignKey("ProdutoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Pedido");
 
                     b.Navigation("Produto");
                 });

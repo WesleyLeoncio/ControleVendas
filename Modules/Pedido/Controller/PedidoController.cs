@@ -1,6 +1,7 @@
 ﻿using ControleVendas.Modules.Pedido.Models.Request;
 using ControleVendas.Modules.Pedido.Models.Response;
 using ControleVendas.Modules.Pedido.Service.Interfaces;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -22,6 +23,13 @@ public class PedidoController : ControllerBase
     {
         await _pedidoService.RegistrarPedido(request);
         return StatusCode(201);
+    }
+    
+    [HttpPost("Pagamento")]
+    public async Task<ActionResult> RealizarPagamento(PedidoPagamentoRequest request)
+    {
+        await _pedidoService.PedidoPagamento(request);
+        return Ok();
     }
 
     [HttpGet]

@@ -45,8 +45,42 @@ public class PedidoService : IPedidoService
         }
 
         pedidoEntity.CalcularValorTotal();
+        pedidoEntity = RealizarPagamento(pedidoEntity, pedidoRequest.Pagamento);
         _uof.PedidoRepository.Create(pedidoEntity);
         await _uof.Commit();
+    }
+
+    public async Task PedidoPagamento(PedidoPagamentoRequest pagamentoRequest)
+    {
+        PedidoEntity pedido = await CheckPedido(pagamentoRequest.IdPedido);
+        if (pedido.Status != StatusPedido.Pago)
+        {
+            pedido = RealizarPagamento(pedido, pagamentoRequest.Pagamento);
+            _uof.PedidoRepository.Update(pedido);
+            await _uof.Commit();
+        }
+    }
+
+    private static PedidoEntity RealizarPagamento(PedidoEntity pedido, decimal pagamento)
+    {
+        if (pagamento < 0)
+            throw new ArgumentException("O valor do pagamento não pode ser negativo.");
+
+        pedido.ValorPago += pagamento;
+        if (pedido.ValorPago >= pedido.ValorTotal)
+        {
+            pedido.Status = StatusPedido.Pago;
+        }
+        else if (VerificarParcelasAtrasadas(pedido))
+        {
+            pedido.Status = StatusPedido.Atrasado;
+        }
+        else
+        {
+            pedido.Status = StatusPedido.Pendente;
+        }
+
+        return pedido;
     }
 
     public async Task<PedidoPaginationResponse> GetAllFilterPedidos(PedidoFiltroRequest filtro)
@@ -73,8 +107,8 @@ public class PedidoService : IPedidoService
                 _uof.PedidoRepository.Update(pedido);
                 return pedido;
             })
-            .ToList(); 
-        
+            .ToList();
+
         if (pedidosAtrasados.Any()) await _uof.Commit();
     }
 
@@ -84,8 +118,11 @@ public class PedidoService : IPedidoService
         if (pedidoEntity.ValorPago >= pedidoEntity.ValorTotal) return false;
 
         decimal valorParcela = pedidoEntity.ValorTotal / pedidoEntity.NumeroParcelas;
-        int parcelasPagas = (int)(pedidoEntity.ValorPago / valorParcela);
+        int parcelasPagas = (int)Math.Floor(pedidoEntity.ValorPago / valorParcela);
+        
         DateTime now = DateTime.Now;
+        
+        if (pedidoEntity.DataVenda == DateTime.MinValue) pedidoEntity.DataVenda = now;
 
         if (parcelasPagas >= pedidoEntity.NumeroParcelas) return false;
 
@@ -111,5 +148,11 @@ public class PedidoService : IPedidoService
         produtoEntity.Estoque = produtoEntity.Estoque - quantidade;
         _uof.ProdutoRepository.Update(produtoEntity);
         await _uof.Commit();
+    }
+    
+    private async Task<PedidoEntity> CheckPedido(int id)
+    {
+        return await _uof.PedidoRepository.GetAsync(p => p.Id == id) ??
+               throw new NotFoundException("Pedido não encontrado!");
     }
 }

@@ -30,6 +30,7 @@ public class AppDbConnectionContext(DbContextOptions options) :
         builder.Entity<PedidoEntity>()
             .Property(p => p.FormaPagamento)
             .HasConversion<string>(); // Salva como texto no banco
+        
     }
     
 }

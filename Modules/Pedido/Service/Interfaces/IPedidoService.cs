@@ -10,4 +10,6 @@ public interface IPedidoService
     Task<PedidoPaginationResponse> GetAllFilterPedidos(PedidoFiltroRequest filtro);
 
     Task VerificarPedidosAtrasados();
+
+    Task PedidoPagamento(PedidoPagamentoRequest pagamentoRequest);
 }

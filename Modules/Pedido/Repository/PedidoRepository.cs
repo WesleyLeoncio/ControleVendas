@@ -18,6 +18,7 @@ public class PedidoRepository : Repository<PedidoEntity>, IPedidoRepository
     {
     }
 
+   
     public Task<IPagedList<PedidoEntity>> GetAllIncludeClienteFilterPageableAsync(PedidoFiltroRequest filtroRequest)
     {
         IQueryable<PedidoEntity> pedidoQuery = GetIQueryable();

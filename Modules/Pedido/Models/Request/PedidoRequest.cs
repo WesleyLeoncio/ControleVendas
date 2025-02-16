@@ -18,6 +18,9 @@ public class PedidoRequest
 
     [Range(0, double.MaxValue, ErrorMessage = "O desconto não pode ser negativo.")]
     public decimal Desconto { get; set; } = 0;
+    
+    [Range(0, double.MaxValue, ErrorMessage = "O pagamento não pode ser negativo.")]
+    public decimal Pagamento { get; set; } = 0;
 
     [Required(ErrorMessage = "Os itens do pedido são obrigatórios.")]
     [MinLength(1, ErrorMessage = "O pedido deve ter pelo menos um item.")]

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ControleVendas.Modules.Pedido.Models.Entity;
 using ControleVendas.Modules.Produto.Models.Entity;
 
 namespace ControleVendas.Modules.ItemPedido.models.Entity;
@@ -10,6 +11,11 @@ public class ItemPedidoEntity
     [Key]
     [Column(name: "id")]
     public int Id { get; set; }
+    
+    [ForeignKey("Pedido")]
+    [Column("pedido_id")]
+    public int PedidoId { get; set; }
+    public PedidoEntity? Pedido { get; set; }
 
     [Column(name: "produto_id")]
     [Required]
