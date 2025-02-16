@@ -2,6 +2,7 @@
 using ControleVendas.Infra.Exceptions.custom;
 using ControleVendas.Modules.Common.Pagination;
 using ControleVendas.Modules.Common.UnitOfWork.Interfaces;
+using ControleVendas.Modules.Fornecedor.Models.Entity;
 using ControleVendas.Modules.Fornecedor.Models.Request;
 using ControleVendas.Modules.Fornecedor.Models.Response;
 using ControleVendas.Modules.Fornecedor.Service.Interfaces;
@@ -23,8 +24,8 @@ public class FornecedorService : IFornecedorService
     public async Task<FornecedorResponse> CreateFornecedor(FornecedorRequest request)
     {
         await CheckNameExists(request.Nome);
-        Models.Entity.Fornecedor entity =
-            _uof.FornecedorRepository.Create(_mapper.Map<Models.Entity.Fornecedor>(request));
+        FornecedorEntity entity =
+            _uof.FornecedorRepository.Create(_mapper.Map<FornecedorEntity>(request));
         await _uof.Commit();
         return _mapper.Map<FornecedorResponse>(entity);
     }
@@ -36,33 +37,33 @@ public class FornecedorService : IFornecedorService
 
     public async Task<FornecedorPaginationResponse> GetAllFilterFornecedor(FornecedorFiltroRequest filtroRequest)
     {
-        IPagedList<Models.Entity.Fornecedor> fornecedores =
+        IPagedList<FornecedorEntity> fornecedores =
             await _uof.FornecedorRepository.GetAllFilterPageableAsync(filtroRequest);
         FornecedorPaginationResponse fornecedorPg = new FornecedorPaginationResponse(
             _mapper.Map<IEnumerable<FornecedorResponse>>(fornecedores),
-            MetaData<Models.Entity.Fornecedor>.ToValue(fornecedores));
+            MetaData<FornecedorEntity>.ToValue(fornecedores));
         return fornecedorPg;
     }
 
     public async Task<FornecedorResponse> UpdateFornecedor(int id, FornecedorRequest request)
     {   
         await CheckNameExists(request.Nome);
-        Models.Entity.Fornecedor fornecedor = await CheckFornecedor(id);
-        _mapper.Map(request, fornecedor);
-        Models.Entity.Fornecedor update = _uof.FornecedorRepository.Update(fornecedor);
+        FornecedorEntity fornecedorEntity = await CheckFornecedor(id);
+        _mapper.Map(request, fornecedorEntity);
+        FornecedorEntity update = _uof.FornecedorRepository.Update(fornecedorEntity);
         await _uof.Commit();
         return _mapper.Map<FornecedorResponse>(update);
     }
 
     public async Task<FornecedorResponse> DeleteFornecedor(int id)
     {
-        Models.Entity.Fornecedor fornecedor = await CheckFornecedor(id);
-        _uof.FornecedorRepository.Delete(fornecedor);
+        FornecedorEntity fornecedorEntity = await CheckFornecedor(id);
+        _uof.FornecedorRepository.Delete(fornecedorEntity);
         await _uof.Commit();
-        return _mapper.Map<FornecedorResponse>(fornecedor);
+        return _mapper.Map<FornecedorResponse>(fornecedorEntity);
     }
 
-    private async Task<Models.Entity.Fornecedor> CheckFornecedor(int id)
+    private async Task<FornecedorEntity> CheckFornecedor(int id)
     {
         return await _uof.FornecedorRepository.GetAsync(c => c.Id == id) ??
                throw new NotFoundException("Fornecedor não encontrado!");
@@ -70,7 +71,7 @@ public class FornecedorService : IFornecedorService
     
     private async Task CheckNameExists(string nome)
     {
-        Models.Entity.Fornecedor? fornecedor = await _uof.FornecedorRepository.GetAsync(f => f.Nome == nome);
+        FornecedorEntity? fornecedor = await _uof.FornecedorRepository.GetAsync(f => f.Nome == nome);
         if (fornecedor != null)
         {
             throw new KeyDuplicationException("Já existe um fornecedor com este nome!");

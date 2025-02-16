@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ControleVendas.Modules.Produto.Models.Entity;
 using ControleVendas.Modules.Produto.Models.Request;
 using ControleVendas.Modules.Produto.Models.Response;
 
@@ -9,9 +10,9 @@ public class ProdutoMapper : Profile
 
     public ProdutoMapper()
     {
-        CreateMap<ProdutoRequest, Entity.Produto>();
-        CreateMap<Entity.Produto, ProdutoResponse>();
-        CreateMap<Entity.Produto, ProdutoCategoriaResponse>();
+        CreateMap<ProdutoRequest, ProdutoEntity>();
+        CreateMap<ProdutoEntity, ProdutoResponse>();
+        CreateMap<ProdutoEntity, ProdutoCategoriaResponse>();
     }
     
 }

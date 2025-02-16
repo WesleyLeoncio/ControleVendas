@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ControleVendas.Modules.Pedido.Models.Entity;
 using ControleVendas.Modules.Pedido.Models.Request;
 using ControleVendas.Modules.Pedido.Models.Response;
 
@@ -8,8 +9,8 @@ public class PedidoMapper : Profile
 {
     public PedidoMapper()
     {
-        CreateMap<PedidoRequest, Entity.Pedido>()
+        CreateMap<PedidoRequest, PedidoEntity>()
             .ForMember(dest => dest.Itens, opt => opt.Ignore());
-        CreateMap<Entity.Pedido, PedidoResponse>();
+        CreateMap<PedidoEntity, PedidoResponse>();
     }
 }

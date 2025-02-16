@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ControleVendas.Modules.Fornecedor.Models.Entity;
 using ControleVendas.Modules.Fornecedor.Models.Request;
 using ControleVendas.Modules.Fornecedor.Models.Response;
 
@@ -8,7 +9,7 @@ public class FornecedorMapper : Profile
 {
     public FornecedorMapper()
     {
-        CreateMap<FornecedorRequest, Entity.Fornecedor>();
-        CreateMap<Entity.Fornecedor, FornecedorResponse>();
+        CreateMap<FornecedorRequest, FornecedorEntity>();
+        CreateMap<FornecedorEntity, FornecedorResponse>();
     }
 }

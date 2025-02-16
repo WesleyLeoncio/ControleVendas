@@ -1,13 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using ControleVendas.Modules.Cliente.Models.Entity;
+using ControleVendas.Modules.ItemPedido.models.Entity;
 using ControleVendas.Modules.Pedido.Models.Enums;
 using ControleVendas.Modules.User.Models.Entity;
 
 namespace ControleVendas.Modules.Pedido.Models.Entity;
 
 [Table("pedidos")]
-public class Pedido
+public class PedidoEntity
 {
     [Key]
     [Column(name:"id")]
@@ -15,15 +17,15 @@ public class Pedido
     
     [Column(name:"cliente_id")] 
     public int ClienteId { get; set; }
-    public Cliente.Models.Entity.Cliente? Cliente { get; set; }
+    public ClienteEntity? Cliente { get; set; }
 
     [Column(name: "vendedor_id")]
     [StringLength(64)]
     public string? VendedorId { get; set; } = string.Empty;
     [JsonIgnore]
-    public ApplicationUser? Vendedor { get; set; }
+    public ApplicationUserEntity? Vendedor { get; set; }
     
-    public List<ItemPedido.models.Entity.ItemPedido> Itens { get; set; } = new List<ItemPedido.models.Entity.ItemPedido>();
+    public List<ItemPedidoEntity> Itens { get; set; } = new List<ItemPedidoEntity>();
 
     [Column(name: "forma_pagamento")] 
     [Required]

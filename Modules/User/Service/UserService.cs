@@ -14,12 +14,12 @@ namespace ControleVendas.Modules.User.Service;
 
 public class UserService : IUserService
 {
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly UserManager<ApplicationUserEntity> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IConfiguration _configuration;
     private readonly ITokenService _tokenService;
 
-    public UserService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager,
+    public UserService(UserManager<ApplicationUserEntity> userManager, RoleManager<IdentityRole> roleManager,
         IConfiguration configuration, ITokenService tokenService)
     {
         _userManager = userManager;
@@ -30,9 +30,9 @@ public class UserService : IUserService
 
     public async Task<LoginResponse> Login(LoginRequest request)
     {
-        ApplicationUser user = await CheckCredential(request);
+        ApplicationUserEntity userEntity = await CheckCredential(request);
         
-        List<Claim> authClaims = await LoginUserAddRole(user);
+        List<Claim> authClaims = await LoginUserAddRole(userEntity);
         
         JwtSecurityToken token = _tokenService.GenerateAccessToken(authClaims,
             _configuration);
@@ -42,15 +42,15 @@ public class UserService : IUserService
         _ = int.TryParse(_configuration["JWT:RefreshTokenValidityInMinutes"],
             out int refreshTokenValidityInMinutes);
 
-        user.RefreshTokenExpiryTime =
+        userEntity.RefreshTokenExpiryTime =
             DateTime.Now.AddMinutes(refreshTokenValidityInMinutes);
 
-        user.RefreshToken = refreshToken;
+        userEntity.RefreshToken = refreshToken;
 
         // Converter DateTime para UTC antes de salvar    
-        user.RefreshTokenExpiryTime = user.RefreshTokenExpiryTime.ToUniversalTime();
+        userEntity.RefreshTokenExpiryTime = userEntity.RefreshTokenExpiryTime.ToUniversalTime();
 
-        await _userManager.UpdateAsync(user);
+        await _userManager.UpdateAsync(userEntity);
 
         return new LoginResponse(
             new JwtSecurityTokenHandler().WriteToken(token),
@@ -61,7 +61,7 @@ public class UserService : IUserService
     public async Task<RegisterResponse> Register(UserRegisterRequest request)
     {
        await CheckUserExists(request.Username);
-        ApplicationUser user = new()
+        ApplicationUserEntity userEntity = new()
         {
             Email = request.Email,
             SecurityStamp = Guid.NewGuid().ToString(),
@@ -69,7 +69,7 @@ public class UserService : IUserService
             FullName = request.FullName,
             PhoneNumber = request.PhoneNumber
         };
-        var result = await _userManager.CreateAsync(user, request.Password);
+        var result = await _userManager.CreateAsync(userEntity, request.Password);
         if (!result.Succeeded) throw new ArgumentException("Ocorreram erros durante o registro!");
         await AddUserToRole(request.Username, Role.VENDEDOR);
         return new RegisterResponse("Success", "Usuario criado com sucesso!");
@@ -100,9 +100,9 @@ public class UserService : IUserService
     
     public async Task Revoke(string name)
     {
-        ApplicationUser user = await CheckUserNameExists(name);
-        user.RefreshToken = null;
-        await _userManager.UpdateAsync(user);
+        ApplicationUserEntity userEntity = await CheckUserNameExists(name);
+        userEntity.RefreshToken = null;
+        await _userManager.UpdateAsync(userEntity);
     }
 
     public async Task<RegisterResponse> CreateRole(Role role)
@@ -116,31 +116,31 @@ public class UserService : IUserService
 
     public async Task<RegisterResponse> AddUserToRole(string name, Role role)
     {
-        ApplicationUser user = await CheckUserNameExists(name);
+        ApplicationUserEntity userEntity = await CheckUserNameExists(name);
         string roleName = role.ToString();
         await CheckRoleNotExists(roleName);
-        var roleResult = await _userManager.AddToRoleAsync(user, roleName);
+        var roleResult = await _userManager.AddToRoleAsync(userEntity, roleName);
         if (!roleResult.Succeeded) throw new NotFoundException("Erro ao tentar adicionar role!");
         return new RegisterResponse("Success", "Role adicionada com sucesso!");
     }
 
     private async Task CheckUserExists(string username)
     {
-        ApplicationUser? appUser = await _userManager.FindByNameAsync(username);
+        ApplicationUserEntity? appUser = await _userManager.FindByNameAsync(username);
         if (appUser != null) throw new KeyDuplicationException("Já existe um usuario com esse nome!");
     }
     
-    private async Task<ApplicationUser> CheckRefreshToken(string username, TokenRequest tokenRequest)
+    private async Task<ApplicationUserEntity> CheckRefreshToken(string username, TokenRequest tokenRequest)
     {
-        ApplicationUser user = await CheckUserNameExists(username);
+        ApplicationUserEntity userEntity = await CheckUserNameExists(username);
 
-        if (user.RefreshToken != tokenRequest.RefreshToken
-            || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
+        if (userEntity.RefreshToken != tokenRequest.RefreshToken
+            || userEntity.RefreshTokenExpiryTime <= DateTime.UtcNow)
         {
             throw new NotFoundException("Invalido access token/refresh token");
         }
        
-        return user;
+        return userEntity;
     }
 
     private async Task CheckRoleExists(string roleName)
@@ -154,27 +154,27 @@ public class UserService : IUserService
         if (!await _roleManager.RoleExistsAsync(roleName)) throw new NotFoundException("Role não encontrada!");
     }
 
-    private async Task<ApplicationUser> CheckUserNameExists(string name)
+    private async Task<ApplicationUserEntity> CheckUserNameExists(string name)
     {
         return await _userManager.FindByNameAsync(name) ??
                throw new NotFoundException("Usuário não encontrado!");
     }
 
-    private async Task<ApplicationUser> CheckCredential(LoginRequest request)
+    private async Task<ApplicationUserEntity> CheckCredential(LoginRequest request)
     {
-        ApplicationUser user = await CheckUserNameExists(request.UserName);
-        if (await _userManager.CheckPasswordAsync(user, request.Password)) return user;
+        ApplicationUserEntity userEntity = await CheckUserNameExists(request.UserName);
+        if (await _userManager.CheckPasswordAsync(userEntity, request.Password)) return userEntity;
         throw new UnauthorizedException("Password Incorreto!");
     }
 
-    private async Task<List<Claim>> LoginUserAddRole(ApplicationUser user)
+    private async Task<List<Claim>> LoginUserAddRole(ApplicationUserEntity userEntity)
     {
-        IList<string> userRoles = await _userManager.GetRolesAsync(user);
+        IList<string> userRoles = await _userManager.GetRolesAsync(userEntity);
         var authClaims = new List<Claim>
         {   
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-            new Claim(ClaimTypes.Name, user.UserName ?? string.Empty),
-            new Claim(ClaimTypes.Email, user.Email ?? string.Empty),
+            new Claim(JwtRegisteredClaimNames.Sub, userEntity.Id),
+            new Claim(ClaimTypes.Name, userEntity.UserName ?? string.Empty),
+            new Claim(ClaimTypes.Email, userEntity.Email ?? string.Empty),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
         

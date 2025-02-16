@@ -6,7 +6,7 @@ namespace ControleVendas.Modules.Cliente.Models.Entity;
 
 [Table("clientes")]
 [Index(nameof(Telefone), IsUnique = true)]
-public class Cliente
+public class ClienteEntity
 {
     [Key]
     [Column(name:"id")]

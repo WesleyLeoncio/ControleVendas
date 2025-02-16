@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ControleVendas.Modules.Produto.Models.Entity;
 
 namespace ControleVendas.Modules.ItemPedido.models.Entity;
 
 [Table("itens_pedidos")]
-public class ItemPedido
+public class ItemPedidoEntity
 {
     [Key]
     [Column(name: "id")]
@@ -13,7 +14,7 @@ public class ItemPedido
     [Column(name: "produto_id")]
     [Required]
     public int ProdutoId { get; set; }
-    public Produto.Models.Entity.Produto? Produto { get; set; } 
+    public ProdutoEntity? Produto { get; set; } 
     
     [Column(name: "quantidade")]
     [Required]

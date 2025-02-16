@@ -14,7 +14,7 @@ public class ClienteController : ControllerBase
 
     public ClienteController(IClienteService clienteService)
     {
-        this._clienteService = clienteService;
+        _clienteService = clienteService;
     }
 
     [HttpPost]

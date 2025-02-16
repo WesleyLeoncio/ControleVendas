@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using ControleVendas.Infra.Exceptions.custom;
+using ControleVendas.Modules.Categoria.Models.Entity;
 using ControleVendas.Modules.Common.Pagination;
 using ControleVendas.Modules.Common.UnitOfWork.Interfaces;
+using ControleVendas.Modules.Fornecedor.Models.Entity;
+using ControleVendas.Modules.Produto.Models.Entity;
 using ControleVendas.Modules.Produto.Models.Request;
 using ControleVendas.Modules.Produto.Models.Response;
 using ControleVendas.Modules.Produto.Service.Interfaces;
@@ -24,7 +27,7 @@ public class ProdutoService : IProdutoService
     {
         await CheckNameExists(request.Nome);
         await CheckCategoriaFornecedor(request);
-        Models.Entity.Produto entity = _uof.ProdutoRepository.Create(_mapper.Map<Models.Entity.Produto>(request));
+        ProdutoEntity entity = _uof.ProdutoRepository.Create(_mapper.Map<ProdutoEntity>(request));
         await _uof.Commit();
         return _mapper.Map<ProdutoResponse>(entity);
     }
@@ -36,34 +39,34 @@ public class ProdutoService : IProdutoService
 
     public async Task<ProdutoPaginationResponse> GetAllFilterProdutos(ProdutoFiltroRequest filtroRequest)
     {
-        IPagedList<Models.Entity.Produto> produtos = await
+        IPagedList<ProdutoEntity> produtos = await
             _uof.ProdutoRepository.GetAllFilterPageableAsync(filtroRequest);
         ProdutoPaginationResponse produtoPg = new ProdutoPaginationResponse(
             _mapper.Map<IEnumerable<ProdutoResponse>>(produtos),
-            MetaData<Models.Entity.Produto>.ToValue(produtos));
+            MetaData<ProdutoEntity>.ToValue(produtos));
         return produtoPg;
     }
 
     public async Task<ProdutoResponse> UpdateProduto(int id, ProdutoRequest request)
     {
-        Models.Entity.Produto produto = await CheckProduto(id);
-        if (produto.Nome != request.Nome) await CheckNameExists(request.Nome);
+        ProdutoEntity produtoEntity = await CheckProduto(id);
+        if (produtoEntity.Nome != request.Nome) await CheckNameExists(request.Nome);
         await CheckCategoriaFornecedor(request);
-        _mapper.Map(request, produto);
-        Models.Entity.Produto update = _uof.ProdutoRepository.Update(produto);
+        _mapper.Map(request, produtoEntity);
+        ProdutoEntity update = _uof.ProdutoRepository.Update(produtoEntity);
         await _uof.Commit();
         return _mapper.Map<ProdutoResponse>(update);
     }
 
     public async Task<ProdutoResponse> DeleteProduto(int id)
     {
-        Models.Entity.Produto produto = await CheckProduto(id);
-        _uof.ProdutoRepository.Delete(produto);
+        ProdutoEntity produtoEntity = await CheckProduto(id);
+        _uof.ProdutoRepository.Delete(produtoEntity);
         await _uof.Commit();
-        return _mapper.Map<ProdutoResponse>(produto);
+        return _mapper.Map<ProdutoResponse>(produtoEntity);
     }
 
-    private async Task<Models.Entity.Produto> CheckProduto(int id)
+    private async Task<ProdutoEntity> CheckProduto(int id)
     {
         return await _uof.ProdutoRepository.GetAsync(p => p.Id == id) ??
                throw new NotFoundException("Produto não encontrado!");
@@ -71,7 +74,7 @@ public class ProdutoService : IProdutoService
 
     private async Task CheckCategoriaFornecedor(ProdutoRequest request)
     {
-        Categoria.Models.Entity.Categoria? categoria = await
+        CategoriaEntity? categoria = await
             _uof.CategoriaRepository.GetAsync(c => c.Id == request.CategoriaId);
 
         if (categoria == null)
@@ -79,7 +82,7 @@ public class ProdutoService : IProdutoService
             throw new NotFoundException("Categoria não encontrada!");
         }
 
-        Fornecedor.Models.Entity.Fornecedor? fornecedor = await
+        FornecedorEntity? fornecedor = await
             _uof.FornecedorRepository.GetAsync(f => f.Id == request.FornecedorId);
 
         if (fornecedor == null)
@@ -90,7 +93,7 @@ public class ProdutoService : IProdutoService
 
     private async Task CheckNameExists(string? nome)
     {
-        Models.Entity.Produto? produto = await _uof.ProdutoRepository.GetAsync(p => p.Nome == nome);
+        ProdutoEntity? produto = await _uof.ProdutoRepository.GetAsync(p => p.Nome == nome);
         if (produto != null)
         {
             throw new KeyDuplicationException("Já existe um produto com este nome!");

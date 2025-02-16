@@ -1,8 +1,10 @@
-﻿namespace ControleVendas.Modules.Fornecedor.Repository.Filter;
+﻿using ControleVendas.Modules.Fornecedor.Models.Entity;
 
-public class FilterFornecedorName
+namespace ControleVendas.Modules.Fornecedor.Repository.Filter;
+
+public abstract class FilterFornecedorName
 {
-    public static IQueryable<Models.Entity.Fornecedor> RunFilterName(IQueryable<Models.Entity.Fornecedor> queryable, string? name)
+    public static IQueryable<FornecedorEntity> RunFilterName(IQueryable<FornecedorEntity> queryable, string? name)
     {
         if (!string.IsNullOrEmpty(name))
         {

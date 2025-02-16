@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ControleVendas.Modules.User.Models.Entity;
 
-public class ApplicationUser : IdentityUser
+public class ApplicationUserEntity : IdentityUser
 {   
     [StringLength(256)]
     public string? RefreshToken { get; set; }

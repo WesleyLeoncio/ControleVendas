@@ -1,12 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ControleVendas.Modules.Categoria.Models.Entity;
+using ControleVendas.Modules.Fornecedor.Models.Entity;
 using Microsoft.EntityFrameworkCore;
 
 namespace ControleVendas.Modules.Produto.Models.Entity;
 
 [Table("produtos")]
 [Index(nameof(Nome), IsUnique = true)]
-public class Produto
+public class ProdutoEntity
 {
     [Key]
     [Column(name:"id")]
@@ -19,11 +21,11 @@ public class Produto
     
     [Column(name:"categoria_id")] 
     public int CategoriaId { get; set; }
-    public Categoria.Models.Entity.Categoria? Categoria { get; set; }
+    public CategoriaEntity? Categoria { get; set; }
     
     [Column(name:"fornecedor_id")] 
     public int FornecedorId { get; set; }
-    public Fornecedor.Models.Entity.Fornecedor? Fornecedor { get; set; }
+    public FornecedorEntity? Fornecedor { get; set; }
     
     [Column(name:"valor_compra")]
     [Required]

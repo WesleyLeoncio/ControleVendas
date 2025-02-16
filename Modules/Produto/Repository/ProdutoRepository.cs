@@ -1,5 +1,6 @@
 ﻿using ControleVendas.Infra.Data;
 using ControleVendas.Modules.Common.Repository;
+using ControleVendas.Modules.Produto.Models.Entity;
 using ControleVendas.Modules.Produto.Models.Request;
 using ControleVendas.Modules.Produto.Repository.Filter.Custom;
 using ControleVendas.Modules.Produto.Repository.Filter.Interfaces;
@@ -9,16 +10,16 @@ using X.PagedList.Extensions;
 
 namespace ControleVendas.Modules.Produto.Repository;
 
-public class ProdutoRepository : Repository<Models.Entity.Produto>, IProdutoRepository
+public class ProdutoRepository : Repository<ProdutoEntity>, IProdutoRepository
 {
     
     public ProdutoRepository(AppDbConnectionContext context) : base(context)
     {
     }
 
-    public Task<IPagedList<Models.Entity.Produto>> GetAllFilterPageableAsync(ProdutoFiltroRequest filtroRequest)
+    public Task<IPagedList<ProdutoEntity>> GetAllFilterPageableAsync(ProdutoFiltroRequest filtroRequest)
     {
-        IQueryable<Models.Entity.Produto> produtosQuery = GetIQueryable();
+        IQueryable<ProdutoEntity> produtosQuery = GetIQueryable();
         
         IEnumerable<IFilterProdutoResult> filterResults = new List<IFilterProdutoResult>
         {

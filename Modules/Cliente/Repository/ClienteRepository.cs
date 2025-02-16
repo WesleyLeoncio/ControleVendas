@@ -1,4 +1,5 @@
 ﻿using ControleVendas.Infra.Data;
+using ControleVendas.Modules.Cliente.Models.Entity;
 using ControleVendas.Modules.Cliente.Models.Request;
 using ControleVendas.Modules.Cliente.Repository.Filter;
 using ControleVendas.Modules.Cliente.Repository.Interfaces;
@@ -8,15 +9,15 @@ using X.PagedList.Extensions;
 
 namespace ControleVendas.Modules.Cliente.Repository;
 
-public class ClienteRepository : Repository<Models.Entity.Cliente>, IClienteRepository
+public class ClienteRepository : Repository<ClienteEntity>, IClienteRepository
 {
     public ClienteRepository(AppDbConnectionContext context) : base(context)
     {
     }
 
-    public Task<IPagedList<Models.Entity.Cliente>> GetAllFilterPageableAsync(ClienteFiltroRequest filtroRequest)
+    public Task<IPagedList<ClienteEntity>> GetAllFilterPageableAsync(ClienteFiltroRequest filtroRequest)
     {
-        IQueryable<Models.Entity.Cliente> clienteQuery = GetIQueryable();
+        IQueryable<ClienteEntity> clienteQuery = GetIQueryable();
         
         clienteQuery = FilterClienteName.RunFilterName(clienteQuery, filtroRequest.Nome);
         

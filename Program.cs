@@ -21,7 +21,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerConfiguration();
 
 //Configura o Indenty
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+builder.Services.AddIdentity<ApplicationUserEntity, IdentityRole>()
     .AddEntityFrameworkStores<AppDbConnectionContext>()
     .AddDefaultTokenProviders();
 

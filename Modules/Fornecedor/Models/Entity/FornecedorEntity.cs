@@ -6,7 +6,7 @@ namespace ControleVendas.Modules.Fornecedor.Models.Entity;
 
 [Table("fornecedores")]
 [Index(nameof(Nome), IsUnique = true)]
-public class Fornecedor
+public class FornecedorEntity
 {
     [Key]
     [Column(name:"id")]

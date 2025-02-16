@@ -2,10 +2,13 @@
 using ControleVendas.Infra.Exceptions.custom;
 using ControleVendas.Modules.Common.Pagination;
 using ControleVendas.Modules.Common.UnitOfWork.Interfaces;
+using ControleVendas.Modules.ItemPedido.models.Entity;
+using ControleVendas.Modules.Pedido.Models.Entity;
 using ControleVendas.Modules.Pedido.Models.Enums;
 using ControleVendas.Modules.Pedido.Models.Request;
 using ControleVendas.Modules.Pedido.Models.Response;
 using ControleVendas.Modules.Pedido.Service.Interfaces;
+using ControleVendas.Modules.Produto.Models.Entity;
 using X.PagedList;
 
 namespace ControleVendas.Modules.Pedido.Service;
@@ -25,44 +28,44 @@ public class PedidoService : IPedidoService
     public async Task RegistrarPedido(PedidoRequest pedidoRequest)
     {
         // if (user == null) throw new NotFoundException("Vendedor não encontrado!");
-        Models.Entity.Pedido pedido = _mapper.Map<Models.Entity.Pedido>(pedidoRequest);
-        pedido.VendedorId = "cadd2ea3-30bb-44a1-b409-ec65001fa6da";
+        PedidoEntity pedidoEntity = _mapper.Map<PedidoEntity>(pedidoRequest);
+        pedidoEntity.VendedorId = "cadd2ea3-30bb-44a1-b409-ec65001fa6da";
         foreach (var item in pedidoRequest.Itens)
         {
-            Produto.Models.Entity.Produto produto = await CheckProduto(item.ProdutoId);
-            await RetirarQuantidadeProduto(produto, item.Quantidade);
+            ProdutoEntity produtoEntity = await CheckProduto(item.ProdutoId);
+            await RetirarQuantidadeProduto(produtoEntity, item.Quantidade);
 
-            ItemPedido.models.Entity.ItemPedido itemPedido = new ItemPedido.models.Entity.ItemPedido();
-            itemPedido.ProdutoId = produto.Id;
-            itemPedido.Quantidade = item.Quantidade;
-            itemPedido.PrecoUnitario = produto.ValorVenda;
-            itemPedido.CalcularLucroItemPedido(produto.ValorCompra);
+            ItemPedidoEntity itemPedidoEntity = new ItemPedidoEntity();
+            itemPedidoEntity.ProdutoId = produtoEntity.Id;
+            itemPedidoEntity.Quantidade = item.Quantidade;
+            itemPedidoEntity.PrecoUnitario = produtoEntity.ValorVenda;
+            itemPedidoEntity.CalcularLucroItemPedido(produtoEntity.ValorCompra);
 
-            pedido.Itens.Add(itemPedido);
+            pedidoEntity.Itens.Add(itemPedidoEntity);
         }
 
-        pedido.CalcularValorTotal();
-        _uof.PedidoRepository.Create(pedido);
+        pedidoEntity.CalcularValorTotal();
+        _uof.PedidoRepository.Create(pedidoEntity);
         await _uof.Commit();
     }
 
     public async Task<PedidoPaginationResponse> GetAllFilterPedidos(PedidoFiltroRequest filtro)
     {
         filtro.VerdedorId = "cadd2ea3-30bb-44a1-b409-ec65001fa6da";
-        IPagedList<Models.Entity.Pedido> pedidos = await
+        IPagedList<PedidoEntity> pedidos = await
             _uof.PedidoRepository.GetAllIncludeClienteFilterPageableAsync(filtro);
 
         PedidoPaginationResponse pedidoPg = new PedidoPaginationResponse(
             _mapper.Map<IEnumerable<PedidoResponse>>(pedidos),
-            MetaData<Models.Entity.Pedido>.ToValue(pedidos));
+            MetaData<PedidoEntity>.ToValue(pedidos));
         return pedidoPg;
     }
 
     public async Task VerificarPedidosAtrasados()
     {
-        IEnumerable<Models.Entity.Pedido> pedidos = await _uof.PedidoRepository.GetAllPedidosStatusPendente();
+        IEnumerable<PedidoEntity> pedidos = await _uof.PedidoRepository.GetAllPedidosStatusPendente();
 
-        IEnumerable<Models.Entity.Pedido> pedidosAtrasados = pedidos
+        IEnumerable<PedidoEntity> pedidosAtrasados = pedidos
             .Where(VerificarParcelasAtrasadas)
             .Select(pedido =>
             {
@@ -75,38 +78,38 @@ public class PedidoService : IPedidoService
         if (pedidosAtrasados.Any()) await _uof.Commit();
     }
 
-    private static bool VerificarParcelasAtrasadas(Models.Entity.Pedido pedido)
+    private static bool VerificarParcelasAtrasadas(PedidoEntity pedidoEntity)
     {
-        if (pedido.NumeroParcelas <= 0 || pedido.ValorTotal <= 0) return false;
-        if (pedido.ValorPago >= pedido.ValorTotal) return false;
+        if (pedidoEntity.NumeroParcelas <= 0 || pedidoEntity.ValorTotal <= 0) return false;
+        if (pedidoEntity.ValorPago >= pedidoEntity.ValorTotal) return false;
 
-        decimal valorParcela = pedido.ValorTotal / pedido.NumeroParcelas;
-        int parcelasPagas = (int)(pedido.ValorPago / valorParcela);
+        decimal valorParcela = pedidoEntity.ValorTotal / pedidoEntity.NumeroParcelas;
+        int parcelasPagas = (int)(pedidoEntity.ValorPago / valorParcela);
         DateTime now = DateTime.Now;
 
-        if (parcelasPagas >= pedido.NumeroParcelas) return false;
+        if (parcelasPagas >= pedidoEntity.NumeroParcelas) return false;
 
-        return Enumerable.Range(parcelasPagas + 1, pedido.NumeroParcelas - parcelasPagas)
-            .Select(i => pedido.DataVenda.AddMonths(i))
+        return Enumerable.Range(parcelasPagas + 1, pedidoEntity.NumeroParcelas - parcelasPagas)
+            .Select(i => pedidoEntity.DataVenda.AddMonths(i))
             .Any(dataVencimento => now > dataVencimento);
     }
 
-    private async Task<Produto.Models.Entity.Produto> CheckProduto(int id)
+    private async Task<ProdutoEntity> CheckProduto(int id)
     {
         return await _uof.ProdutoRepository.GetAsync(p => p.Id == id) ??
                throw new NotFoundException("Produto não encontrado!");
     }
 
-    private async Task RetirarQuantidadeProduto(Produto.Models.Entity.Produto produto, int quantidade)
+    private async Task RetirarQuantidadeProduto(ProdutoEntity produtoEntity, int quantidade)
     {
-        if (produto.Estoque < quantidade)
+        if (produtoEntity.Estoque < quantidade)
         {
             throw new NotFoundException($"Não a produtos o suficiente em estoque, "
-                                        + $"Quandidade em estoque: {produto.Estoque}");
+                                        + $"Quandidade em estoque: {produtoEntity.Estoque}");
         }
 
-        produto.Estoque = produto.Estoque - quantidade;
-        _uof.ProdutoRepository.Update(produto);
+        produtoEntity.Estoque = produtoEntity.Estoque - quantidade;
+        _uof.ProdutoRepository.Update(produtoEntity);
         await _uof.Commit();
     }
 }

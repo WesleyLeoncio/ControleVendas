@@ -1,8 +1,10 @@
-﻿namespace ControleVendas.Modules.Categoria.Repository.Filter;
+﻿using ControleVendas.Modules.Categoria.Models.Entity;
+
+namespace ControleVendas.Modules.Categoria.Repository.Filter;
 
 public abstract class FilterCategoriaName
 {
-    public static IQueryable<Models.Entity.Categoria> RunFilterName(IQueryable<Models.Entity.Categoria> queryable, string? name)
+    public static IQueryable<CategoriaEntity> RunFilterName(IQueryable<CategoriaEntity> queryable, string? name)
     {
         if (!string.IsNullOrEmpty(name))
         {

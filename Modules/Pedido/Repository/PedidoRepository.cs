@@ -1,5 +1,6 @@
 ﻿using ControleVendas.Infra.Data;
 using ControleVendas.Modules.Common.Repository;
+using ControleVendas.Modules.Pedido.Models.Entity;
 using ControleVendas.Modules.Pedido.Models.Enums;
 using ControleVendas.Modules.Pedido.Models.Request;
 using ControleVendas.Modules.Pedido.Repository.Filter.Custom;
@@ -11,15 +12,15 @@ using X.PagedList.Extensions;
 
 namespace ControleVendas.Modules.Pedido.Repository;
 
-public class PedidoRepository : Repository<Models.Entity.Pedido>, IPedidoRepository
+public class PedidoRepository : Repository<PedidoEntity>, IPedidoRepository
 {
     public PedidoRepository(AppDbConnectionContext context) : base(context)
     {
     }
 
-    public Task<IPagedList<Models.Entity.Pedido>> GetAllIncludeClienteFilterPageableAsync(PedidoFiltroRequest filtroRequest)
+    public Task<IPagedList<PedidoEntity>> GetAllIncludeClienteFilterPageableAsync(PedidoFiltroRequest filtroRequest)
     {
-        IQueryable<Models.Entity.Pedido> pedidoQuery = GetIQueryable();
+        IQueryable<PedidoEntity> pedidoQuery = GetIQueryable();
         
         pedidoQuery = pedidoQuery.Include(p => p.Cliente);
 
@@ -39,9 +40,9 @@ public class PedidoRepository : Repository<Models.Entity.Pedido>, IPedidoReposit
             filtroRequest.PageSize));
     }
     
-    public async Task<IEnumerable<Models.Entity.Pedido>> GetAllPedidosStatusPendente()
+    public async Task<IEnumerable<PedidoEntity>> GetAllPedidosStatusPendente()
     {
-        IQueryable<Models.Entity.Pedido> pedidoQuery = GetIQueryable();
+        IQueryable<PedidoEntity> pedidoQuery = GetIQueryable();
         
         pedidoQuery = pedidoQuery.Where(p => p.Status == StatusPedido.Pendente);
         

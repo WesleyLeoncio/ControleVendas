@@ -1,4 +1,5 @@
 ﻿using ControleVendas.Infra.Data;
+using ControleVendas.Modules.Categoria.Models.Entity;
 using ControleVendas.Modules.Categoria.Models.Request;
 using ControleVendas.Modules.Categoria.Repository.Filter;
 using ControleVendas.Modules.Categoria.Repository.Interfaces;
@@ -9,15 +10,15 @@ using X.PagedList.Extensions;
 
 namespace ControleVendas.Modules.Categoria.Repository;
 
-public class CategoriaRepository : Repository<Models.Entity.Categoria>, ICategoriaRepository
+public class CategoriaRepository : Repository<CategoriaEntity>, ICategoriaRepository
 {
     public CategoriaRepository(AppDbConnectionContext context) : base(context)
     {
     }
 
-    public Task<IPagedList<Models.Entity.Categoria>> GetAllIncludePageableAsync(CategoriaFiltroRequest filtroRequest)
+    public Task<IPagedList<CategoriaEntity>> GetAllIncludePageableAsync(CategoriaFiltroRequest filtroRequest)
     {
-        IQueryable<Models.Entity.Categoria> categoriaQuery = GetIQueryable()
+        IQueryable<CategoriaEntity> categoriaQuery = GetIQueryable()
             .OrderBy(c => c.Nome)
             .Include(categoria => categoria.Produtos);
 
@@ -27,9 +28,9 @@ public class CategoriaRepository : Repository<Models.Entity.Categoria>, ICategor
             filtroRequest.PageSize));
     }
 
-    public Task<IPagedList<Models.Entity.Categoria>> GetAllFilterPageableAsync(CategoriaFiltroRequest filtroRequest)
+    public Task<IPagedList<CategoriaEntity>> GetAllFilterPageableAsync(CategoriaFiltroRequest filtroRequest)
     {
-        IQueryable<Models.Entity.Categoria> categoriaQuery = GetIQueryable();
+        IQueryable<CategoriaEntity> categoriaQuery = GetIQueryable();
 
         categoriaQuery = FilterCategoriaName.RunFilterName(categoriaQuery, filtroRequest.Nome);
 

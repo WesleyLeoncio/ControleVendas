@@ -1,12 +1,13 @@
 ﻿using ControleVendas.Modules.Common.Repository.Interfaces;
+using ControleVendas.Modules.Pedido.Models.Entity;
 using ControleVendas.Modules.Pedido.Models.Request;
 using X.PagedList;
 
 namespace ControleVendas.Modules.Pedido.Repository.Interfaces;
 
-public interface IPedidoRepository : IRepository<Models.Entity.Pedido>
+public interface IPedidoRepository : IRepository<PedidoEntity>
 {
-    Task<IPagedList<Models.Entity.Pedido>> GetAllIncludeClienteFilterPageableAsync(PedidoFiltroRequest filtroRequest);
+    Task<IPagedList<PedidoEntity>> GetAllIncludeClienteFilterPageableAsync(PedidoFiltroRequest filtroRequest);
 
-    Task<IEnumerable<Models.Entity.Pedido>> GetAllPedidosStatusPendente();
+    Task<IEnumerable<PedidoEntity>> GetAllPedidosStatusPendente();
 }
