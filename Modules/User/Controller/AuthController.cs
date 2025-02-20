@@ -3,6 +3,7 @@ using ControleVendas.Modules.User.Models.Enums;
 using ControleVendas.Modules.User.Models.Request;
 using ControleVendas.Modules.User.Models.Response;
 using ControleVendas.Modules.User.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ControleVendas.Modules.User.Controller;
@@ -34,6 +35,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = nameof(Role.MASTER))]
     [Route("CreateRole")]
     public async Task<ActionResult<RegisterResponse>> CreateRole(Role role)
     {
@@ -41,6 +43,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = nameof(Role.MASTER))]
     [Route("AddUserToRole")]
     public async Task<ActionResult<RegisterResponse>> AddUserToRole(string userName, Role role)
     {
@@ -48,6 +51,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = nameof(Role.MASTER))]
     [Route("refresh-token")]
     public async Task<ActionResult<RefreshTokenResponse>> RefreshToken(TokenRequest tokenRequest)
     {
@@ -56,6 +60,7 @@ public class AuthController : ControllerBase
 
 
     [HttpPost]
+    [Authorize(Roles = nameof(Role.MASTER))]
     [Route("revoke/{userName}")]
     public async Task<IActionResult> Revoke(string userName)
     {

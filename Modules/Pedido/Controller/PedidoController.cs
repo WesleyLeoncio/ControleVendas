@@ -1,7 +1,8 @@
 ﻿using ControleVendas.Modules.Pedido.Models.Request;
 using ControleVendas.Modules.Pedido.Models.Response;
 using ControleVendas.Modules.Pedido.Service.Interfaces;
-using Microsoft.AspNetCore.Http.HttpResults;
+using ControleVendas.Modules.User.Models.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -9,6 +10,7 @@ namespace ControleVendas.Modules.Pedido.Controller;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize(Roles = nameof(Role.VENDEDOR))]
 public class PedidoController : ControllerBase
 {
     private readonly IPedidoService _pedidoService;

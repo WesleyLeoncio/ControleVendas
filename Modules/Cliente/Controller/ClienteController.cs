@@ -1,6 +1,8 @@
 ﻿using ControleVendas.Modules.Cliente.Models.Request;
 using ControleVendas.Modules.Cliente.Models.Response;
 using ControleVendas.Modules.Cliente.Service.Interfaces;
+using ControleVendas.Modules.User.Models.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -8,6 +10,7 @@ namespace ControleVendas.Modules.Cliente.Controller;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize(Roles = nameof(Role.VENDEDOR))]
 public class ClienteController : ControllerBase
 {
     private readonly IClienteService _clienteService;

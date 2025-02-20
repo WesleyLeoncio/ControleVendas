@@ -1,6 +1,8 @@
 ﻿using ControleVendas.Modules.Fornecedor.Models.Request;
 using ControleVendas.Modules.Fornecedor.Models.Response;
 using ControleVendas.Modules.Fornecedor.Service.Interfaces;
+using ControleVendas.Modules.User.Models.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -8,6 +10,7 @@ namespace ControleVendas.Modules.Fornecedor.Controller;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize(Roles = nameof(Role.VENDEDOR))]
 public class FornecedorController : ControllerBase
 {
     private readonly IFornecedorService _fornecedorService;

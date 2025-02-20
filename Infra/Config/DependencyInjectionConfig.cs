@@ -60,5 +60,8 @@ public static class DependencyInjectionConfig
         // Adiciona o serviço de background para verificar pedidos atrasados
         services.AddHostedService<PedidoAtrasadoService>();
         
+        // Permite pega info do token nos services
+        services.AddHttpContextAccessor();
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Security.Claims;
+using AutoMapper;
 using ControleVendas.Infra.Exceptions.custom;
 using ControleVendas.Modules.Common.Pagination;
 using ControleVendas.Modules.Common.UnitOfWork.Interfaces;
@@ -16,20 +17,21 @@ namespace ControleVendas.Modules.Pedido.Service;
 public class PedidoService : IPedidoService
 {
     private readonly IUnitOfWork _uof;
-    private readonly IMapper _mapper;
+    private readonly IMapper _mapper; 
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public PedidoService(IUnitOfWork uof, IMapper mapper)
+    public PedidoService(IUnitOfWork uof, IMapper mapper, IHttpContextAccessor httpContextAccessor)
     {
         _uof = uof;
         _mapper = mapper;
+        _httpContextAccessor = httpContextAccessor;
     }
-
+    
 
     public async Task RegistrarPedido(PedidoRequest pedidoRequest)
     {
-        // if (user == null) throw new NotFoundException("Vendedor não encontrado!");
         PedidoEntity pedidoEntity = _mapper.Map<PedidoEntity>(pedidoRequest);
-        pedidoEntity.VendedorId = "cadd2ea3-30bb-44a1-b409-ec65001fa6da";
+        pedidoEntity.VendedorId = BusarVendedorId();
         foreach (var item in pedidoRequest.Itens)
         {
             ProdutoEntity produtoEntity = await CheckProduto(item.ProdutoId);
@@ -85,7 +87,8 @@ public class PedidoService : IPedidoService
 
     public async Task<PedidoPaginationResponse> GetAllFilterPedidos(PedidoFiltroRequest filtro)
     {
-        filtro.VerdedorId = "cadd2ea3-30bb-44a1-b409-ec65001fa6da";
+        filtro.VerdedorId = BusarVendedorId();
+        Console.WriteLine("Pedido: "+filtro.VerdedorId);
         IPagedList<PedidoEntity> pedidos = await
             _uof.PedidoRepository.GetAllIncludeClienteFilterPageableAsync(filtro);
 
@@ -154,5 +157,13 @@ public class PedidoService : IPedidoService
     {
         return await _uof.PedidoRepository.GetAsync(p => p.Id == id) ??
                throw new NotFoundException("Pedido não encontrado!");
+    }
+    
+    private string BusarVendedorId()
+    {
+        string? userId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (userId == null) throw new NotFoundException("Id Do Usuario não encontrado");
+  
+        return userId;
     }
 }

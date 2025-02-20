@@ -1,6 +1,8 @@
 ﻿using ControleVendas.Modules.Categoria.Models.Request;
 using ControleVendas.Modules.Categoria.Models.Response;
 using ControleVendas.Modules.Categoria.Service.Interfaces;
+using ControleVendas.Modules.User.Models.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -8,7 +10,7 @@ namespace ControleVendas.Modules.Categoria.Controller;
 
 [ApiController]
 [Route("[controller]")]
-// [Authorize(policy: "VENDEDOR")]
+[Authorize(Roles = nameof(Role.VENDEDOR))]
 public class CategoriaController : ControllerBase
 {
     private readonly ICategoriaService _categoriaService;

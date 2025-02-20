@@ -1,6 +1,8 @@
 ﻿using ControleVendas.Modules.Produto.Models.Request;
 using ControleVendas.Modules.Produto.Models.Response;
 using ControleVendas.Modules.Produto.Service.Interfaces;
+using ControleVendas.Modules.User.Models.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -8,6 +10,7 @@ namespace ControleVendas.Modules.Produto.Controller;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize(Roles = nameof(Role.VENDEDOR))]
 public class ProdutoController : ControllerBase
 {
     private readonly IProdutoService _produtoService;
