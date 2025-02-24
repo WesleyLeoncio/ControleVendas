@@ -173,8 +173,7 @@ public class UserService : IUserService
         var authClaims = new List<Claim>
         {   
             new Claim(JwtRegisteredClaimNames.Sub, userEntity.Id),
-            new Claim(ClaimTypes.Name, userEntity.UserName ?? string.Empty),
-            new Claim(ClaimTypes.Email, userEntity.Email ?? string.Empty),
+            new Claim(ClaimTypes.Name, userEntity.FullName ?? string.Empty),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
         
