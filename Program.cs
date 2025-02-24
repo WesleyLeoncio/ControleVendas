@@ -15,6 +15,9 @@ builder.Services.AddControllers();
 // Configuração das opções JSON usando a classe JsonConfig
 builder.Services.AddJsonConfiguration();
 
+// Configuração as politicas do cors usando a class PolicyCorsConfig
+builder.Services.AddPolicyCors();
+
 builder.Services.AddEndpointsApiExplorer();
 
 // Configuração do Swagger usando a classe SwaggerConfig
@@ -55,9 +58,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseMiddleware(typeof(GlobalErrorHandlingMiddleware));
-
 app.UseHttpsRedirection();
+
+app.UseCors();
+
+app.UseMiddleware(typeof(GlobalErrorHandlingMiddleware));
 
 app.UseAuthentication();
 
