@@ -29,9 +29,10 @@ public class CategoriaController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<CategoriaResponse>> AlterarCategoria(int id, CategoriaRequest request)
+    public async Task<ActionResult> AlterarCategoria(int id, CategoriaRequest request)
     {
-        return Ok(await _categoriaService.UpdateCategoria(id, request));
+        await _categoriaService.UpdateCategoria(id, request);
+        return NoContent();
     }
     
     [HttpDelete("{id}")]

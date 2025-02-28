@@ -45,14 +45,13 @@ public class FornecedorService : IFornecedorService
         return fornecedorPg;
     }
 
-    public async Task<FornecedorResponse> UpdateFornecedor(int id, FornecedorRequest request)
+    public async Task UpdateFornecedor(int id, FornecedorRequest request)
     {   
         await CheckNameExists(request.Nome);
         FornecedorEntity fornecedorEntity = await CheckFornecedor(id);
         _mapper.Map(request, fornecedorEntity);
-        FornecedorEntity update = _uof.FornecedorRepository.Update(fornecedorEntity);
+        _uof.FornecedorRepository.Update(fornecedorEntity);
         await _uof.Commit();
-        return _mapper.Map<FornecedorResponse>(update);
     }
 
     public async Task<FornecedorResponse> DeleteFornecedor(int id)

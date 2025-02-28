@@ -13,7 +13,7 @@ public class Repository<T> : IRepository<T> where T : class
     {
         _context = context;
     }
-    
+
     public IQueryable<T> GetIQueryable()
     {
         return _context.Set<T>().AsNoTracking();
@@ -35,10 +35,9 @@ public class Repository<T> : IRepository<T> where T : class
         return entity;
     }
 
-    public T Update(T entity)
+    public void Update(T entity)
     {
         _context.Set<T>().Update(entity);
-        return entity;
     }
 
     public T Delete(T entity)

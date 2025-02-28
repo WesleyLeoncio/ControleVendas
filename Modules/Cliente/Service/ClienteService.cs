@@ -46,14 +46,13 @@ public class ClienteService : IClienteService
         return clientePg;
     }
 
-    public async Task<ClienteResponse> UpdateCliente(int id, ClienteRequest request)
+    public async Task UpdateCliente(int id, ClienteRequest request)
     {
         ClienteEntity clienteEntity = await CheckCliente(id);
         if (clienteEntity.Telefone != request.Telefone) await CheckTelefoneExists(request.Telefone);
         _mapper.Map(request, clienteEntity);
-        ClienteEntity update = _uof.ClienteRepository.Update(clienteEntity);
+        _uof.ClienteRepository.Update(clienteEntity);
         await _uof.Commit();
-        return _mapper.Map<ClienteResponse>(update);
     }
 
     public async Task<ClienteResponse> DeleteCliente(int id)
@@ -64,13 +63,12 @@ public class ClienteService : IClienteService
        return _mapper.Map<ClienteResponse>(clienteEntity);
     }
 
-    public async Task<string> AlterStatusCliente(int id)
+    public async Task AlterStatusCliente(int id)
     {
         ClienteEntity clienteEntity = await CheckCliente(id);
         clienteEntity.Ativo = !clienteEntity.Ativo;
          _uof.ClienteRepository.Update(clienteEntity);
         await _uof.Commit();
-        return clienteEntity.Ativo ? "ATIVO" : "BLOQUEADO";
     }
 
     private async Task<ClienteEntity> CheckCliente(int id)

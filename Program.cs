@@ -24,7 +24,7 @@ builder.Services.AddPolicyCors();
 builder.Services.AddEndpointsApiExplorer();
 
 // Configuração do Swagger usando a classe SwaggerConfig
-builder.Services.AddSwaggerConfiguration();
+builder.Services.AddSwaggerConfiguration(builder.Configuration);
 
 //Configura o Indenty
 builder.Services.AddIdentity<ApplicationUserEntity, IdentityRole>()

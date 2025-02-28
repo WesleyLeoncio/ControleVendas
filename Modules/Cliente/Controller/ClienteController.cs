@@ -28,15 +28,17 @@ public class ClienteController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<ClienteResponse>> AlterarCliente(int id, ClienteRequest request)
+    public async Task<ActionResult> AlterarCliente(int id, ClienteRequest request)
     {
-        return Ok(await _clienteService.UpdateCliente(id, request));
+        await _clienteService.UpdateCliente(id, request);
+        return NoContent();
     }
 
     [HttpPut("Status/{id}")]
-    public async Task<ActionResult<String>> AlterarStatusCliente(int id)
+    public async Task<ActionResult> AlterarStatusCliente(int id)
     {
-        return Ok(await _clienteService.AlterStatusCliente(id));
+        await _clienteService.AlterStatusCliente(id);
+        return NoContent();
     }
     
     [HttpDelete("{id}")]

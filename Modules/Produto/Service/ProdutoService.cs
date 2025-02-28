@@ -47,15 +47,14 @@ public class ProdutoService : IProdutoService
         return produtoPg;
     }
 
-    public async Task<ProdutoResponse> UpdateProduto(int id, ProdutoRequest request)
+    public async Task UpdateProduto(int id, ProdutoRequest request)
     {
         ProdutoEntity produtoEntity = await CheckProduto(id);
         if (produtoEntity.Nome != request.Nome) await CheckNameExists(request.Nome);
         await CheckCategoriaFornecedor(request);
         _mapper.Map(request, produtoEntity);
-        ProdutoEntity update = _uof.ProdutoRepository.Update(produtoEntity);
+        _uof.ProdutoRepository.Update(produtoEntity);
         await _uof.Commit();
-        return _mapper.Map<ProdutoResponse>(update);
     }
 
     public async Task<ProdutoResponse> DeleteProduto(int id)

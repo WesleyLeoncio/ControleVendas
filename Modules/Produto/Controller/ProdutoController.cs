@@ -29,9 +29,10 @@ public class ProdutoController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<ProdutoResponse>> AlterarProduto(int id, ProdutoRequest request)
+    public async Task<ActionResult> AlterarProduto(int id, ProdutoRequest request)
     {
-        return Ok(await _produtoService.UpdateProduto(id, request));
+        await _produtoService.UpdateProduto(id, request);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]

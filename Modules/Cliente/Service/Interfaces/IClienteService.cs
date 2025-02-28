@@ -10,9 +10,9 @@ public interface IClienteService
     Task<ClienteResponse> GetClienteById(int id); 
     Task<ClientePaginationResponse> GetAllFilterClientes(ClienteFiltroRequest filtroRequest);
     
-    Task<ClienteResponse> UpdateCliente(int id, ClienteRequest request);
+    Task UpdateCliente(int id, ClienteRequest request);
     
     Task<ClienteResponse> DeleteCliente(int id);
     
-    Task<String> AlterStatusCliente(int id);
+    Task AlterStatusCliente(int id);
 }

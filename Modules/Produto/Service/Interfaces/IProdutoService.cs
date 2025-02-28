@@ -8,9 +8,7 @@ public interface IProdutoService
     Task<ProdutoResponse> CreateProduto(ProdutoRequest request);
     Task<ProdutoResponse> GetProdutoById(int id); 
     Task<ProdutoPaginationResponse> GetAllFilterProdutos(ProdutoFiltroRequest filtroRequest);
-    
-    Task<ProdutoResponse> UpdateProduto(int id, ProdutoRequest request);
-    
+    Task UpdateProduto(int id, ProdutoRequest request);
     Task<ProdutoResponse> DeleteProduto(int id);
     
 }

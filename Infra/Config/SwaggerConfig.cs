@@ -1,24 +1,30 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using System.Reflection;
+using Microsoft.OpenApi.Models;
 
 namespace ControleVendas.Infra.Config;
 
 public static class SwaggerConfig
 {
-    public static void AddSwaggerConfiguration(this IServiceCollection services)
+    public static void AddSwaggerConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddSwaggerGen(c =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "API VENDAS", Version = "v1" });
-
-            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+            IConfigurationSection swaggerConfig = configuration.GetSection("Swagger");
+            c.SwaggerDoc(swaggerConfig["Version"], new OpenApiInfo
             {
-                Name = "Authorization",
-                Type = SecuritySchemeType.ApiKey,
-                Scheme = "Bearer",
-                BearerFormat = "JWT",
-                In = ParameterLocation.Header,
-                Description = "Bearer JWT ",
+                Title = swaggerConfig["Title"],
+                Version = swaggerConfig["Version"],
+                Description = swaggerConfig["Description"],
+                Contact = new OpenApiContact
+                {
+                    Name = swaggerConfig["Contact:Name"],
+                    Email = swaggerConfig["Contact:Email"],
+                    Url = new Uri(swaggerConfig["Contact:Url"] ?? string.Empty)
+                }
             });
+
+            var xmlFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFileName));
 
             c.AddSecurityRequirement(new OpenApiSecurityRequirement
             {

@@ -56,14 +56,13 @@ public class CategoriaService : ICategoriaService
     }
 
 
-    public async Task<CategoriaResponse> UpdateCategoria(int id, CategoriaRequest request)
+    public async Task UpdateCategoria(int id, CategoriaRequest request)
     {   
         CategoriaEntity categoriaEntity = await CheckCategoria(id);
         if (categoriaEntity.Nome != request.Nome) await CheckNameExists(request.Nome);
         _mapper.Map(request, categoriaEntity);
-        CategoriaEntity update = _uof.CategoriaRepository.Update(categoriaEntity);
+        _uof.CategoriaRepository.Update(categoriaEntity);
         await _uof.Commit();
-        return _mapper.Map<CategoriaResponse>(update);
     }
 
     public async Task<CategoriaResponse> DeleteCategoria(int id)

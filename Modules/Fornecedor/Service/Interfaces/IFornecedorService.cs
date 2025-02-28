@@ -11,7 +11,7 @@ public interface IFornecedorService
     
     Task<FornecedorPaginationResponse> GetAllFilterFornecedor(FornecedorFiltroRequest filtroRequest);
     
-    Task<FornecedorResponse> UpdateFornecedor(int id, FornecedorRequest request);
+    Task UpdateFornecedor(int id, FornecedorRequest request);
     
     Task<FornecedorResponse> DeleteFornecedor(int id);
 }
