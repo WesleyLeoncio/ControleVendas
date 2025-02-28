@@ -19,7 +19,9 @@ public class PedidoController : ControllerBase
     {
         _pedidoService = pedidoService;
     }
-
+    
+    ///<summary>Cadastra Um Novo Pedido</summary>
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Create))]
     [HttpPost]
     public async Task<ActionResult> CriarNovoPedido(PedidoRequest request)
     {
@@ -27,13 +29,18 @@ public class PedidoController : ControllerBase
         return StatusCode(201);
     }
     
+    ///<summary>Registra Um Pagamento Para Um Pedido</summary>
     [HttpPost("Pagamento")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesDefaultResponseType]
     public async Task<ActionResult> RealizarPagamento(PedidoPagamentoRequest request)
     {
         await _pedidoService.PedidoPagamento(request);
-        return Ok();
+        return NoContent();
     }
-
+    
+    ///<summary>Lista Pedidos Utilizando Filtros</summary>
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
     [HttpGet]
     public async Task<ActionResult<PedidoPaginationResponse>> ListarPedidosComFiltros([FromQuery] PedidoFiltroRequest filtroRequest)
     {

@@ -20,14 +20,19 @@ public class CategoriaController : ControllerBase
         _categoriaService = categoriaService;
     }
 
+    ///<summary>Cadastra Uma Nova Categoria</summary>
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Create))]
     [HttpPost]
+    
     public async Task<ActionResult<CategoriaResponse>> CadastroDeCategoria(CategoriaRequest request)
     {
         CategoriaResponse response = await _categoriaService.CreateCategoria(request);
         return CreatedAtAction(nameof(BuscarCategoriaPorId),
             new { id = response.Id }, response);
     }
-
+    
+    /// <summary>Altera Uma Categoria</summary>
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
     [HttpPut("{id}")]
     public async Task<ActionResult> AlterarCategoria(int id, CategoriaRequest request)
     {
@@ -35,18 +40,24 @@ public class CategoriaController : ControllerBase
         return NoContent();
     }
     
+    /// <summary>Deleta Uma Categoria</summary>
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
     [HttpDelete("{id}")]
     public async Task<ActionResult<CategoriaResponse>> DeletarCategoria(int id)
     { 
       return Ok(await _categoriaService.DeleteCategoria(id));
     }
     
+    ///<summary>Busca Uma Categoria Pelo Id</summary>
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
     [HttpGet("{id}")]
     public async Task<ActionResult<CategoriaResponse>> BuscarCategoriaPorId(int id)
     {
         return Ok(await _categoriaService.GetCategoriaById(id));
     }
     
+    ///<summary>Lista Categorias Utilizando Filtros</summary>
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
     [HttpGet("Filter/Pagination")]
     public async Task<ActionResult<IEnumerable<CategoriaResponse>>> ListarCategoriaComFiltro([FromQuery] CategoriaFiltroRequest filtroRequest)
     {
@@ -55,6 +66,8 @@ public class CategoriaController : ControllerBase
         return Ok(response.Categorias);
     }
     
+    ///<summary>Lista Categorias Com Produtos Utilizando Filtros</summary>
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
     [HttpGet("Filter/Pagination/Produtos")]
     public async Task<ActionResult<IEnumerable<CategoriaProdutoResponse>>> ListarCategoriaComProdutosFiltro([FromQuery] CategoriaFiltroRequest filtroRequest)
     {

@@ -9,6 +9,7 @@ public static class SwaggerConfig
     {
         services.AddSwaggerGen(c =>
         {
+           
             IConfigurationSection swaggerConfig = configuration.GetSection("Swagger");
             c.SwaggerDoc(swaggerConfig["Version"], new OpenApiInfo
             {
@@ -25,6 +26,16 @@ public static class SwaggerConfig
 
             var xmlFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFileName));
+            
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+            {
+                Name = "Authorization",
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = "Bearer",
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Description = "Bearer JWT ",
+            });
 
             c.AddSecurityRequirement(new OpenApiSecurityRequirement
             {

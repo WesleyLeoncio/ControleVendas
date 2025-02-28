@@ -19,7 +19,9 @@ public class FornecedorController : ControllerBase
     {
         _fornecedorService = fornecedorService;
     }
-
+    
+    ///<summary>Cadastra Um Novo Fornecedor</summary>
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Create))]
     [HttpPost]
     public async Task<ActionResult<FornecedorResponse>> CadastroDeFornecedor(FornecedorRequest request)
     {
@@ -27,26 +29,34 @@ public class FornecedorController : ControllerBase
         return CreatedAtAction(nameof(BuscarFornecedorPorId),
             new { id = response.Id }, response);
     }
-
+    
+    /// <summary>Altera Um Forncedor</summary>
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
     [HttpPut("{id}")]
     public async Task<ActionResult> AlterarFornecedor(int id, FornecedorRequest request)
     {
         await _fornecedorService.UpdateFornecedor(id, request);
         return NoContent();
     }
-
+    
+    ///<summary>Busca Um Fornecedor Pelo Id</summary>
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
     [HttpGet("{id}")]
     public async Task<ActionResult<FornecedorResponse>> BuscarFornecedorPorId(int id)
     {
         return Ok(await _fornecedorService.GetFornecedorById(id));
     }
-
+    
+    /// <summary>Deleta Um Fornecedor</summary>
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
     [HttpDelete("{id}")]
     public async Task<ActionResult<FornecedorResponse>> DeletarFornecedor(int id)
     {
         return Ok(await _fornecedorService.DeleteFornecedor(id));
     }
-
+    
+    ///<summary>Lista Fornecedores Utilizando Filtros</summary>
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
     [HttpGet("Filter/Pagination")]
     public async Task<ActionResult<IEnumerable<FornecedorResponse>>> ListarFornecedorComFiltro(
         [FromQuery] FornecedorFiltroRequest filtroRequest)

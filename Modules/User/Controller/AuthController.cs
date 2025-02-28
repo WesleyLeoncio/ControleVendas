@@ -18,14 +18,17 @@ public class AuthController : ControllerBase
     {
         _userService = userService;
     }
-
+    
+    ///<summary>Realiza Login Do Usuario</summary>
     [HttpPost]
     [Route("login")]
     public async Task<ActionResult<LoginResponse>> Login(LoginRequest request)
     {
         return Ok(await _userService.Login(request));
     }
-
+    
+    ///<summary>Cadastra Um Novo Usuarios</summary>
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Create))]
     [HttpPost]
     [Route("register")]
     public async Task<ActionResult<RegisterResponse>> Register(UserRegisterRequest request)
@@ -33,7 +36,9 @@ public class AuthController : ControllerBase
         return StatusCode(StatusCodes.Status201Created, 
             await _userService.Register(request));
     }
-
+    
+    ///<summary>Cadastra Uma Nova Role</summary>
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Create))]
     [HttpPost]
     [Authorize(Roles = nameof(Role.MASTER))]
     [Route("CreateRole")]
@@ -42,6 +47,7 @@ public class AuthController : ControllerBase
         return StatusCode(StatusCodes.Status201Created, await _userService.CreateRole(role));
     }
 
+    ///<summary>Adiciona Uma Nova Role Para Um Usuario</summary>
     [HttpPost]
     [Authorize(Roles = nameof(Role.MASTER))]
     [Route("AddUserToRole")]
@@ -49,7 +55,8 @@ public class AuthController : ControllerBase
     {
         return Ok(await _userService.AddUserToRole(userName, role));
     }
-
+    
+    ///<summary>Atualiza O Token Do Usuario</summary>
     [HttpPost]
     [Authorize(Roles = nameof(Role.MASTER))]
     [Route("refresh-token")]
@@ -57,11 +64,13 @@ public class AuthController : ControllerBase
     {
         return Ok(await _userService.RefreshToken(tokenRequest));
     }
-
-
+    
+    ///<summary>Remove O Token Do Usuario</summary>
     [HttpPost]
     [Authorize(Roles = nameof(Role.MASTER))]
     [Route("revoke/{userName}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesDefaultResponseType]
     public async Task<IActionResult> Revoke(string userName)
     {
         await _userService.Revoke(userName);

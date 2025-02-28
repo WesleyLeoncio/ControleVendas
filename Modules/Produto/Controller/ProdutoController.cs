@@ -19,7 +19,9 @@ public class ProdutoController : ControllerBase
     {
         _produtoService = produtoService;
     }
-
+    
+    ///<summary>Cadastra Um Novo Produto</summary>
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Create))]
     [HttpPost]
     public async Task<ActionResult<ProdutoResponse>> CadastroDeProduto(ProdutoRequest request)
     {
@@ -27,20 +29,26 @@ public class ProdutoController : ControllerBase
         return CreatedAtAction(nameof(BuscarProdutoPorId),
             new { id = response.Id }, response);
     }
-
+    
+    /// <summary>Altera Um Produto</summary>
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
     [HttpPut("{id}")]
     public async Task<ActionResult> AlterarProduto(int id, ProdutoRequest request)
     {
         await _produtoService.UpdateProduto(id, request);
         return NoContent();
     }
-
+    
+    /// <summary>Deleta Um Produto</summary>
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
     [HttpDelete("{id}")]
     public async Task<ActionResult<ProdutoResponse>> DeletarProduto(int id)
     {
         return Ok(await _produtoService.DeleteProduto(id));
     }
-
+    
+    ///<summary>Lista Produtos Utilizando Filtros</summary>
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
     [HttpGet("Filter/Pagination")]
     public async Task<ActionResult<IEnumerable<ProdutoResponse>>> ListarProdutosComFiltro([FromQuery] ProdutoFiltroRequest filtroRequest)
     {
@@ -49,6 +57,8 @@ public class ProdutoController : ControllerBase
         return Ok(response.Produtos);
     }
     
+    ///<summary>Busca Um Produto Pelo Id</summary>
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
     [HttpGet("{id}")]
     public async Task<ActionResult<ProdutoResponse>> BuscarProdutoPorId(int id)
     {
