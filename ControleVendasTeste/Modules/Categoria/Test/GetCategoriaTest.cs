@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using AutoMapper;
 using ControleVendas.Infra.Exceptions.custom;
 using ControleVendas.Modules.Categoria.Models.Entity;
 using ControleVendas.Modules.Categoria.Models.Mapper;
@@ -8,13 +9,11 @@ using ControleVendas.Modules.Categoria.Repository.Interfaces;
 using ControleVendas.Modules.Categoria.Service;
 using ControleVendas.Modules.Categoria.Service.Interfaces;
 using ControleVendas.Modules.Common.UnitOfWork.Interfaces;
-using ControleVendas.Modules.Produto.Models.Response;
+using ControleVendas.Modules.Produto.Models.Mapper;
 using ControleVendasTeste.Config;
 using ControleVendasTeste.Modules.Categoria.Models;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc;
 using Moq;
-using X.PagedList;
 using X.PagedList.Extensions;
 
 namespace ControleVendasTeste.Modules.Categoria.Test;
@@ -28,7 +27,10 @@ public class GetCategoriaTest
     {
         _mockUof = new Mock<IUnitOfWork>();
         Mock<ICategoriaRepository> mockCategoriaRepository = new Mock<ICategoriaRepository>();
-        var mapper = AutoMapperConfig.Configure(new CategoriaMapper());
+        var mapper = AutoMapperConfig.Configure(new List<Profile>()
+        {
+            new CategoriaMapper(), new ProdutoMapper()
+        });
 
         _categoriaService = new CategoriaService(_mockUof.Object, mapper);
         _mockUof.Setup(u => u.CategoriaRepository).Returns(mockCategoriaRepository.Object);
@@ -82,7 +84,7 @@ public class GetCategoriaTest
                     .Where(c => c.Nome != null && (string.IsNullOrEmpty(request.Nome) ||
                                                    c.Nome.Contains(request.Nome, StringComparison.OrdinalIgnoreCase)))
                     .ToList();
-                
+
                 return categoriaFiltradas.ToPagedList(request.PageNumber, request.PageSize);
             });
 
@@ -94,7 +96,7 @@ public class GetCategoriaTest
 
         //Assert
         act.Should().NotBeNull();
-        
+
         if (!string.IsNullOrEmpty(request.Nome))
         {
             if (act.Categorias.Any())
@@ -116,8 +118,70 @@ public class GetCategoriaTest
             // ✅ Se não há filtro, retorna a lista completa
             act.Categorias.Should().HaveCount(CategoriasData.GetListCategorias().Count());
         }
-
     }
-    
-  
+
+
+    [Theory(DisplayName =
+        "Deve testar se o metodo GetAllIncludePageableAsync está retornando as categorias com e sem filtro")]
+    [MemberData(nameof(CategoriasData.CategoriasRequest), MemberType = typeof(CategoriasData))]
+    public async Task GetAllIncludePageableAsync_Return_CategoriasComFiltro_E_SemFiltro(string filterCategorias)
+    {
+        // Arrange
+        _mockUof.Setup(u =>
+                u.CategoriaRepository.GetAllIncludePageableAsync(It.IsAny<CategoriaFiltroRequest>()))
+            .ReturnsAsync((CategoriaFiltroRequest request) =>
+            {
+                List<CategoriaEntity> categoriaFiltradas = CategoriasData.GetListCategorias()
+                    .Where(c => c.Nome != null && (string.IsNullOrEmpty(request.Nome) ||
+                                                   c.Nome.Contains(request.Nome, StringComparison.OrdinalIgnoreCase)))
+                    .ToList();
+
+                return categoriaFiltradas.ToPagedList(request.PageNumber, request.PageSize);
+            });
+
+
+        CategoriaFiltroRequest request = new CategoriaFiltroRequest { Nome = filterCategorias };
+
+        // Act
+        CategoriaPaginationProdutoResponse act = await _categoriaService.GetAllIncludeProduto(request);
+
+        //Assert
+        act.Should().NotBeNull();
+
+        if (!string.IsNullOrEmpty(request.Nome))
+        {
+            if (act.Categorias.Any())
+            {
+                // ✅ Caso existam categorias que correspondem ao filtro, elas devem ser retornadas corretamente
+                act.Categorias.Should().NotBeEmpty();
+                act.Categorias.Should().OnlyContain(c =>
+                    c.Nome.Contains(request.Nome, StringComparison.OrdinalIgnoreCase)
+                );
+                VerificarProdutosExistentes(act.Categorias.ToList());
+            }
+            else
+            {
+                // ✅ Caso nenhuma categoria corresponda ao filtro, deve retornar uma lista vazia
+                act.Categorias.Should().BeEmpty();
+            }
+        }
+        else
+        {
+            // ✅ Se não há filtro, retorna a lista completa
+            act.Categorias.Should().HaveCount(CategoriasData.GetListCategorias().Count());
+            VerificarProdutosExistentes(act.Categorias.ToList());
+        }
+    }
+
+    private static void VerificarProdutosExistentes(List<CategoriaProdutoResponse> categorias)
+    {
+        foreach (var categoria in categorias)
+        {
+            foreach (var produto in categoria.Produtos)
+            {
+                produto.Should().NotBeNull("Produto não pode ser nulo");
+                produto.Nome.Should().NotBeNullOrEmpty($"Produto na categoria {categoria.Nome} não pode ter um nome nulo ou vazio");
+            }
+        }
+    }
 }

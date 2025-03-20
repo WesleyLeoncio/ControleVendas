@@ -4,11 +4,14 @@ namespace ControleVendasTeste.Config;
 
 public static class AutoMapperConfig
 {
-    public static IMapper Configure(Profile profile)
+    public static IMapper Configure(List<Profile> profiles)
     {
         var config = new MapperConfiguration(cfg =>
         {
-              cfg.AddProfile(profile);
+            foreach (var profile in profiles)
+            {
+                cfg.AddProfile(profile);
+            }
         });
 
         return config.CreateMapper();
