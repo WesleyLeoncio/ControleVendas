@@ -72,7 +72,7 @@ public class GetCategoriaTest
 
     [Theory(DisplayName =
         "Deve testar se o metodo GetAllFilterCategorias está retornando as categorias com e sem filtro")]
-    [MemberData(nameof(CategoriasData.CategoriasRequest), MemberType = typeof(CategoriasData))]
+    [MemberData(nameof(CategoriasData.CategoriasGetFilter), MemberType = typeof(CategoriasData))]
     public async Task GetAllFilterCategorias_Return_CategoriasComFiltro_E_SemFiltro(string filterCategorias)
     {
         // Arrange
@@ -123,7 +123,7 @@ public class GetCategoriaTest
 
     [Theory(DisplayName =
         "Deve testar se o metodo GetAllIncludePageableAsync está retornando as categorias com e sem filtro")]
-    [MemberData(nameof(CategoriasData.CategoriasRequest), MemberType = typeof(CategoriasData))]
+    [MemberData(nameof(CategoriasData.CategoriasGetFilter), MemberType = typeof(CategoriasData))]
     public async Task GetAllIncludePageableAsync_Return_CategoriasComFiltro_E_SemFiltro(string filterCategorias)
     {
         // Arrange

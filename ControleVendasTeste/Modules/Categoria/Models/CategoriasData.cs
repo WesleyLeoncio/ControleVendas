@@ -46,6 +46,15 @@ public static class CategoriasData
     {
         return new List<object[]>
         {
+            new object[] { new CategoriaRequest("Perfume") },
+            new object[] { new CategoriaRequest("Creme") }
+        };
+    }
+
+    public static IEnumerable<object[]> CategoriasGetFilter()
+    {
+        return new List<object[]>
+        {
             new object[] { "Perfume" },
             new object[] { "Inexistente" },
             new object[] { "" },
