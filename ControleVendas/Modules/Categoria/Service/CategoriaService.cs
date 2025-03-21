@@ -65,12 +65,11 @@ public class CategoriaService : ICategoriaService
         await _uof.Commit();
     }
 
-    public async Task<CategoriaResponse> DeleteCategoria(int id)
+    public async Task DeleteCategoria(int id)
     {
         CategoriaEntity categoriaEntity = await CheckCategoria(id);
         _uof.CategoriaRepository.Delete(categoriaEntity);
         await _uof.Commit();
-        return _mapper.Map<CategoriaResponse>(categoriaEntity);
     }
 
     private async Task<CategoriaEntity> CheckCategoria(int id)

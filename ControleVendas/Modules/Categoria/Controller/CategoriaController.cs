@@ -5,6 +5,7 @@ using ControleVendas.Modules.User.Models.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
 
 namespace ControleVendas.Modules.Categoria.Controller;
 
@@ -39,13 +40,14 @@ public class CategoriaController : ControllerBase
         await _categoriaService.UpdateCategoria(id, request);
         return NoContent();
     }
-    
-    /// <summary>Deleta Uma Categoria</summary>
-    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
+
     [HttpDelete("{id}")]
-    public async Task<ActionResult<CategoriaResponse>> DeletarCategoria(int id)
-    { 
-      return Ok(await _categoriaService.DeleteCategoria(id));
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult> DeletarCategoria(int id)
+    {
+        await _categoriaService.DeleteCategoria(id); 
+        return NoContent();
     }
     
     ///<summary>Busca Uma Categoria Pelo Id</summary>

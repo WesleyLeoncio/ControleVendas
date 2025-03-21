@@ -15,6 +15,6 @@ public interface ICategoriaService
     
     Task UpdateCategoria(int id, CategoriaRequest request);
     
-    Task<CategoriaResponse> DeleteCategoria(int id);
+    Task DeleteCategoria(int id);
     
 }
