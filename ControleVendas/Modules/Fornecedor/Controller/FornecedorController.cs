@@ -5,6 +5,7 @@ using ControleVendas.Modules.User.Models.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
 
 namespace ControleVendas.Modules.Fornecedor.Controller;
 
@@ -46,13 +47,14 @@ public class FornecedorController : ControllerBase
     {
         return Ok(await _fornecedorService.GetFornecedorById(id));
     }
-    
-    /// <summary>Deleta Um Fornecedor</summary>
-    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
+
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesDefaultResponseType]
     public async Task<ActionResult<FornecedorResponse>> DeletarFornecedor(int id)
     {
-        return Ok(await _fornecedorService.DeleteFornecedor(id));
+        await _fornecedorService.DeleteFornecedor(id);
+        return NoContent();
     }
     
     ///<summary>Lista Fornecedores Utilizando Filtros</summary>

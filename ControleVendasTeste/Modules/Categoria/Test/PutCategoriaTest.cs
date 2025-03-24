@@ -61,7 +61,7 @@ public class PutCategoriaTest
     public async Task UpdateCategoria_Throws_KeyDuplicationException()
     {
        // Arrange
-        int id = 2;
+        int id = 1;
         var request = new CategoriaRequest("Desodorante");
         var categoriaExistente = CategoriasData.GetCategoriaIndex(0);
         var categoriaDuplicada = CategoriasData.GetCategoriaIndex(1);

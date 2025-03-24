@@ -13,5 +13,5 @@ public interface IFornecedorService
     
     Task UpdateFornecedor(int id, FornecedorRequest request);
     
-    Task<FornecedorResponse> DeleteFornecedor(int id);
+    Task DeleteFornecedor(int id);
 }
