@@ -18,10 +18,12 @@ public class ClienteEntity
     public string? Nome { get; set; }
     
     [Column(name:"email")] 
+    [StringLength(150)]
     public string? Email { get; set; }
     
     [Required]
     [Column(name:"telefone")] 
+    [StringLength(20)]
     public string? Telefone { get; set; }
     
     [Column(name:"ativo")]
