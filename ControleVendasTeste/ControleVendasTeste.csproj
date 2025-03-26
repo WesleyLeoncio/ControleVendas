@@ -24,4 +24,8 @@
       <ProjectReference Include="..\ControleVendas\ControleVendas.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Modules\Cliente\Test\" />
+    </ItemGroup>
+
 </Project>
