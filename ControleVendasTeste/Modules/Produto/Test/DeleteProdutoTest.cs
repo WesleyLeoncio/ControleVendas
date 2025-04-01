@@ -1,9 +1,7 @@
 ﻿using System.Linq.Expressions;
 using AutoMapper;
 using ControleVendas.Infra.Exceptions.custom;
-using ControleVendas.Modules.Categoria.Repository.Interfaces;
 using ControleVendas.Modules.Common.UnitOfWork.Interfaces;
-using ControleVendas.Modules.Fornecedor.Repository.Interfaces;
 using ControleVendas.Modules.Produto.Models.Entity;
 using ControleVendas.Modules.Produto.Models.Mapper;
 using ControleVendas.Modules.Produto.Repository.Interfaces;
