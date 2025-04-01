@@ -99,6 +99,38 @@ public class PostProdutoTest
         await act.Should().ThrowAsync<KeyDuplicationException>()
             .WithMessage("Já existe um produto com este nome!");
     }
+    
+    [Theory(DisplayName = "Deve testar se o metodo cadastro de produto " +
+                        "lança uma exeption NotFoundException ao tentar cadastrar " +
+                        "produtos com categoria ou fornecedor que não existe")]
+    [InlineData(2,1,"Categoria não encontrada!" )]
+    [InlineData(1,1,"Fornecedor não encontrado!" )]
+    public async Task PostProduto_Throws_NotFoundException(int categoriaId, int fornecedorId, string message)
+    {
+        //Arrange
+        var produtoRequest = ProdutosData.GetProdutoRequest();
+        var categoria = CategoriasData.GetCategoriaIndex(0);
+        var fornecedor = FornecedoresData.GetFornecedorIndex(0);
+        
+        _mockUof.Setup(u => u.CategoriaRepository.GetAsync(
+                It.Is<Expression<Func<CategoriaEntity, bool>>>(expr => 
+                    expr.Compile()(new CategoriaEntity{ Id = categoriaId}))))
+            .ReturnsAsync(categoria);
+        
+        _mockUof.Setup(u => u.FornecedorRepository.GetAsync(
+                It.Is<Expression<Func<FornecedorEntity, bool>>>(expr => 
+                    expr.Compile()(new FornecedorEntity(){ Id = fornecedorId }))))
+            .ReturnsAsync(fornecedor);
+        
+        
+        //Act
+        Func<Task> act = async () => await _produtoService.CreateProduto(produtoRequest);
+        
+        //Assert
+        act.Should().NotBeNull();
+        await act.Should().ThrowAsync<NotFoundException>().WithMessage(message);
+
+    }
   
     
 }

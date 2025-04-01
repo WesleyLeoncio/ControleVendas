@@ -49,12 +49,12 @@ public static class ProdutosData
             new object[]
             {
                 new ProdutoRequest("Produto 1", 20, 25,
-                    "Descrição do produto 1", 20, 1, 2)
+                    "Descrição do produto 1", 20, 2, 1)
             },
             new object[]
             {
                 new ProdutoRequest("Produto 2", 220, 265,
-                    "Descrição do produto 2", 20, 1, 1)
+                    "Descrição do produto 2", 20, 1, 2)
             },
         };
     }
