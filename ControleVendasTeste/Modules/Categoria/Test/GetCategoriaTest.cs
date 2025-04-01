@@ -55,7 +55,7 @@ public class GetCategoriaTest
     }
 
     [Fact(DisplayName = "Deve retornar NotFoundException ao buscar categoria por ID inexistente")]
-    public async Task GetCategoriaById_Return_NotFoundException()
+    public async Task GetCategoriaById_Throws_NotFoundException()
     {
         // Arrange
         _mockUof.Setup(u => u.CategoriaRepository.GetAsync(It.IsAny<Expression<Func<CategoriaEntity, bool>>>()))

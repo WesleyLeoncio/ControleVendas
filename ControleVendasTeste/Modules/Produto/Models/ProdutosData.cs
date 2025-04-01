@@ -1,11 +1,12 @@
 ﻿using ControleVendas.Modules.Produto.Models.Entity;
+using ControleVendas.Modules.Produto.Models.Enums;
 using ControleVendas.Modules.Produto.Models.Request;
 
 namespace ControleVendasTeste.Modules.Produto.Models;
 
 public static class ProdutosData
 {
-    public static IEnumerable<ProdutoEntity> GetListProdutos()
+    public static List<ProdutoEntity> GetListProdutos()
     {
         return new List<ProdutoEntity>
         {
@@ -28,11 +29,48 @@ public static class ProdutosData
             new ProdutoEntity
             {
                 Id = 1, Nome = "Produto 3",
-                CategoriaId = 2, FornecedorId = 2,
+                CategoriaId = 1, FornecedorId = 2,
                 ValorCompra = 100, ValorVenda = 125,
                 Descricao = "Descrição do produto 3", Estoque = 20,
                 DataCadastro = DateTime.Today
             }
+        };
+    }
+
+    public static IEnumerable<object[]> ProdutoFiltroRequestData()
+    {
+        return new List<object[]>
+        {
+            new object[]
+            {
+                new ProdutoFiltroRequest 
+                { Nome = "Produto 1"},1
+            },
+            new object[]
+            {
+                new ProdutoFiltroRequest 
+                    { Categoria = 1,Fornecedor = 1},1
+            },
+            new object[]
+            {
+                new ProdutoFiltroRequest 
+                    { Nome = "Produto 3", Categoria = 1,Fornecedor = 2},1
+            },
+            new object[]
+            {
+                new ProdutoFiltroRequest 
+                    { Preco = 25, PrecoCriterio = Criterio.IGUAL},1
+            },
+            new object[]
+            {
+                new ProdutoFiltroRequest 
+                    { Preco = 100, PrecoCriterio = Criterio.MAIOR},2
+            },
+            new object[]
+            {
+                new ProdutoFiltroRequest 
+                    { Preco = 30, PrecoCriterio = Criterio.MENOR},1
+            },
         };
     }
 
@@ -62,6 +100,6 @@ public static class ProdutosData
 
     public static ProdutoEntity GetProdutoIndex(int index)
     {
-        return GetListProdutos().ElementAt(index);
+        return GetListProdutos()[index];
     }
 }
