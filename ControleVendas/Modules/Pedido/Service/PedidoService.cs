@@ -35,7 +35,7 @@ public class PedidoService : IPedidoService
         foreach (var item in pedidoRequest.Itens)
         {
             ProdutoEntity produtoEntity = await CheckProduto(item.ProdutoId);
-            await RetirarQuantidadeProduto(produtoEntity, item.Quantidade);
+            RetirarQuantidadeProduto(produtoEntity, item.Quantidade);
 
             ItemPedidoEntity itemPedidoEntity = new ItemPedidoEntity();
             itemPedidoEntity.ProdutoId = produtoEntity.Id;
@@ -88,7 +88,6 @@ public class PedidoService : IPedidoService
     public async Task<PedidoPaginationResponse> GetAllFilterPedidos(PedidoFiltroRequest filtro)
     {
         filtro.VerdedorId = BusarVendedorId();
-        Console.WriteLine("Pedido: "+filtro.VerdedorId);
         IPagedList<PedidoEntity> pedidos = await
             _uof.PedidoRepository.GetAllIncludeClienteFilterPageableAsync(filtro);
 
@@ -140,7 +139,7 @@ public class PedidoService : IPedidoService
                throw new NotFoundException("Produto não encontrado!");
     }
 
-    private async Task RetirarQuantidadeProduto(ProdutoEntity produtoEntity, int quantidade)
+    private void RetirarQuantidadeProduto(ProdutoEntity produtoEntity, int quantidade)
     {
         if (produtoEntity.Estoque < quantidade)
         {
@@ -150,7 +149,6 @@ public class PedidoService : IPedidoService
 
         produtoEntity.Estoque = produtoEntity.Estoque - quantidade;
         _uof.ProdutoRepository.Update(produtoEntity);
-        await _uof.Commit();
     }
     
     private async Task<PedidoEntity> CheckPedido(int id)
