@@ -47,23 +47,23 @@ public class PedidoService : IPedidoService
         }
 
         pedidoEntity.CalcularValorTotal();
-        pedidoEntity = RealizarPagamento(pedidoEntity, pedidoRequest.Pagamento);
+        pedidoEntity = VerificarStatusPedido(pedidoEntity, pedidoRequest.Pagamento);
         _uof.PedidoRepository.Create(pedidoEntity);
         await _uof.Commit();
     }
 
-    public async Task PedidoPagamento(PedidoPagamentoRequest pagamentoRequest)
+    public async Task RealizarPagamentoDePedido(PedidoPagamentoRequest pagamentoRequest)
     {
         PedidoEntity pedido = await CheckPedido(pagamentoRequest.IdPedido);
         if (pedido.Status != StatusPedido.Pago)
         {
-            pedido = RealizarPagamento(pedido, pagamentoRequest.Pagamento);
+            pedido = VerificarStatusPedido(pedido, pagamentoRequest.Pagamento);
             _uof.PedidoRepository.Update(pedido);
             await _uof.Commit();
         }
     }
 
-    private static PedidoEntity RealizarPagamento(PedidoEntity pedido, decimal pagamento)
+    private static PedidoEntity VerificarStatusPedido(PedidoEntity pedido, decimal pagamento)
     {
         if (pagamento < 0)
             throw new ArgumentException("O valor do pagamento não pode ser negativo.");

@@ -35,7 +35,7 @@ public class PedidoController : ControllerBase
     [ProducesDefaultResponseType]
     public async Task<ActionResult> RealizarPagamento(PedidoPagamentoRequest request)
     {
-        await _pedidoService.PedidoPagamento(request);
+        await _pedidoService.RealizarPagamentoDePedido(request);
         return NoContent();
     }
     

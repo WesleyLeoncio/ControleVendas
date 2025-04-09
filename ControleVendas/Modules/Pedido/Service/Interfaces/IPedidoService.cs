@@ -11,5 +11,5 @@ public interface IPedidoService
 
     Task VerificarPedidosAtrasados();
 
-    Task PedidoPagamento(PedidoPagamentoRequest pagamentoRequest);
+    Task RealizarPagamentoDePedido(PedidoPagamentoRequest pagamentoRequest);
 }
