@@ -87,7 +87,7 @@ public class PedidoService : IPedidoService
 
     public async Task<PedidoPaginationResponse> GetAllFilterPedidos(PedidoFiltroRequest filtro)
     {
-        filtro.VerdedorId = BusarVendedorId();
+        filtro.VendedorId = BusarVendedorId();
         IPagedList<PedidoEntity> pedidos = await
             _uof.PedidoRepository.GetAllIncludeClienteFilterPageableAsync(filtro);
 

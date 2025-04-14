@@ -13,7 +13,7 @@ public class PedidoFiltroRequest : QueryParameters
     public StatusPedido? Status { get; set; }
     [JsonIgnore]
     [SwaggerIgnore]
-    public string? VerdedorId { get; set; }
+    public string? VendedorId { get; set; }
 
     public bool VerificarStatusPedido()
     {

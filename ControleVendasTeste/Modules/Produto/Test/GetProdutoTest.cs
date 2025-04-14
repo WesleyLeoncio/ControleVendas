@@ -10,7 +10,6 @@ using ControleVendas.Modules.Produto.Repository.Interfaces;
 using ControleVendas.Modules.Produto.Service;
 using ControleVendas.Modules.Produto.Service.Interfaces;
 using ControleVendasTeste.Config;
-using ControleVendasTeste.Modules.Categoria.Models;
 using ControleVendasTeste.Modules.Produto.Filter.Custom;
 using ControleVendasTeste.Modules.Produto.Filter.Interfaces;
 using ControleVendasTeste.Modules.Produto.Models;
@@ -54,7 +53,7 @@ public class GetProdutoTest
             .WithMessage("Produto não encontrado!");
     }
 
-    [Fact(DisplayName = "Deve retornar um lista de produtos buscar produtos")]
+    [Fact(DisplayName = "Deve retornar um lista de produtos ao buscar produtos")]
     public async Task GetAllFilterProdutos_Returns_ProdutoPaginationResponse()
     {
         // Arrange
@@ -72,7 +71,7 @@ public class GetProdutoTest
         
         // Assert
         act.Should().NotBeNull();
-        act.Produtos.Should().HaveCount(CategoriasData.GetListCategorias().Count());
+        act.Produtos.Should().HaveCount(ProdutosData.GetListProdutos().Count);
     }
     
     [Theory(DisplayName = "Deve testar os filtros e retornar uma lista de produtos")]

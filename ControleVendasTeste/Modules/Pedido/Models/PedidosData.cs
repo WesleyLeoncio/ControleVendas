@@ -1,4 +1,5 @@
-﻿using ControleVendas.Modules.ItemPedido.models.Entity;
+﻿using ControleVendas.Modules.Cliente.Models.Entity;
+using ControleVendas.Modules.ItemPedido.models.Entity;
 using ControleVendas.Modules.ItemPedido.models.Request;
 using ControleVendas.Modules.Pedido.Models.Entity;
 using ControleVendas.Modules.Pedido.Models.Enums;
@@ -35,6 +36,7 @@ public static class PedidosData
                 {
                     Id = 1,
                     ClienteId = 1,
+                    Cliente = new ClienteEntity{Nome = "Wesley"},
                     VendedorId = "vendedor123",
                     Status = StatusPedido.Pendente,
                     DataVenda = DateTime.Now,
@@ -56,8 +58,57 @@ public static class PedidosData
                 {
                     Id = 2,
                     ClienteId = 2,
-                    VendedorId = "vendedor456",
+                    Cliente = new ClienteEntity{Nome = "João"},
+                    VendedorId = "vendedor123",
                     Status = StatusPedido.Pendente,
+                    DataVenda = DateTime.Now,
+                    Itens = new List<ItemPedidoEntity>
+                    {
+                        CriarItemPedido(1, 1, 20, 15),
+                        CriarItemPedido(2, 1, 30, 20)
+                    }
+                },
+                new PagamentoInfo
+                {
+                    FormaPagamento = MetodoPagamento.PARCELADO,
+                    NumeroParcelas = 2,
+                    Desconto = 0,
+                    ValorPago = 0,
+                }
+                
+            ),
+            CriarPedido(
+                new PedidoDados
+                {
+                    Id = 3,
+                    ClienteId = 3,
+                    Cliente = new ClienteEntity{Nome = "Neuza"},
+                    VendedorId = "vendedor789",
+                    Status = StatusPedido.Pago,
+                    DataVenda = DateTime.Now,
+                    Itens = new List<ItemPedidoEntity>
+                    {
+                        CriarItemPedido(1, 1, 20, 15),
+                        CriarItemPedido(2, 1, 30, 20)
+                    }
+                },
+                new PagamentoInfo
+                {
+                    FormaPagamento = MetodoPagamento.PARCELADO,
+                    NumeroParcelas = 2,
+                    Desconto = 0,
+                    ValorPago = 0,
+                }
+                
+            ),
+            CriarPedido(
+                new PedidoDados
+                {
+                    Id = 4,
+                    ClienteId = 4,
+                    Cliente = new ClienteEntity{Nome = "Leticia"},
+                    VendedorId = "vendedor7891",
+                    Status = StatusPedido.Atrasado,
                     DataVenda = DateTime.Now,
                     Itens = new List<ItemPedidoEntity>
                     {
@@ -81,6 +132,33 @@ public static class PedidosData
     {
         return GetListPedidos()[index];
     }
+
+    public static IEnumerable<object[]> PeididoFiltroRequestData()
+    {
+        return new List<object[]>
+        {
+            new object[]
+            {
+                new PedidoFiltroRequest { VendedorId = "vendedor123" },2
+            },
+            new object[]
+            {
+                new PedidoFiltroRequest { VendedorId = "vendedor123", Nome = "Wesley"},1
+            },
+            new object[]
+            {
+                new PedidoFiltroRequest { Status = StatusPedido.Pendente},2
+            },
+            new object[]
+            {
+                new PedidoFiltroRequest { Status = StatusPedido.Pago},1
+            },
+            new object[]
+            {
+                new PedidoFiltroRequest { Status = StatusPedido.Atrasado},1
+            }
+        };
+    }
     
     private static PedidoEntity CriarPedido(
         PedidoDados dados,
@@ -90,6 +168,7 @@ public static class PedidosData
         {
             Id = dados.Id,
             ClienteId = dados.ClienteId,
+            Cliente = dados.Cliente,
             VendedorId = dados.VendedorId,
             Status = dados.Status,
             DataVenda = dados.DataVenda,

@@ -8,10 +8,10 @@ public class FilterVendedorPedido : IFilterPedidoResult
 {
     public IQueryable<PedidoEntity> RunFilter(IQueryable<PedidoEntity> queryable, PedidoFiltroRequest filtro)
     {
-        if (!string.IsNullOrEmpty(filtro.VerdedorId))
+        if (!string.IsNullOrEmpty(filtro.VendedorId))
         {
             queryable = queryable
-                .Where(p => p.VendedorId == filtro.VerdedorId);
+                .Where(p => p.VendedorId == filtro.VendedorId);
             return queryable;
             
         }
