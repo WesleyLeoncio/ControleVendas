@@ -12,6 +12,7 @@ using ControleVendas.Modules.Pedido.Service.Interfaces;
 using ControleVendas.Modules.Produto.Models.Entity;
 using ControleVendas.Modules.Produto.Repository.Interfaces;
 using ControleVendasTeste.Config;
+using ControleVendasTeste.Modules.Pedido.Config;
 using ControleVendasTeste.Modules.Pedido.Models;
 using ControleVendasTeste.Modules.Produto.Models;
 using FluentAssertions;
@@ -20,34 +21,20 @@ using Moq;
 
 namespace ControleVendasTeste.Modules.Pedido.Test;
 
-public class RegistrarPedidoTest
+public class RegistrarPedidoTest : IClassFixture<PedidoConfigTest>
 {
     private readonly IPedidoService _pedidoService;
     private readonly Mock<IUnitOfWork> _mockUof;
     
-    public RegistrarPedidoTest()
+    public RegistrarPedidoTest(PedidoConfigTest pedidoConfigTest)
     {
         _mockUof = new Mock<IUnitOfWork>();
-        Mock<IHttpContextAccessor> mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
-        DefaultHttpContext mockHttpContext = new DefaultHttpContext();
-        string userId = "vendedor123";
-       
-        var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.NameIdentifier, userId)
-        };
-        var identity = new ClaimsIdentity(claims);
-        mockHttpContext.User = new ClaimsPrincipal(identity);
+        
         Mock<IPedidoRepository> mockPedidoRepository = new Mock<IPedidoRepository>();
         Mock<IProdutoRepository> mockProdutoRepository = new Mock<IProdutoRepository>();
-        var mapper = AutoMapperConfig.Configure(new List<Profile>()
-        {
-            new PedidoMapper()
-        });
        
-        mockHttpContextAccessor.Setup(x => x.HttpContext).Returns(mockHttpContext);
-       
-        _pedidoService = new PedidoService(_mockUof.Object, mapper,mockHttpContextAccessor.Object);
+        _pedidoService = new PedidoService(_mockUof.Object, pedidoConfigTest.Mapper,
+            pedidoConfigTest.MockHttpContextAccessor.Object);
         _mockUof.Setup(u => u.ProdutoRepository).Returns(mockProdutoRepository.Object); 
         _mockUof.Setup(u => u.PedidoRepository).Returns(mockPedidoRepository.Object);
         

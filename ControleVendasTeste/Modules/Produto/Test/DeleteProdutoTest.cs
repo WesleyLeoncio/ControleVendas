@@ -1,34 +1,27 @@
 ﻿using System.Linq.Expressions;
-using AutoMapper;
 using ControleVendas.Infra.Exceptions.custom;
 using ControleVendas.Modules.Common.UnitOfWork.Interfaces;
 using ControleVendas.Modules.Produto.Models.Entity;
-using ControleVendas.Modules.Produto.Models.Mapper;
 using ControleVendas.Modules.Produto.Repository.Interfaces;
 using ControleVendas.Modules.Produto.Service;
 using ControleVendas.Modules.Produto.Service.Interfaces;
-using ControleVendasTeste.Config;
+using ControleVendasTeste.Modules.Produto.Config;
 using ControleVendasTeste.Modules.Produto.Models;
 using FluentAssertions;
 using Moq;
 
 namespace ControleVendasTeste.Modules.Produto.Test;
 
-public class DeleteProdutoTest
+public class DeleteProdutoTest : IClassFixture<ProdutoConfigTest>
 {
     private readonly IProdutoService _produtoService;
     private readonly Mock<IUnitOfWork> _mockUof;
 
-    public DeleteProdutoTest()
+    public DeleteProdutoTest(ProdutoConfigTest produtoConfigTest)
     {
         _mockUof = new Mock<IUnitOfWork>();
         Mock<IProdutoRepository> mockProdutoRepository = new Mock<IProdutoRepository>();
-        var mapper = AutoMapperConfig.Configure(new List<Profile>()
-        {
-            new ProdutoMapper()
-        });
-
-        _produtoService = new ProdutoService(_mockUof.Object, mapper);
+        _produtoService = new ProdutoService(_mockUof.Object, produtoConfigTest.Mapper);
         _mockUof.Setup(u => u.ProdutoRepository).Returns(mockProdutoRepository.Object); 
     }
     

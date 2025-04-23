@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using AutoMapper;
 using ControleVendas.Infra.Exceptions.custom;
 using ControleVendas.Modules.Categoria.Models.Entity;
 using ControleVendas.Modules.Categoria.Repository.Interfaces;
@@ -7,37 +6,33 @@ using ControleVendas.Modules.Common.UnitOfWork.Interfaces;
 using ControleVendas.Modules.Fornecedor.Models.Entity;
 using ControleVendas.Modules.Fornecedor.Repository.Interfaces;
 using ControleVendas.Modules.Produto.Models.Entity;
-using ControleVendas.Modules.Produto.Models.Mapper;
 using ControleVendas.Modules.Produto.Models.Request;
 using ControleVendas.Modules.Produto.Repository.Interfaces;
 using ControleVendas.Modules.Produto.Service;
 using ControleVendas.Modules.Produto.Service.Interfaces;
-using ControleVendasTeste.Config;
 using ControleVendasTeste.Modules.Categoria.Models;
 using ControleVendasTeste.Modules.Fornecedor.Models;
+using ControleVendasTeste.Modules.Produto.Config;
 using ControleVendasTeste.Modules.Produto.Models;
 using FluentAssertions;
 using Moq;
 
 namespace ControleVendasTeste.Modules.Produto.Test;
 
-public class PutProdutoTest
+public class PutProdutoTest : IClassFixture<ProdutoConfigTest>
 {
     private readonly IProdutoService _produtoService;
     private readonly Mock<IUnitOfWork> _mockUof;
 
-    public PutProdutoTest()
+    public PutProdutoTest(ProdutoConfigTest produtoConfigTest)
     {
         _mockUof = new Mock<IUnitOfWork>();
         Mock<IProdutoRepository> mockProdutoRepository = new Mock<IProdutoRepository>();
         Mock<ICategoriaRepository> mockCategoriaRepository = new Mock<ICategoriaRepository>();
         Mock<IFornecedorRepository> mockFornecedorRepository = new Mock<IFornecedorRepository>();
-        var mapper = AutoMapperConfig.Configure(new List<Profile>()
-        {
-            new ProdutoMapper()
-        });
+        
 
-        _produtoService = new ProdutoService(_mockUof.Object, mapper);
+        _produtoService = new ProdutoService(_mockUof.Object, produtoConfigTest.Mapper);
         _mockUof.Setup(u => u.ProdutoRepository).Returns(mockProdutoRepository.Object); 
         _mockUof.Setup(u => u.CategoriaRepository).Returns(mockCategoriaRepository.Object);
         _mockUof.Setup(u => u.FornecedorRepository).Returns(mockFornecedorRepository.Object);

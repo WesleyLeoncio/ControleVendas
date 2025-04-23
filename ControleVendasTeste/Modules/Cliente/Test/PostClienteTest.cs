@@ -1,37 +1,26 @@
 ﻿using System.Linq.Expressions;
-using AutoMapper;
 using ControleVendas.Infra.Exceptions.custom;
 using ControleVendas.Modules.Cliente.Models.Entity;
-using ControleVendas.Modules.Cliente.Models.Mapper;
 using ControleVendas.Modules.Cliente.Models.Request;
 using ControleVendas.Modules.Cliente.Models.Response;
-using ControleVendas.Modules.Cliente.Repository.Interfaces;
-using ControleVendas.Modules.Cliente.Service;
 using ControleVendas.Modules.Cliente.Service.Interfaces;
 using ControleVendas.Modules.Common.UnitOfWork.Interfaces;
-using ControleVendasTeste.Config;
+using ControleVendasTeste.Modules.Cliente.Config;
 using ControleVendasTeste.Modules.Cliente.Models;
 using FluentAssertions;
 using Moq;
 
 namespace ControleVendasTeste.Modules.Cliente.Test;
 
-public class PostClienteTest
+public class PostClienteTest : IClassFixture<ClienteConfigTest>
 {
     private readonly IClienteService _clienteService;
     private readonly Mock<IUnitOfWork> _mockUof;
 
-    public PostClienteTest()
+    public PostClienteTest(ClienteConfigTest clienteConfigTest)
     {
-        _mockUof = new Mock<IUnitOfWork>();
-        Mock<IClienteRepository> mockClienteRepository = new Mock<IClienteRepository>();
-        var mapper = AutoMapperConfig.Configure(new List<Profile>()
-        {
-            new ClienteMapper()
-        });
-
-        _clienteService = new ClienteService(_mockUof.Object, mapper);
-        _mockUof.Setup(u => u.ClienteRepository).Returns(mockClienteRepository.Object); 
+        _clienteService = clienteConfigTest.ClienteService;
+        _mockUof = clienteConfigTest.MockUof;
     }
     
     [Theory(DisplayName = "Deve testar se o metodo cadastro de cliente retorna ClienteResponse")]

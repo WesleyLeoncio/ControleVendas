@@ -8,39 +8,26 @@ using ControleVendas.Modules.Pedido.Repository.Interfaces;
 using ControleVendas.Modules.Pedido.Service;
 using ControleVendas.Modules.Pedido.Service.Interfaces;
 using ControleVendasTeste.Config;
+using ControleVendasTeste.Modules.Pedido.Config;
 using ControleVendasTeste.Modules.Pedido.Models;
 using Microsoft.AspNetCore.Http;
 using Moq;
 
 namespace ControleVendasTeste.Modules.Pedido.Test;
 
-public class VerificarPedidosAtrasadosTest
+public class VerificarPedidosAtrasadosTest : IClassFixture<PedidoConfigTest>
 {
     private readonly IPedidoService _pedidoService;
     private readonly Mock<IUnitOfWork> _mockUof;
     
-    public VerificarPedidosAtrasadosTest()
+    public VerificarPedidosAtrasadosTest(PedidoConfigTest pedidoConfigTest)
     {
         _mockUof = new Mock<IUnitOfWork>();
-        Mock<IHttpContextAccessor> mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
-        DefaultHttpContext mockHttpContext = new DefaultHttpContext();
-        string userId = "vendedor123";
-       
-        var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.NameIdentifier, userId)
-        };
-        var identity = new ClaimsIdentity(claims);
-        mockHttpContext.User = new ClaimsPrincipal(identity);
+        
         Mock<IPedidoRepository> mockPedidoRepository = new Mock<IPedidoRepository>();
-        var mapper = AutoMapperConfig.Configure(new List<Profile>()
-        {
-            new PedidoMapper()
-        });
        
-        mockHttpContextAccessor.Setup(x => x.HttpContext).Returns(mockHttpContext);
-
-        _pedidoService = new PedidoService(_mockUof.Object, mapper, mockHttpContextAccessor.Object);
+        _pedidoService = new PedidoService(_mockUof.Object, pedidoConfigTest.Mapper,
+            pedidoConfigTest.MockHttpContextAccessor.Object);
         _mockUof.Setup(u => u.PedidoRepository).Returns(mockPedidoRepository.Object);
     } 
     

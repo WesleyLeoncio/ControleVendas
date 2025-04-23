@@ -1,36 +1,26 @@
 ﻿using System.Linq.Expressions;
-using AutoMapper;
 using ControleVendas.Infra.Exceptions.custom;
 using ControleVendas.Modules.Common.UnitOfWork.Interfaces;
 using ControleVendas.Modules.Fornecedor.Models.Entity;
-using ControleVendas.Modules.Fornecedor.Models.Mapper;
-using ControleVendas.Modules.Fornecedor.Repository.Interfaces;
-using ControleVendas.Modules.Fornecedor.Service;
 using ControleVendas.Modules.Fornecedor.Service.Interfaces;
-using ControleVendasTeste.Config;
+using ControleVendasTeste.Modules.Fornecedor.Config;
 using ControleVendasTeste.Modules.Fornecedor.Models;
 using FluentAssertions;
 using Moq;
 
 namespace ControleVendasTeste.Modules.Fornecedor.Test;
 
-public class DeleteFornecedorTest
+public class DeleteFornecedorTest : IClassFixture<FornecedorConfigTest>
 {
     private readonly IFornecedorService _fornecedorService;
     private readonly Mock<IUnitOfWork> _mockUof;
 
-    public DeleteFornecedorTest()
+    public DeleteFornecedorTest(FornecedorConfigTest fornecedorConfigTest)
     {
-        _mockUof = new Mock<IUnitOfWork>();
-        Mock<IFornecedorRepository> mockFornecedorRepository = new Mock<IFornecedorRepository>();
-        var mapper = AutoMapperConfig.Configure(new List<Profile>()
-        {
-            new FornecedorMapper()
-        });
-
-        _fornecedorService = new FornecedorService(_mockUof.Object, mapper);
-        _mockUof.Setup(u => u.FornecedorRepository).Returns(mockFornecedorRepository.Object);
+        _fornecedorService = fornecedorConfigTest.FornecedorService;
+        _mockUof = fornecedorConfigTest.MockUof;
     }
+    
     [Fact(DisplayName = "Deve deletar um forncedor com sucesso")]
     public async Task DeleteFornecedor_Success()
     {

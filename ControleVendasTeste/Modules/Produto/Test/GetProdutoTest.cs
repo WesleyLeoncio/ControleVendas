@@ -1,15 +1,13 @@
 ﻿using System.Linq.Expressions;
-using AutoMapper;
 using ControleVendas.Infra.Exceptions.custom;
 using ControleVendas.Modules.Common.UnitOfWork.Interfaces;
 using ControleVendas.Modules.Produto.Models.Entity;
-using ControleVendas.Modules.Produto.Models.Mapper;
 using ControleVendas.Modules.Produto.Models.Request;
 using ControleVendas.Modules.Produto.Models.Response;
 using ControleVendas.Modules.Produto.Repository.Interfaces;
 using ControleVendas.Modules.Produto.Service;
 using ControleVendas.Modules.Produto.Service.Interfaces;
-using ControleVendasTeste.Config;
+using ControleVendasTeste.Modules.Produto.Config;
 using ControleVendasTeste.Modules.Produto.Filter.Custom;
 using ControleVendasTeste.Modules.Produto.Filter.Interfaces;
 using ControleVendasTeste.Modules.Produto.Models;
@@ -19,21 +17,16 @@ using X.PagedList.Extensions;
 
 namespace ControleVendasTeste.Modules.Produto.Test;
 
-public class GetProdutoTest
+public class GetProdutoTest : IClassFixture<ProdutoConfigTest>
 {
     private readonly IProdutoService _produtoService;
     private readonly Mock<IUnitOfWork> _mockUof;
 
-    public GetProdutoTest()
+    public GetProdutoTest(ProdutoConfigTest produtoConfigTest)
     {
         _mockUof = new Mock<IUnitOfWork>();
         Mock<IProdutoRepository> mockProdutoRepository = new Mock<IProdutoRepository>();
-        var mapper = AutoMapperConfig.Configure(new List<Profile>()
-        {
-            new ProdutoMapper()
-        });
-
-        _produtoService = new ProdutoService(_mockUof.Object, mapper);
+        _produtoService = new ProdutoService(_mockUof.Object, produtoConfigTest.Mapper);
         _mockUof.Setup(u => u.ProdutoRepository).Returns(mockProdutoRepository.Object); 
     }
     

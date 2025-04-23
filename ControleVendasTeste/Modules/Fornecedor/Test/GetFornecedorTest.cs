@@ -1,15 +1,11 @@
 ﻿using System.Linq.Expressions;
-using AutoMapper;
 using ControleVendas.Infra.Exceptions.custom;
 using ControleVendas.Modules.Common.UnitOfWork.Interfaces;
 using ControleVendas.Modules.Fornecedor.Models.Entity;
-using ControleVendas.Modules.Fornecedor.Models.Mapper;
 using ControleVendas.Modules.Fornecedor.Models.Request;
 using ControleVendas.Modules.Fornecedor.Models.Response;
-using ControleVendas.Modules.Fornecedor.Repository.Interfaces;
-using ControleVendas.Modules.Fornecedor.Service;
 using ControleVendas.Modules.Fornecedor.Service.Interfaces;
-using ControleVendasTeste.Config;
+using ControleVendasTeste.Modules.Fornecedor.Config;
 using ControleVendasTeste.Modules.Fornecedor.Models;
 using FluentAssertions;
 using Moq;
@@ -17,22 +13,15 @@ using X.PagedList.Extensions;
 
 namespace ControleVendasTeste.Modules.Fornecedor.Test;
 
-public class GetFornecedorTest
+public class GetFornecedorTest : IClassFixture<FornecedorConfigTest>
 {
     private readonly IFornecedorService _fornecedorService;
     private readonly Mock<IUnitOfWork> _mockUof;
 
-    public GetFornecedorTest()
+    public GetFornecedorTest(FornecedorConfigTest fornecedorConfigTest)
     {
-        _mockUof = new Mock<IUnitOfWork>();
-        Mock<IFornecedorRepository> mockFornecedorRepository = new Mock<IFornecedorRepository>();
-        var mapper = AutoMapperConfig.Configure(new List<Profile>()
-        {
-            new FornecedorMapper()
-        });
-        
-        _fornecedorService = new FornecedorService(_mockUof.Object, mapper);
-        _mockUof.Setup(u => u.FornecedorRepository).Returns(mockFornecedorRepository.Object);
+        _fornecedorService = fornecedorConfigTest.FornecedorService;
+        _mockUof = fornecedorConfigTest.MockUof;
     }
     
     [Fact(DisplayName = "Deve retornar FornecedorResponse ao buscar fornecedor por ID")]

@@ -1,36 +1,25 @@
 ﻿using System.Linq.Expressions;
-using AutoMapper;
 using ControleVendas.Infra.Exceptions.custom;
 using ControleVendas.Modules.Categoria.Models.Entity;
-using ControleVendas.Modules.Categoria.Models.Mapper;
 using ControleVendas.Modules.Categoria.Models.Request;
-using ControleVendas.Modules.Categoria.Repository.Interfaces;
-using ControleVendas.Modules.Categoria.Service;
 using ControleVendas.Modules.Categoria.Service.Interfaces;
 using ControleVendas.Modules.Common.UnitOfWork.Interfaces;
-using ControleVendasTeste.Config;
+using ControleVendasTeste.Modules.Categoria.Config;
 using ControleVendasTeste.Modules.Categoria.Models;
 using FluentAssertions;
 using Moq;
 
 namespace ControleVendasTeste.Modules.Categoria.Test;
 
-public class PutCategoriaTest
+public class PutCategoriaTest : IClassFixture<CategoriaConfigTest>
 {
     private readonly ICategoriaService _categoriaService;
     private readonly Mock<IUnitOfWork> _mockUof;
 
-    public PutCategoriaTest()
+    public PutCategoriaTest(CategoriaConfigTest categoriaConfigTest)
     {
-        _mockUof = new Mock<IUnitOfWork>();
-        Mock<ICategoriaRepository> mockCategoriaRepository = new Mock<ICategoriaRepository>();
-        var mapper = AutoMapperConfig.Configure(new List<Profile>()
-        {
-            new CategoriaMapper()
-        });
-
-        _categoriaService = new CategoriaService(_mockUof.Object, mapper);
-        _mockUof.Setup(u => u.CategoriaRepository).Returns(mockCategoriaRepository.Object);
+        _categoriaService = categoriaConfigTest.CategoriaService;
+        _mockUof = categoriaConfigTest.MockUof;
     }
     
     [Fact(DisplayName = "Deve atualizar uma categoria com sucesso")]
