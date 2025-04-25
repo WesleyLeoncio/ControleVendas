@@ -5,13 +5,12 @@ using ControleVendas.Modules.User.Models.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Microsoft.AspNetCore.Http;
 
 namespace ControleVendas.Modules.Fornecedor.Controller;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize(Roles = nameof(Role.VENDEDOR))]
+[Authorize(Roles = nameof(Role.Vendedor))]
 public class FornecedorController : ControllerBase
 {
     private readonly IFornecedorService _fornecedorService;
@@ -31,7 +30,7 @@ public class FornecedorController : ControllerBase
             new { id = response.Id }, response);
     }
     
-    /// <summary>Altera Um Forncedor</summary>
+    /// <summary>Altera Um Fornecedor</summary>
     [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
     [HttpPut("{id}")]
     public async Task<ActionResult> AlterarFornecedor(int id, FornecedorRequest request)
@@ -40,7 +39,7 @@ public class FornecedorController : ControllerBase
         return NoContent();
     }
     
-    ///<summary>Busca Um Fornecedor Pelo Id</summary>
+    ///<summary>Busca Um Fornecedor Pelo ‘Id’</summary>
     [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
     [HttpGet("{id}")]
     public async Task<ActionResult<FornecedorResponse>> BuscarFornecedorPorId(int id)
@@ -51,7 +50,7 @@ public class FornecedorController : ControllerBase
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult<FornecedorResponse>> DeletarFornecedor(int id)
+    public async Task<ActionResult<FornecedorResponse>> DeleteFornecedor(int id)
     {
         await _fornecedorService.DeleteFornecedor(id);
         return NoContent();

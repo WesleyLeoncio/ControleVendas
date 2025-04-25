@@ -5,7 +5,7 @@ using ControleVendas.Modules.Produto.Repository.Filter.Interfaces;
 
 namespace ControleVendas.Modules.Produto.Repository.Filter.Custom;
 
-public class FilterPrecoCriteiroProduto : IFilterProdutoResult
+public class FilterPrecoCriterioProduto : IFilterProdutoResult
 {
     public IQueryable<ProdutoEntity> RunFilter(IQueryable<ProdutoEntity> queryable, ProdutoFiltroRequest filtro)
     {
@@ -13,15 +13,15 @@ public class FilterPrecoCriteiroProduto : IFilterProdutoResult
         {
             switch (filtro.PrecoCriterio)
             {
-                case Criterio.MAIOR:
+                case Criterio.Maior:
                     queryable = queryable.Where(p => p.ValorVenda > filtro.Preco)
                         .OrderBy(p => p.ValorVenda);
                     break;
-                case Criterio.MENOR:
+                case Criterio.Menor:
                     queryable = queryable.Where(p => p.ValorVenda < filtro.Preco)
                         .OrderBy(p => p.ValorVenda);
                     break;
-                case Criterio.IGUAL:
+                case Criterio.Igual:
                     queryable = queryable.Where(p => p.ValorVenda == filtro.Preco)
                         .OrderBy(p => p.ValorVenda);
                     break;

@@ -10,7 +10,7 @@ namespace ControleVendas.Modules.Produto.Controller;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize(Roles = nameof(Role.VENDEDOR))]
+[Authorize(Roles = nameof(Role.Vendedor))]
 public class ProdutoController : ControllerBase
 {
     private readonly IProdutoService _produtoService;
@@ -39,10 +39,10 @@ public class ProdutoController : ControllerBase
         return NoContent();
     }
     
-    /// <summary>Deleta Um Produto</summary>
+    /// <summary>Delete Um Produto</summary>
     [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
     [HttpDelete("{id}")]
-    public async Task<ActionResult<ProdutoResponse>> DeletarProduto(int id)
+    public async Task<ActionResult<ProdutoResponse>> DeleteProduto(int id)
     {
         return Ok(await _produtoService.DeleteProduto(id));
     }

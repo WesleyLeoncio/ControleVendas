@@ -87,8 +87,8 @@ public class PutProdutoTest : IClassFixture<ProdutoConfigTest>
         await act.Should().ThrowAsync<KeyDuplicationException>();
     }
     
-    [Theory(DisplayName = "Deve testar se o metodo update de produto " +
-                          "lança uma exeption NotFoundException ao tentar alterar " +
+    [Theory(DisplayName = "Deve testar se o método update de produto " +
+                          "lança uma exception NotFoundException ao tentar alterar " +
                           "produtos com categoria ou fornecedor que não existe")]
     [InlineData(2,2,1,"Produto não encontrado!" )]
     [InlineData(1,2,1,"Categoria não encontrada!" )]

@@ -2,7 +2,7 @@
 
 public enum Criterio
 {
-    MAIOR,
-    MENOR,
-    IGUAL
+    Maior,
+    Menor,
+    Igual
 }

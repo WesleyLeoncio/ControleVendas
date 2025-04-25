@@ -4,15 +4,14 @@ using ControleVendas.Infra.Exceptions.interfaces;
 
 namespace ControleVendas.Infra.Exceptions.handle;
 
-public class HandleKeyDuplication : IErrorResultTask
+public class HandleNotFound : IErrorResultTask
 {
     public Task ValidarException(ErrorExceptionResult error)
     {
-        if (error.Exception.GetType() == typeof(KeyDuplicationException))
+        if (error.Exception.GetType() == typeof(NotFoundException))
         {
-            Console.WriteLine("teste 1234");
-            int status = 409;
-            string result = JsonSerializer.Serialize(new { status, mensage = error.Mensage});
+            int status = 404;
+            string result = JsonSerializer.Serialize(new { status, mensage = error.Message});
             error.Context.Response.StatusCode = status;
             return error.Context.Response.WriteAsync(result);
         }

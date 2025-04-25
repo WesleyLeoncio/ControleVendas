@@ -4,7 +4,7 @@ namespace ControleVendas.Modules.User.Models.Request;
 
 public record LoginRequest(
     
-    [Required(ErrorMessage = "O campo UserName é Obrigatorio!")]
+    [Required(ErrorMessage = "O campo UserName é Obrigatório!")]
     string UserName,
     [RegularExpression(@"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$",
         ErrorMessage =

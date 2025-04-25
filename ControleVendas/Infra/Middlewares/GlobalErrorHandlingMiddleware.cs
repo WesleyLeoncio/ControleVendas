@@ -23,11 +23,11 @@ public class GlobalErrorHandlingMiddleware
         }
         catch (Exception ex)
         {
-            await HandleExceptionAsync(context, ex)!;
+            await HandleExceptionAsync(context, ex);
         }
     }
 
-    private Task? HandleExceptionAsync(HttpContext context, Exception exception)
+    private Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         context.Response.ContentType = "application/json";
 

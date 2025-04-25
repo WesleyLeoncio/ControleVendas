@@ -4,14 +4,14 @@ using ControleVendas.Infra.Exceptions.interfaces;
 
 namespace ControleVendas.Infra.Exceptions.handle;
 
-public class HandleUnauthorized : IErrorResultTask
+public class HandleKeyDuplication : IErrorResultTask
 {
     public Task ValidarException(ErrorExceptionResult error)
     {
-        if (error.Exception.GetType() == typeof(UnauthorizedException))
+        if (error.Exception.GetType() == typeof(KeyDuplicationException))
         {
-            int status = 403;
-            string result = JsonSerializer.Serialize(new { status, mensage = error.Mensage});
+            int status = 409;
+            string result = JsonSerializer.Serialize(new { status, mensage = error.Message});
             error.Context.Response.StatusCode = status;
             return error.Context.Response.WriteAsync(result);
         }

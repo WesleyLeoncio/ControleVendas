@@ -10,7 +10,7 @@ namespace ControleVendas.Modules.Pedido.Controller;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize(Roles = nameof(Role.VENDEDOR))]
+[Authorize(Roles = nameof(Role.Vendedor))]
 public class PedidoController : ControllerBase
 {
     private readonly IPedidoService _pedidoService;
@@ -29,7 +29,7 @@ public class PedidoController : ControllerBase
         return StatusCode(201);
     }
     
-    ///<summary>Registra Um Pagamento Para Um Pedido</summary>
+    ///<summary>Registrar Um Pagamento Para Um Pedido</summary>
     [HttpPost("Pagamento")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesDefaultResponseType]

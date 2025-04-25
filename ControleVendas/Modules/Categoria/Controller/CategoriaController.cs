@@ -5,13 +5,12 @@ using ControleVendas.Modules.User.Models.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Microsoft.AspNetCore.Http;
 
 namespace ControleVendas.Modules.Categoria.Controller;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize(Roles = nameof(Role.VENDEDOR))]
+[Authorize(Roles = nameof(Role.Vendedor))]
 public class CategoriaController : ControllerBase
 {
     private readonly ICategoriaService _categoriaService;
@@ -44,13 +43,13 @@ public class CategoriaController : ControllerBase
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult> DeletarCategoria(int id)
+    public async Task<ActionResult> DeleteCategoria(int id)
     {
         await _categoriaService.DeleteCategoria(id); 
         return NoContent();
     }
     
-    ///<summary>Busca Uma Categoria Pelo Id</summary>
+    ///<summary>Busca Uma Categoria Pelo ‘Id’</summary>
     [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
     [HttpGet("{id}")]
     public async Task<ActionResult<CategoriaResponse>> BuscarCategoriaPorId(int id)

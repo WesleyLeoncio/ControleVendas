@@ -40,7 +40,7 @@ public class PostProdutoTest : IClassFixture<ProdutoConfigTest>
         _mockUof.Setup(u => u.FornecedorRepository).Returns(mockFornecedorRepository.Object);
     }
     
-    [Theory(DisplayName = "Deve testar se o metodo cadastro de produto retorna ProdutoResponse")]
+    [Theory(DisplayName = "Deve testar se o método cadastro de produto retorna ProdutoResponse")]
     [MemberData(nameof(ProdutosData.ProdutosRequest), MemberType = typeof(ProdutosData))]
     public async Task PostProduto_Returns_ProdutoResponse(ProdutoRequest produtoRequest)
     {
@@ -66,14 +66,10 @@ public class PostProdutoTest : IClassFixture<ProdutoConfigTest>
         act.Should().NotBeNull();
         act.Should().BeOfType<ProdutoResponse>();
         act.Nome.Should().Be(produtoRequest.Nome);  
-        
     }
     
-    
-    //TODO 
-    //MODIFICAR OS OUTROS TESTE COM BASE NESSE 
-    [Fact(DisplayName = "Deve testar se o metodo cadastro de produto " +
-                        "lança uma exeption KeyDuplicationException ao tentar cadastrar " +
+    [Fact(DisplayName = "Deve testar se o método cadastro de produto " +
+                        "lança uma exception KeyDuplicationException ao tentar cadastrar " +
                         "produtos com o mesmo nome")]
     public async Task PostProduto_Throws_KeyDuplicationException()
     {
@@ -96,8 +92,8 @@ public class PostProdutoTest : IClassFixture<ProdutoConfigTest>
             .WithMessage("Já existe um produto com este nome!");
     }
     
-    [Theory(DisplayName = "Deve testar se o metodo cadastro de produto " +
-                        "lança uma exeption NotFoundException ao tentar cadastrar " +
+    [Theory(DisplayName = "Deve testar se o método cadastro de produto " +
+                        "lança uma exception NotFoundException ao tentar cadastrar " +
                         "produtos com categoria ou fornecedor que não existe")]
     [InlineData(2,1,"Categoria não encontrada!" )]
     [InlineData(1,1,"Fornecedor não encontrado!" )]

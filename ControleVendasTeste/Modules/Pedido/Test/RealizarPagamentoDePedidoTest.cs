@@ -36,7 +36,7 @@ public class RealizarPagamentoDePedidoTest : IClassFixture<PedidoConfigTest>
     [InlineData(1,50, StatusPedido.Pago)]
     [InlineData(1,20, StatusPedido.Pendente)]
     [InlineData(1,20, StatusPedido.Atrasado)]
-    public async Task RealizarPagamentoDePedido_Sucesso(int id, Decimal pagamento, StatusPedido status)
+    public async Task RealizarPagamentoDePedido_Sucesso(int id, decimal pagamento, StatusPedido status)
     {   
         // Arrange
         PedidoPagamentoRequest request = PedidosData.GetPedidoPagamentoRequest(id,pagamento);

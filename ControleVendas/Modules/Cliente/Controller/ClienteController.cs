@@ -10,7 +10,7 @@ namespace ControleVendas.Modules.Cliente.Controller;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize(Roles = nameof(Role.VENDEDOR))]
+[Authorize(Roles = nameof(Role.Vendedor))]
 public class ClienteController : ControllerBase
 {
     private readonly IClienteService _clienteService;
@@ -47,10 +47,10 @@ public class ClienteController : ControllerBase
         return NoContent();
     }
     
-    /// <summary>Deleta Um Cliente</summary>
+    /// <summary>Delete Um Cliente</summary>
     [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
     [HttpDelete("{id}")]
-    public async Task<ActionResult<ClienteResponse>> DeletarCliente(int id)
+    public async Task<ActionResult<ClienteResponse>> DeleteCliente(int id)
     { 
         return Ok(await _clienteService.DeleteCliente(id));
     }

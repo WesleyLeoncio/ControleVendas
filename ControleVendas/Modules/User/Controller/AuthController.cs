@@ -19,7 +19,7 @@ public class AuthController : ControllerBase
         _userService = userService;
     }
     
-    ///<summary>Realiza Login Do Usuario</summary>
+    ///<summary>Realiza Login Do Usuário</summary>
     [HttpPost]
     [Route("login")]
     public async Task<ActionResult<LoginResponse>> Login(LoginRequest request)
@@ -27,7 +27,7 @@ public class AuthController : ControllerBase
         return Ok(await _userService.Login(request));
     }
     
-    ///<summary>Cadastra Um Novo Usuarios</summary>
+    ///<summary>Cadastra Um Novo Usuário</summary>
     [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Create))]
     [HttpPost]
     [Route("register")]
@@ -40,34 +40,34 @@ public class AuthController : ControllerBase
     ///<summary>Cadastra Uma Nova Role</summary>
     [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Create))]
     [HttpPost]
-    [Authorize(Roles = nameof(Role.MASTER))]
+    [Authorize(Roles = nameof(Role.Master))]
     [Route("CreateRole")]
     public async Task<ActionResult<RegisterResponse>> CreateRole(Role role)
     {
         return StatusCode(StatusCodes.Status201Created, await _userService.CreateRole(role));
     }
 
-    ///<summary>Adiciona Uma Nova Role Para Um Usuario</summary>
+    ///<summary>Adiciona Uma Nova Role Para Um Usuário</summary>
     [HttpPost]
-    [Authorize(Roles = nameof(Role.MASTER))]
+    [Authorize(Roles = nameof(Role.Master))]
     [Route("AddUserToRole")]
     public async Task<ActionResult<RegisterResponse>> AddUserToRole(string userName, Role role)
     {
         return Ok(await _userService.AddUserToRole(userName, role));
     }
     
-    ///<summary>Atualiza O Token Do Usuario</summary>
+    ///<summary>Atualiza O ‘Token’ Do Usuário</summary>
     [HttpPost]
-    [Authorize(Roles = nameof(Role.MASTER))]
+    [Authorize(Roles = nameof(Role.Master))]
     [Route("refresh-token")]
     public async Task<ActionResult<RefreshTokenResponse>> RefreshToken(TokenRequest tokenRequest)
     {
         return Ok(await _userService.RefreshToken(tokenRequest));
     }
     
-    ///<summary>Remove O Token Do Usuario</summary>
+    ///<summary>Remove O Token Do Usuário</summary>
     [HttpPost]
-    [Authorize(Roles = nameof(Role.MASTER))]
+    [Authorize(Roles = nameof(Role.Master))]
     [Route("revoke/{userName}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesDefaultResponseType]

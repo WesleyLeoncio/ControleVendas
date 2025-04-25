@@ -59,17 +59,17 @@ public static class ProdutosData
             new object[]
             {
                 new ProdutoFiltroRequest 
-                    { Preco = 25, PrecoCriterio = Criterio.IGUAL},1
+                    { Preco = 25, PrecoCriterio = Criterio.Igual},1
             },
             new object[]
             {
                 new ProdutoFiltroRequest 
-                    { Preco = 100, PrecoCriterio = Criterio.MAIOR},2
+                    { Preco = 100, PrecoCriterio = Criterio.Maior},2
             },
             new object[]
             {
                 new ProdutoFiltroRequest 
-                    { Preco = 30, PrecoCriterio = Criterio.MENOR},1
+                    { Preco = 30, PrecoCriterio = Criterio.Menor},1
             },
         };
     }

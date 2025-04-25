@@ -1,22 +1,17 @@
 ﻿using System.Linq.Expressions;
-using System.Security.Claims;
-using AutoMapper;
 using ControleVendas.Infra.Exceptions.custom;
 using ControleVendas.Modules.Common.UnitOfWork.Interfaces;
 using ControleVendas.Modules.Pedido.Models.Entity;
-using ControleVendas.Modules.Pedido.Models.Mapper;
 using ControleVendas.Modules.Pedido.Models.Request;
 using ControleVendas.Modules.Pedido.Repository.Interfaces;
 using ControleVendas.Modules.Pedido.Service;
 using ControleVendas.Modules.Pedido.Service.Interfaces;
 using ControleVendas.Modules.Produto.Models.Entity;
 using ControleVendas.Modules.Produto.Repository.Interfaces;
-using ControleVendasTeste.Config;
 using ControleVendasTeste.Modules.Pedido.Config;
 using ControleVendasTeste.Modules.Pedido.Models;
 using ControleVendasTeste.Modules.Produto.Models;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using Moq;
 
 namespace ControleVendasTeste.Modules.Pedido.Test;
@@ -98,7 +93,7 @@ public class RegistrarPedidoTest : IClassFixture<PedidoConfigTest>
        // Assert
        await act.Should().ThrowAsync<NotFoundException>()
            .WithMessage($"Não a produtos o suficiente em estoque, "
-                        + $"Quandidade em estoque: {produto.Estoque}");
+                        + $"Quantidade em estoque: {produto.Estoque}");
     }
     
     [Fact(DisplayName = "Deve falhar quando não encontrar o produto")]

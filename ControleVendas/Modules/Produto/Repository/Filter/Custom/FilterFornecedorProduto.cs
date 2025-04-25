@@ -4,7 +4,7 @@ using ControleVendas.Modules.Produto.Repository.Filter.Interfaces;
 
 namespace ControleVendas.Modules.Produto.Repository.Filter.Custom;
 
-public class FilterFonecedorProduto : IFilterProdutoResult
+public class FilterFornecedorProduto : IFilterProdutoResult
 {
     public IQueryable<ProdutoEntity> RunFilter(IQueryable<ProdutoEntity> queryable, ProdutoFiltroRequest filtro)
     {

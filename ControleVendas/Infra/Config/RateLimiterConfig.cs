@@ -11,9 +11,9 @@ public static class RateLimiterConfig
             options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 
             options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpcontext =>
-                RateLimitPartition.GetFixedWindowLimiter<string>(
+                RateLimitPartition.GetFixedWindowLimiter(
                     partitionKey: httpcontext.User.Identity?.Name ?? httpcontext.Request.Headers.Host.ToString(),
-                    factory: partition => new FixedWindowRateLimiterOptions
+                    factory: _ => new FixedWindowRateLimiterOptions
                     {
                         AutoReplenishment = true,
                         PermitLimit = 2,

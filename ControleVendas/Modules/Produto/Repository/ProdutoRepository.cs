@@ -25,9 +25,9 @@ public class ProdutoRepository : Repository<ProdutoEntity>, IProdutoRepository
         {
             new FilterProdutoEstoque(),
             new FilterNameProduto(),
-            new FilterFonecedorProduto(),
+            new FilterFornecedorProduto(),
             new FilterCategoriaProduto(),
-            new FilterPrecoCriteiroProduto()
+            new FilterPrecoCriterioProduto()
         };
 
         foreach (var filter in filterResults)

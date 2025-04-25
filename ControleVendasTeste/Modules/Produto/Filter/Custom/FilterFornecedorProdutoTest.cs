@@ -4,7 +4,7 @@ using ControleVendasTeste.Modules.Produto.Filter.Interfaces;
 
 namespace ControleVendasTeste.Modules.Produto.Filter.Custom;
 
-public class FilterFonecedorProdutoTest : IFilterProdutoResultTest
+public class FilterFornecedorProdutoTest : IFilterProdutoResultTest
 {
     public List<ProdutoEntity> RunFilter(List<ProdutoEntity> produtos, ProdutoFiltroRequest filtro)
     {

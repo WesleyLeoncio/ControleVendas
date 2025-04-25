@@ -53,7 +53,7 @@ public class GetAllFilterPedidosTest : IClassFixture<PedidoConfigTest>
     }
     
     [Theory(DisplayName = "Deve testar os filtros e retornar uma lista de pedidos")]
-    [MemberData(nameof(PedidosData.PeididoFiltroRequestData), MemberType = typeof(PedidosData))]
+    [MemberData(nameof(PedidosData.PedidoFiltroRequestData), MemberType = typeof(PedidosData))]
     public async Task GetAllFilterProdutos_Test_Filter(PedidoFiltroRequest request, int quantidadePedido)
     {
         // Arrange

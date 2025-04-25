@@ -4,12 +4,12 @@ namespace ControleVendas.Modules.Common.Pagination;
 
 public class MetaData<T>
 {
-    public int Count { get; private set; }
-    public int PageSize { get; private set; }
-    public int PageCount { get; private set; }
-    public int TotalItemCount { get; private set; }
-    public bool HasNextPage { get; private set; }
-    public bool HasPreviousPage { get; private set; }
+    public readonly int Count;
+    public readonly int PageSize;
+    public readonly int PageCount;
+    public readonly int TotalItemCount;
+    public readonly bool HasNextPage;
+    public readonly bool HasPreviousPage;
 
     public MetaData(int count, int pageSize, int pageCount, int totalItemCount, bool hasNextPage, bool hasPreviousPage)
     {

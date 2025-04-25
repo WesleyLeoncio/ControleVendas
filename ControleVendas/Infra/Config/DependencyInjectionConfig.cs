@@ -57,7 +57,7 @@ public static class DependencyInjectionConfig
         services.AddTransient<IErrorResultTask, HandleKeyDuplication>();
         services.AddTransient<IErrorResultTask, HandleUnauthorized>();
         
-        // Adiciona o serviço de background para verificar pedidos atrasados
+        // Adiciona o serviço de "background" para verificar pedidos atrasados
         services.AddHostedService<PedidoAtrasadoService>();
         
         // Permite pega info do token nos services

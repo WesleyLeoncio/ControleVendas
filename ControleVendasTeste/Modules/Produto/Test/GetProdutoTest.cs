@@ -78,9 +78,9 @@ public class GetProdutoTest : IClassFixture<ProdutoConfigTest>
         {
             new FilterProdutoEstoqueTest(),
             new FilterNameProdutoTest(),
-            new FilterFonecedorProdutoTest(),
+            new FilterFornecedorProdutoTest(),
             new FilterCategoriaProdutoTest(),
-            new FilterPrecoCriteiroProdutoTest()
+            new FilterPrecoCriterioProdutoTest()
         };
         
         foreach (var filter in filterResults)

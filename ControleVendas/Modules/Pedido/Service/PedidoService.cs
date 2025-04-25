@@ -31,7 +31,7 @@ public class PedidoService : IPedidoService
     public async Task RegistrarPedido(PedidoRequest pedidoRequest)
     {
         PedidoEntity pedidoEntity = _mapper.Map<PedidoEntity>(pedidoRequest);
-        pedidoEntity.VendedorId = BusarVendedorId();
+        pedidoEntity.VendedorId = BuscarVendedorId();
         foreach (var item in pedidoRequest.Itens)
         {
             ProdutoEntity produtoEntity = await CheckProduto(item.ProdutoId);
@@ -87,7 +87,7 @@ public class PedidoService : IPedidoService
 
     public async Task<PedidoPaginationResponse> GetAllFilterPedidos(PedidoFiltroRequest filtro)
     {
-        filtro.VendedorId = BusarVendedorId();
+        filtro.VendedorId = BuscarVendedorId();
         IPagedList<PedidoEntity> pedidos = await
             _uof.PedidoRepository.GetAllIncludeClienteFilterPageableAsync(filtro);
 
@@ -144,7 +144,7 @@ public class PedidoService : IPedidoService
         if (produtoEntity.Estoque < quantidade)
         {
             throw new NotFoundException($"Não a produtos o suficiente em estoque, "
-                                        + $"Quandidade em estoque: {produtoEntity.Estoque}");
+                                        + $"Quantidade em estoque: {produtoEntity.Estoque}");
         }
 
         produtoEntity.Estoque = produtoEntity.Estoque - quantidade;
@@ -157,10 +157,10 @@ public class PedidoService : IPedidoService
                throw new NotFoundException("Pedido não encontrado!");
     }
     
-    private string BusarVendedorId()
+    private string BuscarVendedorId()
     {
-        string? userId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (userId == null) throw new NotFoundException("Id Do Usuario não encontrado");
+        var userId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (userId == null) throw new NotFoundException("Id Do Usuário não encontrado");
   
         return userId;
     }

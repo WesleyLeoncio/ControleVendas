@@ -2,6 +2,6 @@
 
 public enum Role
 {
-    MASTER,
-    VENDEDOR
+    Master,
+    Vendedor
 }

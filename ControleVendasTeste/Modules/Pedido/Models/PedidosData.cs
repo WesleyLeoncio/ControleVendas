@@ -13,7 +13,7 @@ public static class PedidosData
     {
         return new PedidoRequest
         {
-            ClienteId = 1,FormaPagamento = MetodoPagamento.AVISTA,NumeroParcelas = 0,
+            ClienteId = 1,FormaPagamento = MetodoPagamento.Avista,NumeroParcelas = 0,
             Desconto = 0,Pagamento = 40,Itens = new List<ItemPedidoRequest>
             {
                 new ItemPedidoRequest(1,1),
@@ -26,106 +26,105 @@ public static class PedidosData
         return new PedidoPagamentoRequest(id,pagamento);
     }
     
-
     public static List<PedidoEntity> GetListPedidos()
     {
-        return new List<PedidoEntity>
-        {
+        return
+        [
             CriarPedido(
                 new PedidoDados
                 {
                     Id = 1,
                     ClienteId = 1,
-                    Cliente = new ClienteEntity{Nome = "Wesley"},
+                    Cliente = new ClienteEntity { Nome = "Wesley" },
                     VendedorId = "vendedor123",
                     Status = StatusPedido.Pendente,
                     DataVenda = DateTime.Now,
-                    Itens = new List<ItemPedidoEntity>
-                    {
-                        CriarItemPedido(1, 1, 20, 15)
-                    }
-                },new PagamentoInfo
+                    Itens = [CriarItemPedido(1, 1, 20, 15)]
+                }, new PagamentoInfo
                 {
-                    FormaPagamento = MetodoPagamento.AVISTA,
+                    FormaPagamento = MetodoPagamento.Avista,
                     NumeroParcelas = 0,
                     Desconto = 0,
                     ValorPago = 0
                 }
             ),
 
+
             CriarPedido(
                 new PedidoDados
                 {
                     Id = 2,
                     ClienteId = 2,
-                    Cliente = new ClienteEntity{Nome = "João"},
+                    Cliente = new ClienteEntity { Nome = "João" },
                     VendedorId = "vendedor123",
                     Status = StatusPedido.Pendente,
                     DataVenda = DateTime.Now,
-                    Itens = new List<ItemPedidoEntity>
-                    {
+                    Itens =
+                    [
                         CriarItemPedido(1, 1, 20, 15),
                         CriarItemPedido(2, 1, 30, 20)
-                    }
+                    ]
                 },
                 new PagamentoInfo
                 {
-                    FormaPagamento = MetodoPagamento.PARCELADO,
+                    FormaPagamento = MetodoPagamento.Parcelado,
                     NumeroParcelas = 2,
                     Desconto = 0,
                     ValorPago = 0,
                 }
-                
+
             ),
+
             CriarPedido(
                 new PedidoDados
                 {
                     Id = 3,
                     ClienteId = 3,
-                    Cliente = new ClienteEntity{Nome = "Neuza"},
+                    Cliente = new ClienteEntity { Nome = "Neuza" },
                     VendedorId = "vendedor789",
                     Status = StatusPedido.Pago,
                     DataVenda = DateTime.Now,
-                    Itens = new List<ItemPedidoEntity>
-                    {
+                    Itens =
+                    [
                         CriarItemPedido(1, 1, 20, 15),
                         CriarItemPedido(2, 1, 30, 20)
-                    }
+                    ]
                 },
                 new PagamentoInfo
                 {
-                    FormaPagamento = MetodoPagamento.PARCELADO,
+                    FormaPagamento = MetodoPagamento.Parcelado,
                     NumeroParcelas = 2,
                     Desconto = 0,
                     ValorPago = 0,
                 }
-                
+
             ),
+
             CriarPedido(
                 new PedidoDados
                 {
                     Id = 4,
                     ClienteId = 4,
-                    Cliente = new ClienteEntity{Nome = "Leticia"},
+                    Cliente = new ClienteEntity { Nome = "Leticia" },
                     VendedorId = "vendedor7891",
                     Status = StatusPedido.Atrasado,
                     DataVenda = DateTime.Now,
-                    Itens = new List<ItemPedidoEntity>
-                    {
+                    Itens =
+                    [
                         CriarItemPedido(1, 1, 20, 15),
                         CriarItemPedido(2, 1, 30, 20)
-                    }
+                    ]
                 },
                 new PagamentoInfo
                 {
-                    FormaPagamento = MetodoPagamento.PARCELADO,
+                    FormaPagamento = MetodoPagamento.Parcelado,
                     NumeroParcelas = 2,
                     Desconto = 0,
                     ValorPago = 0,
                 }
-                
+
             )
-        };
+        ];
     }
     
     public static PedidoEntity GetPedidoIndex(int index)
@@ -133,7 +132,7 @@ public static class PedidosData
         return GetListPedidos()[index];
     }
 
-    public static IEnumerable<object[]> PeididoFiltroRequestData()
+    public static IEnumerable<object[]> PedidoFiltroRequestData()
     {
         return new List<object[]>
         {

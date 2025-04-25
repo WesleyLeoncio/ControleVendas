@@ -12,7 +12,7 @@ public static class JsonConfig
                 // Ignora ciclos quando detectados
                 option.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
                     
-                // Converte valores de enumeração de/para cadeias de caractere
+                // Converte valores de enumeração de/para cadeias de caracteres
                 option.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
     }

@@ -1,4 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using ControleVendas.Infra.Exceptions.custom;
 using ControleVendas.Modules.Token.Models.Request;
@@ -71,7 +71,7 @@ public class UserService : IUserService
         };
         var result = await _userManager.CreateAsync(userEntity, request.Password);
         if (!result.Succeeded) throw new ArgumentException("Ocorreram erros durante o registro!");
-        await AddUserToRole(request.Username, Role.VENDEDOR);
+        await AddUserToRole(request.Username, Role.Vendedor);
         return new RegisterResponse("Success", "Usuario criado com sucesso!");
     }
     
@@ -173,7 +173,8 @@ public class UserService : IUserService
         var authClaims = new List<Claim>
         {   
             new Claim(JwtRegisteredClaimNames.Sub, userEntity.Id),
-            new Claim(ClaimTypes.Name, userEntity.FullName ?? string.Empty),
+            new Claim(ClaimTypes.Name, userEntity.UserName ?? string.Empty),
+            new Claim("full_name", userEntity.FullName ?? string.Empty),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
         

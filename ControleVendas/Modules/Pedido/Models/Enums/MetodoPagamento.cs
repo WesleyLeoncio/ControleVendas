@@ -2,6 +2,6 @@
 
 public enum MetodoPagamento
 {
-    AVISTA,
-    PARCELADO
+    Avista,
+    Parcelado
 }

@@ -82,7 +82,7 @@ public class ClienteService : IClienteService
         ClienteEntity? cliente = await _uof.ClienteRepository.GetAsync(c => c.Telefone == telefone);
         if (cliente != null)
         {
-            throw new KeyDuplicationException("Já existe um telefone com estes numeros cadastrado!");
+            throw new KeyDuplicationException("Já existe um telefone com estes números cadastrado!");
         }
     }
 }
