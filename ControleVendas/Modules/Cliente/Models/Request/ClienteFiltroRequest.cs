@@ -5,4 +5,5 @@ namespace ControleVendas.Modules.Cliente.Models.Request;
 public class ClienteFiltroRequest : QueryParameters
 {
     public string? Nome { get; set; }
+    public bool? Ativo { get; set; }
 }
