@@ -1,4 +1,5 @@
 ﻿using ControleVendas.Infra.Data;
+using ControleVendas.Infra.Exceptions.custom;
 using ControleVendas.Modules.Common.Repository;
 using ControleVendas.Modules.Pedido.Models.Entity;
 using ControleVendas.Modules.Pedido.Models.Enums;
@@ -48,5 +49,17 @@ public class PedidoRepository : Repository<PedidoEntity>, IPedidoRepository
         pedidoQuery = pedidoQuery.Where(p => p.Status == StatusPedido.Pendente);
         
         return await pedidoQuery.ToListAsync();
+    }
+
+    public async Task<PedidoEntity> GetPedidosIncludeItensPendentePorId(int id)
+    {
+        var pedido = await GetIQueryable()
+            .Include(p => p.Itens)
+            .FirstOrDefaultAsync(p => p.Id == id);
+        
+        if (pedido == null)
+            throw new NotFoundException("Pedido não encontrado!");
+
+        return pedido;
     }
 }

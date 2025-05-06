@@ -55,12 +55,11 @@ public class ClienteService : IClienteService
         await _uof.Commit();
     }
 
-    public async Task<ClienteResponse> DeleteCliente(int id)
+    public async Task DeleteCliente(int id)
     {
        ClienteEntity clienteEntity = await CheckCliente(id);
        _uof.ClienteRepository.Delete(clienteEntity);
        await _uof.Commit();
-       return _mapper.Map<ClienteResponse>(clienteEntity);
     }
 
     public async Task AlterStatusCliente(int id)

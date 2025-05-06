@@ -57,12 +57,11 @@ public class ProdutoService : IProdutoService
         await _uof.Commit();
     }
 
-    public async Task<ProdutoResponse> DeleteProduto(int id)
+    public async Task DeleteProduto(int id)
     {
         ProdutoEntity produtoEntity = await CheckProduto(id);
         _uof.ProdutoRepository.Delete(produtoEntity);
         await _uof.Commit();
-        return _mapper.Map<ProdutoResponse>(produtoEntity);
     }
 
     private async Task<ProdutoEntity> CheckProduto(int id)

@@ -58,6 +58,8 @@ public class GetClienteTest : IClassFixture<ClienteConfigTest>
             .WithMessage("Cliente não encontrado!");
     }
     
+    //TODO 
+    //EDITAR ESSE TESTE
     [Theory(DisplayName =
         "Deve testar se o metodo GetAllFilterClientes está retornando as clientes com e sem filtro")]
     [MemberData(nameof(ClienteData.ClienteGetFilter), MemberType = typeof(ClienteData))]

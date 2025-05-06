@@ -46,13 +46,14 @@ public class ClienteController : ControllerBase
         await _clienteService.AlterStatusCliente(id);
         return NoContent();
     }
-    
-    /// <summary>Delete Um Cliente</summary>
-    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
+
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesDefaultResponseType]
     public async Task<ActionResult<ClienteResponse>> DeleteCliente(int id)
-    { 
-        return Ok(await _clienteService.DeleteCliente(id));
+    {
+        await _clienteService.DeleteCliente(id);
+        return NoContent();
     }
     
     ///<summary>Busca Um Cliente Pelo Id</summary>

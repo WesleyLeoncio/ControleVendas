@@ -39,6 +39,16 @@ public class PedidoController : ControllerBase
         return NoContent();
     }
     
+    ///<summary>Cancela um pedido</summary>
+    [HttpPut("Cancelar/{pedidoId}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult> CancelaPeido(int pedidoId)
+    {
+        await _pedidoService.CancelarPedido(pedidoId);
+        return NoContent();
+    }
+    
     ///<summary>Lista Pedidos Utilizando Filtros</summary>
     [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
     [HttpGet]

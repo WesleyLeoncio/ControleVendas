@@ -38,13 +38,14 @@ public class ProdutoController : ControllerBase
         await _produtoService.UpdateProduto(id, request);
         return NoContent();
     }
-    
-    /// <summary>Delete Um Produto</summary>
-    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
+
     [HttpDelete("{id}")]
-    public async Task<ActionResult<ProdutoResponse>> DeleteProduto(int id)
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult> DeleteProduto(int id)
     {
-        return Ok(await _produtoService.DeleteProduto(id));
+        await _produtoService.DeleteProduto(id);
+        return NoContent();
     }
     
     ///<summary>Lista Produtos Utilizando Filtros</summary>

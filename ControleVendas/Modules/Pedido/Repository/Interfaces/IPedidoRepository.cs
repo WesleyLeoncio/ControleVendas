@@ -10,4 +10,6 @@ public interface IPedidoRepository : IRepository<PedidoEntity>
     Task<IPagedList<PedidoEntity>> GetAllIncludeClienteFilterPageableAsync(PedidoFiltroRequest filtroRequest);
 
     Task<IEnumerable<PedidoEntity>> GetAllPedidosStatusPendente();
+    
+    Task<PedidoEntity> GetPedidosIncludeItensPendentePorId(int id);
 }

@@ -52,6 +52,23 @@ public class PedidoService : IPedidoService
         await _uof.Commit();
     }
 
+    public async Task CancelarPedido(int pedidoId)
+    {
+        PedidoEntity pedidoEntity = await 
+            _uof.PedidoRepository.GetPedidosIncludeItensPendentePorId(pedidoId);
+        if (pedidoEntity.Status == StatusPedido.Cancelado) throw new ConflictException("Pedido já está cancelado");
+        foreach (var item in pedidoEntity.Itens)
+        {
+            ProdutoEntity produtoEntity = await CheckProduto(item.ProdutoId);
+            produtoEntity.Estoque += item.Quantidade;
+            _uof.ProdutoRepository.Update(produtoEntity);
+        }
+
+        pedidoEntity.Status = StatusPedido.Cancelado;
+        _uof.PedidoRepository.Update(pedidoEntity);
+        await _uof.Commit();
+    }
+
     public async Task RealizarPagamentoDePedido(PedidoPagamentoRequest pagamentoRequest)
     {
         PedidoEntity pedido = await CheckPedido(pagamentoRequest.IdPedido);

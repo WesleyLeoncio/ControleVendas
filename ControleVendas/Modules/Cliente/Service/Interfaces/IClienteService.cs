@@ -12,7 +12,7 @@ public interface IClienteService
     
     Task UpdateCliente(int id, ClienteRequest request);
     
-    Task<ClienteResponse> DeleteCliente(int id);
+    Task DeleteCliente(int id);
     
     Task AlterStatusCliente(int id);
 }

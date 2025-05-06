@@ -9,6 +9,6 @@ public interface IProdutoService
     Task<ProdutoResponse> GetProdutoById(int id); 
     Task<ProdutoPaginationResponse> GetAllFilterProdutos(ProdutoFiltroRequest filtroRequest);
     Task UpdateProduto(int id, ProdutoRequest request);
-    Task<ProdutoResponse> DeleteProduto(int id);
+    Task DeleteProduto(int id);
     
 }

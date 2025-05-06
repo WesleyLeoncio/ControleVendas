@@ -12,4 +12,6 @@ public interface IPedidoService
     Task VerificarPedidosAtrasados();
 
     Task RealizarPagamentoDePedido(PedidoPagamentoRequest pagamentoRequest);
+
+    Task CancelarPedido(int pedidoId);
 }

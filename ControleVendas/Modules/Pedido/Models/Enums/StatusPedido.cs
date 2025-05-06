@@ -4,5 +4,6 @@ public enum StatusPedido
 {
     Pendente,
     Pago,
-    Atrasado
+    Atrasado,
+    Cancelado,
 }
