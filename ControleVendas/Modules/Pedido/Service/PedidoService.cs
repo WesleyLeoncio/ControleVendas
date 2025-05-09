@@ -56,7 +56,7 @@ public class PedidoService : IPedidoService
     {
         PedidoEntity pedidoEntity = await 
             _uof.PedidoRepository.GetPedidosIncludeItensPendentePorId(pedidoId);
-        if (pedidoEntity.Status == StatusPedido.Cancelado) throw new ConflictException("Pedido já está cancelado");
+        if (pedidoEntity.Status == StatusPedido.Cancelado) throw new ConflictException("Pedido já está cancelado!");
         foreach (var item in pedidoEntity.Itens)
         {
             ProdutoEntity produtoEntity = await CheckProduto(item.ProdutoId);

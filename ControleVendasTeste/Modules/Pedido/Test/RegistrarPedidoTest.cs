@@ -48,12 +48,6 @@ public class RegistrarPedidoTest : IClassFixture<PedidoConfigTest>
         _mockUof.Setup(u => u.ProdutoRepository.GetAsync(It.IsAny<Expression<Func<ProdutoEntity, bool>>>()))
             .ReturnsAsync(produto);
         
-        _mockUof.Setup(u => u.ProdutoRepository.Update(It.IsAny<ProdutoEntity>()))
-            .Callback<ProdutoEntity>(updatedProduto => 
-            {
-                produto.Estoque = updatedProduto.Estoque; // Atualiza o mock
-            });
-        
         _mockUof.Setup(u => u.PedidoRepository.Create(It.IsAny<PedidoEntity>()))
             .Returns((PedidoEntity e) => e);
 

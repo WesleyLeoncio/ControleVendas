@@ -6,6 +6,8 @@ using ControleVendas.Modules.Cliente.Models.Response;
 using ControleVendas.Modules.Cliente.Service.Interfaces;
 using ControleVendas.Modules.Common.UnitOfWork.Interfaces;
 using ControleVendasTeste.Modules.Cliente.Config;
+using ControleVendasTeste.Modules.Cliente.Filter.Custom;
+using ControleVendasTeste.Modules.Cliente.Filter.Interfaces;
 using ControleVendasTeste.Modules.Cliente.Models;
 using FluentAssertions;
 using Moq;
@@ -58,56 +60,36 @@ public class GetClienteTest : IClassFixture<ClienteConfigTest>
             .WithMessage("Cliente não encontrado!");
     }
     
-    //TODO 
-    //EDITAR ESSE TESTE
     [Theory(DisplayName =
         "Deve testar se o metodo GetAllFilterClientes está retornando as clientes com e sem filtro")]
-    [MemberData(nameof(ClienteData.ClienteGetFilter), MemberType = typeof(ClienteData))]
-    public async Task GetAllFilterClientes_Return_ClienteComFiltro_E_SemFiltro(string filterClientes)
+    [MemberData(nameof(ClienteData.ClienteGetFilterRequest), MemberType = typeof(ClienteData))]
+    public async Task GetAllFilterClientes_Return_ClienteComFiltro_E_SemFiltro(ClienteFiltroRequest request, int quantidadeCliente)
     {
         // Arrange
-        _mockUof.Setup(u =>
-                u.ClienteRepository.GetAllFilterPageableAsync(It.IsAny<ClienteFiltroRequest>()))
-            .ReturnsAsync((ClienteFiltroRequest request) =>
-            {
-                List<ClienteEntity> clientesFiltrados = ClienteData.GetListClientes()
-                    .Where(c => c.Nome != null && (string.IsNullOrEmpty(request.Nome) ||
-                                                   c.Nome.Contains(request.Nome, StringComparison.OrdinalIgnoreCase)))
-                    .ToList();
+        List<ClienteEntity> clientesList = ClienteData.GetListClientes();
 
-                return clientesFiltrados.ToPagedList(request.PageNumber, request.PageSize);
-            });
+        IEnumerable<IFilterClienteResultTest> filterResults = new List<IFilterClienteResultTest>
+        {
+            new FilterNameClienteTest(),
+            new FilterAtivoClienteTest()
+        };
 
-
-        ClienteFiltroRequest request = new ClienteFiltroRequest { Nome = filterClientes };
-
+        foreach (var filter in filterResults)
+        {
+            clientesList = filter.RunFilter(clientesList,request);
+        }
+        _mockUof.Setup(u => u.ClienteRepository.GetAllFilterPageableAsync(It.IsAny<ClienteFiltroRequest>()))
+            .ReturnsAsync(() => clientesList.ToPagedList(request.PageNumber, request.PageSize));
+       
         // Act
         ClientePaginationResponse act = await _clienteService.GetAllFilterClientes(request);
 
-        //Assert
+        // Assert
         act.Should().NotBeNull();
-
-        if (!string.IsNullOrEmpty(request.Nome))
-        {
-            if (act.Clientes.Any())
-            {
-                // ✅ Caso existam clientes que correspondem ao filtro, elas devem ser retornadas corretamente
-                act.Clientes.Should().NotBeEmpty();
-                act.Clientes.Should().OnlyContain(c =>
-                    c.Nome.Contains(request.Nome, StringComparison.OrdinalIgnoreCase)
-                );
-            }
-            else
-            {
-                // ✅ Caso nenhum cliente corresponda ao filtro, deve retornar uma lista vazia
-                act.Clientes.Should().BeEmpty();
-            }
-        }
-        else
-        {
-            // ✅ Se não há filtro, retorna a lista completa
-            act.Clientes.Should().HaveCount(ClienteData.GetListClientes().Count());
-        }
+        act.Clientes.Should().NotBeNull();
+        if (!string.IsNullOrEmpty(request.Nome)) act.Clientes.Should().OnlyContain(categoriaResponse =>
+           categoriaResponse.Nome.Contains(request.Nome,StringComparison.OrdinalIgnoreCase));
+        
+        act.Clientes.Should().HaveCount(quantidadeCliente);
     }
-    
 }
